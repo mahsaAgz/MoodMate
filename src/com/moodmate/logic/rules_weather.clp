@@ -16,19 +16,12 @@
    (slot mood-impact
 	(type NUMBER))) ;; impact score
 
-(deftemplate humidity-input
-   (slot level
-    (type NUMBER)))
 
-(deftemplate temperature-input
-   (slot value
-    (type NUMBER)))
-(deftemplate weather-input
-   (slot condition))
 
 (deftemplate FinalEffect
    (slot temperature)
-   (slot final-mood-score (default 0)))
+   (slot final-mood-score (default 0))
+   (slot suggestion))
 
 (defglobal ?*mood-score* = 0) ;; Initialize the mood score
 
@@ -329,7 +322,3 @@
    (printout t "Hazardous weather: Recommendations for staying safe and comfortable indoors." crlf))
    
 
-
-(watch rules)
-(watch facts)
-(run)

@@ -2,6 +2,7 @@ package com.moodmate.GUI;
 import com.moodmate.database.*;
 import javax.swing.*;
 import java.util.List;
+import java.util.Map;
 
 import com.moodmate.database.DatabaseConnection;
 import com.moodmate.logic.User;
@@ -11,6 +12,7 @@ import jess.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.math.BigDecimal;
 import java.util.Iterator;
 
 public class SignInPage extends BasePage {
@@ -124,6 +126,46 @@ public class SignInPage extends BasePage {
                       //Getting user id from username
                         GlobalVariable.userId = DatabaseConnection.getUserIdByUsername(username);
                         System.out.println("User ID for username '" + username + "': " + GlobalVariable.userId);
+                        
+                        // Fetch user information and assert it as facts
+                        // Fetch user information
+                        Map<String, Object> userInfo = DatabaseConnection.fetchUserInfoById(GlobalVariable.userId);
+                        if (!userInfo.isEmpty()) {
+                            try {
+                                // Create a fact for the profile-input template
+                                Fact profileFact = new Fact("profile-input", engine);
+
+                                // Map database columns to template slots
+                                profileFact.setSlotValue("user_id", new Value((Integer) userInfo.get("user_id"), RU.INTEGER));
+                                profileFact.setSlotValue("name", new Value((String) userInfo.get("name"), RU.STRING));
+                                profileFact.setSlotValue("gender", new Value((Byte) userInfo.get("gender"), RU.INTEGER)); // Assuming gender is stored as a tinyint
+                                profileFact.setSlotValue("age", new Value((Integer) userInfo.get("age"), RU.INTEGER));
+                                profileFact.setSlotValue("mbti", new Value(userInfo.get("mbti") != null ? (String) userInfo.get("mbti") : "unknown", RU.STRING));
+                                
+                                // Convert hobbies to a Jess list
+                                String hobbies = (String) userInfo.get("hobbies");
+                                ValueVector hobbiesList = new ValueVector();
+                                if (hobbies != null && !hobbies.isEmpty()) {
+                                    for (String hobby : hobbies.split(",")) {
+                                        hobbiesList.add(new Value(hobby.trim(), RU.STRING));
+                                    }
+                                }
+                                profileFact.setSlotValue("hobbies", new Value(hobbiesList, RU.LIST));
+
+                                // Set notification frequency (if null, use default value 1)
+                                Integer notificationFrequency = (Integer) userInfo.get("notification");
+                                profileFact.setSlotValue("notification-frequency", new Value(notificationFrequency != null ? notificationFrequency : 1, RU.INTEGER));
+
+                                // Assert the fact into the Jess engine
+                                engine.assertFact(profileFact);
+                                System.out.println("Profile fact asserted: " + profileFact);
+                            } catch (JessException ex) {
+                                ex.printStackTrace();
+                            }
+                        } else {
+                            System.out.println("No user information found for user_id: " + GlobalVariable.userId);
+                        }
+
                         addToNavigationStack();
                         new HomePage();
                         dispose();

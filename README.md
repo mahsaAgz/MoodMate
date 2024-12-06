@@ -67,8 +67,7 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     gender TINYINT,
     age INT,
     mbti VARCHAR(4),
-    hobbies TEXT,
-    self_image_score DECIMAL(5,2)
+    hobbies TEXT
     );
 
     -- Daily_Record table
@@ -80,12 +79,10 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     angry_score DECIMAL(5,2),
     confused_score DECIMAL(5,2),
     scared_score DECIMAL(5,2),
-    self_image_score DECIMAL(5,2),
     sleep_score DECIMAL(5,2),
     physical_activity_score DECIMAL(5,2),
     food_score DECIMAL(5,2),
     weather_condition VARCHAR(50),
     weather_temperature DECIMAL(5,2),
-    triggers_of_day TEXT,
     PRIMARY KEY (user_id, record_date)
     );

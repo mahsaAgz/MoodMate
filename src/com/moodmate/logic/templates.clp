@@ -337,3 +337,22 @@
     (slot emotion-name)    
     (slot avg-percentage)
     (slot reading-count))
+    
+    
+; Templates definition
+(deftemplate weather-input
+    (slot condition))
+
+(deftemplate temperature-input
+    (slot value))
+
+(deftemplate humidity-input
+    (slot level))
+
+(deftemplate weather-recommendation
+    (slot user_id)
+    (slot message))
+    
+(deftemplate Weather
+   (slot condition)) ;; sunny, rainy, cloudy, stormy, etc.
+    
