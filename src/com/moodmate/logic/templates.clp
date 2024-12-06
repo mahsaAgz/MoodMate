@@ -30,6 +30,9 @@
     (slot password)
 )
 
+(deftemplate user-id
+    (slot userId)
+)
 
 (deftemplate profile-input
     (slot user_id)              ;; Integer, unique identifier
@@ -78,6 +81,11 @@
     (slot user_id)
     (slot day)
     (slot hour)
+    (slot emotion-name))
+    
+(deftemplate processed-monthly-reading
+    (slot user_id)
+    (slot day)
     (slot emotion-name))
 
 ; Add template for daily summary
@@ -314,3 +322,18 @@
     (slot severity))     ; Match with risk level from assessments
 
 
+; Template for monthly emotion totals
+(deftemplate monthly-emotion-total
+    (slot user_id)
+    (slot month)           ; Will store YYYYMM format
+    (slot emotion-name)    
+    (slot sum (default 0))
+    (slot count (default 0)))
+
+; Template for monthly emotion summary
+(deftemplate monthly-emotion-summary
+    (slot user_id)
+    (slot month)           ; Will store YYYYMM format
+    (slot emotion-name)    
+    (slot avg-percentage)
+    (slot reading-count))

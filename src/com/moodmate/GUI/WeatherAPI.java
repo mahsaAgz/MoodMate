@@ -46,10 +46,12 @@ public class WeatherAPI {
 
             double temperature = main.get("temp").getAsDouble() - 273.15;
             String weatherCondition = weather.get("main").getAsString();
-
+            int humidity = main.get("humidity").getAsInt();
+            
             System.out.println("\nWeather in " + CITY + ":");
             System.out.println("Date: " + formattedDate);
             System.out.println("Temperature: " + String.format("%.1f", temperature) + "°C");
+            System.out.println("Humidity: " + humidity + " %");
             System.out.println("Weather Condition: " + weatherCondition);
 
             Rete engine = ReteEngineManager.getInstance();
@@ -58,7 +60,7 @@ public class WeatherAPI {
             // Assert `weather-input` facts
             engine.eval("(assert (weather-input (condition \"" + weatherCondition + "\")))");
             engine.eval("(assert (temperature-input (value " + temperature + ")))");
-            engine.eval("(bind ?userId " + userId + ")");
+            engine.eval("(assert (humidity-input (level " + humidity + ")))");
 
             // Assert the `daily-weather` fact
             String dailyWeatherFact = String.format(
@@ -69,6 +71,7 @@ public class WeatherAPI {
             engine.eval(dailyWeatherFact);
 
             // Run the engine
+            engine.eval("(assert (user-id (userId " + userId + ")))");
             engine.eval("(run)");
 
             Iterator<Fact> facts = engine.listFacts();
