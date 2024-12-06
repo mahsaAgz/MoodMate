@@ -485,22 +485,19 @@ public class HomePage extends BaseHomePage {
             if (suggestions.isEmpty()) {
                 switch (timeframe.toLowerCase()) {
                     case "daily":
-                        suggestions.add("No data for now  No data for now No data for now  No data for now No data for now  No data for now No data for now  N and get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now Noo data for now");
-                        suggestions.add("Press Begin");
-                        suggestions.add("and get personolized suggestions No data for now  No data for now No data for now  No data for now No data for now  No dataand get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now No for now");
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
-                        suggestions.add("and get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now Noand get personolized suggestions No data for now  No data for now No data for now  No data for now No data for now  No data for now No data for now  No data for now");
-                        break;
+                        suggestions.add("and get personalized suggestions");
+			break;
                     case "weekly":
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
-                        suggestions.add("and get personolized suggestions");
+                        suggestions.add("and get personalized suggestions");
                         break;
                     case "monthly":
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
-                        suggestions.add("and get personolized suggestions");
+                        suggestions.add("and get personalized suggestions");
                         break;
                 }
             }
