@@ -39,7 +39,7 @@ public class HomePage extends BaseHomePage {
     }    
     public HomePage() {
         super();
-        
+        WeatherScheduler.startWeatherUpdates();
         int currentY = 20;
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(null); // Absolute positioning
@@ -449,5 +449,12 @@ public class HomePage extends BaseHomePage {
 
     public static void main(String[] args) {
         new HomePage();
+    }
+    
+    @Override
+    public void dispose() {
+        // Stop weather updates when HomePage is closed
+        WeatherScheduler.stopWeatherUpdates();
+        super.dispose();
     }
 }

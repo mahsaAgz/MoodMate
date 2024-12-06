@@ -23,9 +23,9 @@ public class WeatherAPI {
         String city = "Daejeon";  // Example city
         String apiKey = "d15bc8c7724a3d65233de5301a550fba";  // Replace with your OpenWeatherMap API key
         // Database credentials
-        String jdbcUrl = "jdbc:mysql://localhost:3306/moodmate";  // Change to your database URL
+        String jdbcUrl = "jdbc:mysql://localhost:3306/moodMate";  // Change to your database URL
         String dbUser = "root";  // Change to your database username
-        String dbPassword = "17Aug1993";  // Change to your database password
+        String dbPassword = "002915";  // Change to your database password
         try {
             // Create the API URL
             String urlString = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
