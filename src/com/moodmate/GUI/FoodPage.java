@@ -53,8 +53,26 @@ public class FoodPage extends BaseHomePage {
         titleLabel.setFont(new Font(customFont, Font.BOLD, 20));
         titleLabel.setBounds(PADDING_X, currentY, contentWidth - 2 * PADDING_X, FIELD_HEIGHT);
         contentPanel.add(titleLabel);
+        
 
         currentY += FIELD_HEIGHT + MARGIN;
+        
+
+     // Meal Count Question
+        JLabel mealCountLabel = new JLabel("How many meals did you have today?", SwingConstants.LEFT);
+        mealCountLabel.setFont(new Font(customFont, Font.PLAIN, 16));
+        mealCountLabel.setBounds(PADDING_X, currentY, contentWidth - 2 * PADDING_X, FIELD_HEIGHT);
+        contentPanel.add(mealCountLabel);
+
+        currentY += FIELD_HEIGHT;
+
+        // Spinner for Meal Count Input
+        JSpinner mealCountSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1)); // Min: 0, Max: 10, Step: 1
+        mealCountSpinner.setBounds(PADDING_X, currentY, FIELD_HEIGHT * 3, FIELD_HEIGHT);
+        contentPanel.add(mealCountSpinner);
+
+        currentY += FIELD_HEIGHT + MARGIN;
+
 
      // Appetite Question with Radio Buttons
         JLabel appetiteLabel = new JLabel("How has your appetite been?", SwingConstants.LEFT);
@@ -187,6 +205,27 @@ public class FoodPage extends BaseHomePage {
 
         nextButton.addActionListener(e -> {
             try {
+                // Validate meal count input
+                int mealsToday = (int) mealCountSpinner.getValue();
+                if (mealsToday < 1) {
+                    JOptionPane.showMessageDialog(
+                        this,
+                        "Please enter how many meals you had today.",
+                        "Input Required",
+                        JOptionPane.WARNING_MESSAGE
+                    );
+                    return;
+                }
+
+                // Assert meal count fact
+                String mealCountCommand = String.format(
+                    "(assert (meal-info (user_id %d) (meals-per-day %d)))",
+                    userId, mealsToday
+                );
+
+                System.out.println("Asserting meal count: " + mealCountCommand);
+                engine.eval(mealCountCommand);
+
                 // Validate appetite selection
                 if (appetiteGroup.getSelection() == null) {
                     JOptionPane.showMessageDialog(
@@ -209,7 +248,7 @@ public class FoodPage extends BaseHomePage {
                     "(vitamins %d) " +
                     "(water %d)))",
                     userId,
-                    nutrientSliders.get("Carbs").getValue(),    
+                    nutrientSliders.get("Carbs").getValue(),
                     nutrientSliders.get("Protein").getValue(),
                     nutrientSliders.get("Fat").getValue(),
                     nutrientSliders.get("Minerals").getValue(),
@@ -219,21 +258,18 @@ public class FoodPage extends BaseHomePage {
 
                 System.out.println("Asserting macronutrients: " + macroCommand);
                 engine.eval(macroCommand);
+
+                // Run the engine to process the rules
                 engine.run();
+
+                // Debugging: Print all facts in the Rete engine
                 Iterator<?> facts = engine.listFacts();
                 System.out.println("Facts in the engine:");
                 while (facts.hasNext()) {
                     System.out.println(facts.next());
                 }
 
-                // Print all facts for debugging
-//                System.out.println("\nAll facts after assertion:");
-//                Iterator<?> facts = engine.listFacts();
-//                while (facts.hasNext()) {
-//                    System.out.println(facts.next());
-//                }
-
-                // Continue to next page
+                // Navigate to the next page
                 addToNavigationStack();
                 new RealTimeSuggestionPage();
                 dispose();
@@ -249,6 +285,8 @@ public class FoodPage extends BaseHomePage {
             }
         });
 
+        
+     
 
         contentPanel.add(nextButton);
         currentY += FIELD_HEIGHT + MARGIN;

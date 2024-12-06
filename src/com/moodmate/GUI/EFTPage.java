@@ -13,6 +13,10 @@ import java.awt.*;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+
 public class EFTPage extends BaseHomePage {
 
     private static final int PADDING_X = 40; // Horizontal padding for fields
@@ -21,20 +25,28 @@ public class EFTPage extends BaseHomePage {
     private static final int BOX_HEIGHT = 250; // Height for each emotion box
     private static final int CORNER_RADIUS = 25; // Rounded corner radius
 
-    private final Hashtable<String, String[]> emotionAdj;
+    private Hashtable<String, String[]> emotionAdj;
     private final Hashtable<String, JSlider> emotionSliders = new Hashtable<>();
     private static final int userId = GlobalVariable.userId; // You might want to pass this from previous pages
-    private static final int day = 1;    // These could come from system time
-    private static final int hour = 10;   // These could come from system time
+    private static int day;
+    private static int hour;
     
     public EFTPage() {
         super();
+        LocalDateTime now = LocalDateTime.now();
+        day = Integer.parseInt(now.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        hour = Integer.parseInt(now.format(DateTimeFormatter.ofPattern("HHmm")));
+        
+        System.out.println("Current Date: " + day); // e.g., 20241206
+        System.out.println("Current Time: " + hour); // e.g., 1016
+    
+
         JLabel backgroundLabel = new JLabel(new ImageIcon("assets/images/background.png"));
         backgroundLabel.setBounds(0, 0, contentArea.getWidth(), contentArea.getHeight());
         contentArea.add(backgroundLabel);
         
         // Define emotions and adjectives
-        emotionAdj = new Hashtable<>();
+        emotionAdj = new Hashtable<String, String[]> ();
         emotionAdj.put("Happy", new String[]{"Loved", "Cheerful", "Joyful", "Optimistic", "Content", "Relaxed", "Proud", "Thrilled", "Grateful", "Elated", "Peaceful", "Jubilant", "Satisfied", "Delighted", "Energized"});
         emotionAdj.put("Sad", new String[]{"Lonely", "Miserable", "Heartbroken", "Hopeless", "Ashamed", "Regretful", "Disappointed", "Rejected", "Depressed", "Crushed", "Sorrowful", "Exhausted", "Isolated", "Grieving", "Forsaken"});
         emotionAdj.put("Angry", new String[]{"Betrayed", "Furious", "Frustrated", "Irritated", "Resentful", "Enraged", "Outraged", "Humiliated", "Mad", "Agitated", "Annoyed", "Hostile", "Defensive", "Bitter", "Indignant"});
