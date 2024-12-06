@@ -83,6 +83,6 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     physical_activity_score DECIMAL(5,2),
     food_score DECIMAL(5,2),
     weather_condition VARCHAR(50),
-    weather_temperature DECIMAL(5,2),
+    weather_temperature VARCHAR(50),
     PRIMARY KEY (user_id, record_date)
     );
