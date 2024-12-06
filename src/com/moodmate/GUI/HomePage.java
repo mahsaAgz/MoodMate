@@ -330,7 +330,7 @@ public class HomePage extends BaseHomePage {
 
                     // Draw formatted hour on the graph
                     g2.drawString(formattedHour, x - 10, height - margin + 20);
-               
+           
                 }
 
                 // Draw emotion labels
