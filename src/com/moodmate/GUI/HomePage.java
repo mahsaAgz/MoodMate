@@ -16,13 +16,23 @@ import jess.JessException;
 import jess.Rete;
 
 public class HomePage extends BaseHomePage {
-    private static final int PADDING_X = 30;
-    private static final int FIELD_HEIGHT = 30;
-    private static final int CORNER_RADIUS = 30;
-    private static final int MARGIN = 20;
-    private static final int MOTIVATION_HEIGHT = 80;
-    private static final int PART1_HEIGHT = 100;
-    private static final int PART2_HEIGHT = 450;
+
+    private static final int PADDING_X = 30; // Horizontal padding for fields
+    private static final int FIELD_HEIGHT = 30; // Height for the input fields and button
+    private static final int CORNER_RADIUS = 30; //
+    private static final int MARGIN = 20; //
+    private static final int MOTIVATION_HEIGHT = 80; //
+    private static final int PART1_HEIGHT = 100; //
+    private static final int PART2_HEIGHT = 450; //
+    
+    private static final Color joyColor = new Color(255, 165, 0);    // A warm orange
+    private static final Color sadnessColor = new Color(70, 130, 180);     // A calming steel blue
+    private static final Color angerColor = new Color(255, 99, 71);       // A warm tomato red
+    private static final Color scaredColor = new Color(147, 112, 219);  // A soft lavender purple
+    private static final Color confusedColor = new Color(144, 238, 144);   // A fresh light green
+
+  
+    
 
     private static class EmotionData {
         List<List<Integer>> scores;
@@ -254,7 +264,7 @@ public class HomePage extends BaseHomePage {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 String[] emotions = {"Happy", "Sad", "Angry", "Scared", "Confused"};
-                Color[] colors = {Color.YELLOW, Color.BLUE, Color.RED, Color.PINK, Color.GREEN};
+                Color[] colors = {joyColor, sadnessColor, angerColor, scaredColor, confusedColor};
 
                 int width = getWidth();
                 int height = getHeight() - 50; // Reserve space for labels
@@ -296,23 +306,148 @@ public class HomePage extends BaseHomePage {
                 g2.setColor(Color.BLACK); // Reset to black for text labels
                 g2.setFont(new Font(customFont, Font.PLAIN, 10));
                 for (int i = 0; i < hours.size(); i++) {
-                    int x = margin + (i * graphWidth) / Math.max(1, hours.size() - 1);
-                    g2.drawString(hours.get(i) + ":00", x - 10, height - margin + 20);
+
+                    int x = margin;
+                    if (hours.size() > 1) {
+                        x = margin + (i * graphWidth) / (hours.size() - 1);
+                    }
+                    // Format hour from 1213 to 12:13
+                    int rawHour = hours.get(i);
+                    String formattedHour = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
+
+                    // Draw formatted hour on the graph
+                    g2.drawString(formattedHour, x - 10, height - margin + 20);
+           
                 }
-                g2.drawString("Time", width / 2, height - margin + 30); // "Time" label
-                g2.drawString("Score (%)", margin - 30, height / 2);    // "Score (%)" label
+
+                // Draw emotion labels
+                int labelY = height - margin + 40;
+                int labelXStart = margin;
+                int labelSpacing = (graphWidth - (emotions.length * 50)) / Math.max(1, emotions.length - 1);
+
+                for (int i = 0; i < emotions.length; i++) {
+                    int labelX = labelXStart + i * (50 + labelSpacing);
+                    g2.setColor(colors[i]);
+                    g2.drawString(emotions[i], labelX, labelY);
+                }
+
+                // Draw axes labels
+                g2.setColor(Color.BLACK);
+//                g2.drawString("Time", width / 2, height - margin + 20);
+                g2.drawString("Score (%)", margin - 30, height / 2);
+
             }
         };
 
-        chartArea.setPreferredSize(new Dimension(400, 200));
+        chartArea.setPreferredSize(new Dimension(400, 10));
         graphPanel.add(chartArea, BorderLayout.CENTER);
+
+
+     // Modified Suggestions section
+        JPanel suggestionsPanel = new JPanel();
+        suggestionsPanel.setLayout(new BoxLayout(suggestionsPanel, BoxLayout.Y_AXIS));
+        suggestionsPanel.setOpaque(false);
+        suggestionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));  // Add padding
+
+        JLabel suggestionsTitle = new JLabel("Suggestions");
+        suggestionsTitle.setFont(new Font(customFont, Font.BOLD, 14));
+        suggestionsTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+        suggestionsPanel.add(suggestionsTitle);
+        suggestionsPanel.add(Box.createVerticalStrut(5));  // Add spacing
+
+        String[] suggestions = generateSuggestions(timeframe);
+        for (String suggestion : suggestions) {
+            // Create a panel for each suggestion with proper wrapping
+            JPanel suggestionItemPanel = new JPanel();
+            suggestionItemPanel.setLayout(new BorderLayout());
+            suggestionItemPanel.setOpaque(false);
+            suggestionItemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));  // Allow height to expand
+            suggestionItemPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            
+            // Wrap the suggestion text in HTML for proper wrapping
+            JLabel suggestionLabel = new JLabel("<html><body style='width: " + 
+                (contentArea.getWidth() - 100) + "px'>&bull; " + suggestion + "</body></html>");
+            suggestionLabel.setFont(new Font(customFont, Font.PLAIN, 12));
+            suggestionItemPanel.add(suggestionLabel, BorderLayout.CENTER);
+            
+            suggestionsPanel.add(suggestionItemPanel);
+            suggestionsPanel.add(Box.createVerticalStrut(5));  // Add spacing between items
+        }
+        suggestionsPanel.add(Box.createVerticalGlue());
+        
+
+        graphPanel.add(suggestionsPanel, BorderLayout.SOUTH);
 
         return graphPanel;
     }
 
     private String[] generateSuggestions(String timeframe) {
         List<String> suggestions = new ArrayList<>();
+
         suggestions.add("Default suggestions for " + timeframe);
+
+        try {
+            Rete engine = ReteEngineManager.getInstance();
+            Iterator<?> facts = engine.listFacts();
+            
+            while (facts.hasNext()) {
+                Fact fact = (Fact) facts.next();
+                // Check for various types of recommendations
+                if (fact.getName().equals("MAIN::recommendation") ||
+                    fact.getName().equals("MAIN::food-recommendation") || 
+                    fact.getName().equals("MAIN::sleep-recommendation") ||
+                    fact.getName().equals("MAIN::physical-activity-recommendation")) {
+                    try {
+                        jess.Value messageValue = fact.getSlotValue("message");
+                        String message = messageValue.stringValue(null);
+                        if (message != null && !message.isEmpty()) {
+                            suggestions.add(message);
+                        }
+                    } catch (JessException e) {
+                        System.out.println("Error reading recommendation message: " + e.getMessage());
+                    }
+                }
+            }
+            
+            // If no recommendations found, provide default suggestions
+            if (suggestions.isEmpty()) {
+                switch (timeframe.toLowerCase()) {
+                    case "daily":
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
+                        break;
+                    case "weekly":
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
+                        break;
+                    case "monthly":
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
+                        break;
+                }
+            }
+            
+            // Limit to 3 suggestions to avoid overcrowding
+            if (suggestions.size() > 3) {
+                suggestions = suggestions.subList(0, 3);
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Return default suggestions if there's an error
+            return new String[]{
+                "Take care of yourself",
+                "Consider talking to someone you trust",
+                "Remember to stay hydrated"
+            };
+        }
+
         return suggestions.toArray(new String[0]);
     }
 
