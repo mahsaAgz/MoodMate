@@ -192,8 +192,39 @@ public class HomePage extends BaseHomePage {
             Arrays.asList(0, 0, 0, 0, 0),
             Arrays.asList(0, 0, 0, 0, 0)
         );
-        List<Integer> defaultHours = Arrays.asList(8, 10, 12, 14, 16);
-
+        List<Integer> defaultHours;
+        LocalDate now = LocalDate.now();
+        
+     // Set appropriate default values based on timeframe
+        switch (timeframe) {
+            case "daily":
+                defaultHours = Arrays.asList(800, 1000, 1200, 1400, 1600);
+                break;
+            case "weekly":
+                // Create dates for the last 5 days in YYYYMMDD format
+                defaultHours = new ArrayList<>();
+                for (int i = 4; i >= 0; i--) {
+                    LocalDate date = now.minusDays(i);
+                    int dateNum = date.getYear() * 10000 + 
+                                date.getMonthValue() * 100 + 
+                                date.getDayOfMonth();
+                    defaultHours.add(dateNum);
+                }
+                break;
+            case "monthly":
+                // Create months for the last 5 months in YYYYMM format
+                defaultHours = new ArrayList<>();
+                for (int i = 4; i >= 0; i--) {
+                    LocalDate date = now.minusMonths(i);
+                    int monthNum = date.getYear() * 100 + 
+                                 date.getMonthValue();
+                    defaultHours.add(monthNum);
+                }
+                break;
+            default:
+                defaultHours = Arrays.asList(800, 1000, 1200, 1400, 1600);
+        }
+        
         Map<Integer, Map<String, Integer>> emotionData = new HashMap<>();
         List<Integer> hours = new ArrayList<>();
 
@@ -264,7 +295,6 @@ public class HomePage extends BaseHomePage {
             return new EmotionData(defaultScores, defaultHours);
         }
     }
-
 
 
     private JPanel createGraphPanel(String timeframe, List<List<Integer>> scores, List<Integer> hours) {
