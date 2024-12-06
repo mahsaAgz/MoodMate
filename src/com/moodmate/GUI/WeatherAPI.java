@@ -1,4 +1,5 @@
 package com.moodmate.GUI;
+import com.moodmate.GUI.SignInPage.GlobalVariable;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -12,7 +13,7 @@ import jess.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.moodmate.GUI.SignInPage.GlobalVariable;
+import java.text.SimpleDateFormat;
 
 public class WeatherAPI {
     private static final String CITY = "Daejeon";
@@ -37,52 +38,60 @@ public class WeatherAPI {
             JsonObject main = jsonResponse.getAsJsonObject("main");
             JsonArray weatherArray = jsonResponse.getAsJsonArray("weather");
             JsonObject weather = weatherArray.get(0).getAsJsonObject();
-            
+
             long unixTimestamp = jsonResponse.get("dt").getAsLong();
             Date date = new Date(unixTimestamp * 1000);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // Updated format
             String formattedDate = sdf.format(date);
-            
+
             double temperature = main.get("temp").getAsDouble() - 273.15;
-            int humidity = main.get("humidity").getAsInt();
             String weatherCondition = weather.get("main").getAsString();
-           
+
             System.out.println("\nWeather in " + CITY + ":");
             System.out.println("Date: " + formattedDate);
-            System.out.println("Temperature: " + String.format("%.1f", temperature) + "°C");       
-            System.out.println("Humidity: " + humidity + "%");
+            System.out.println("Temperature: " + String.format("%.1f", temperature) + "°C");
             System.out.println("Weather Condition: " + weatherCondition);
-            
+
             Rete engine = ReteEngineManager.getInstance();
             engine.batch("src/com/moodmate/logic/templates_weather.clp");
-            
+
+            // Assert `weather-input` facts
             engine.eval("(assert (weather-input (condition \"" + weatherCondition + "\")))");
             engine.eval("(assert (temperature-input (value " + temperature + ")))");
-            engine.eval("(assert (humidity-input (level " + humidity + ")))");
             engine.eval("(bind ?userId " + userId + ")");
+
+            // Assert the `daily-weather` fact
+            String dailyWeatherFact = String.format(
+                "(assert (daily-weather (user_id %d) (day \"%s\") (condition \"%s\") (temperature %.1f)))",
+                userId, formattedDate, weatherCondition, temperature
+            );
+            System.out.println("Asserting fact: " + dailyWeatherFact);
+            engine.eval(dailyWeatherFact);
+
+            // Run the engine
             engine.eval("(run)");
-            
+
             Iterator<Fact> facts = engine.listFacts();
             while (facts.hasNext()) {
                 Fact fact = facts.next();
                 String factName = fact.getName();
-                
+
                 if (factName.equals("MAIN::FinalEffect")) {
                     Value tempCondition = fact.getSlotValue("temperature");
                     Value scoreValue = fact.getSlotValue("final-mood-score");
                     Value suggestionValue = fact.getSlotValue("suggestion");
-                    
+
                     System.out.println("\nWeather Analysis Results:");
                     if (tempCondition != null) {
-                        System.out.println("Temperature Condition: " + 
+                        System.out.println("Temperature Condition: " +
                             tempCondition.stringValue(engine.getGlobalContext()));
                     }
                     if (scoreValue != null) {
-                        System.out.println("Weather Impact Score: " + 
+                        System.out.println("Weather Impact Score: " +
                             scoreValue.stringValue(engine.getGlobalContext()) + "/100");
                     }
                     if (suggestionValue != null) {
-                        System.out.println("Recommendation: " + 
+                        System.out.println("Recommendation: " +
                             suggestionValue.stringValue(engine.getGlobalContext()));
                     }
                 }
@@ -92,7 +101,6 @@ public class WeatherAPI {
             System.out.println("Error getting weather update: " + e.getMessage());
         }
     }
-
     // Main method for testing
     public static void main(String[] args) {
         getWeatherUpdate();
