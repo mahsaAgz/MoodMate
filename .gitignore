@@ -1,0 +1,12 @@
+/bin/
+# Ignore Mac system files
+.DS_Store
+
+# Ignore Eclipse/Java IDE files
+.classpath
+.project
+
+# Ignore specific files in directories
+src/.DS_Store
+src/com/.DS_Store
+src/com/moodmate/.DS_Store
