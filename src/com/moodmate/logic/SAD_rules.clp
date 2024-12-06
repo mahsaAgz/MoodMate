@@ -3,13 +3,16 @@
     (declare (salience 75))
     ; Depressive pattern during poor weather
     (emotional-pattern (user_id ?id) 
-                      (pattern-type "depressive")
-                      (intensity "severe")
-                      (persistence ?p1&:(> ?p1 5)))  ; Persists more than 5 days
+    					(day ?e_day)
+                      	(pattern-type "depressive")
+                      	(intensity "severe")
+                      	(persistence ?p1&:(> ?p1 5)))  ; Persists more than 5 days
     ; Consistent poor weather conditions
     (daily-weather (user_id ?id)
+    				(day ?w_day)
                   (condition ?c&:(or (eq ?c "cloudy") (eq ?c "rainy") (eq ?c "snowy")))
                   (temperature ?t&:(< ?t 10)))
+    (test (and (= ?e_day ?w_day)))
     (not (sad-assessment (user_id ?id)))
 =>
     (assert (sad-assessment

@@ -18,10 +18,10 @@ public class SignInPage extends BasePage {
     // Constants for easy adjustments
     private static final int PADDING_X = 60; // Horizontal padding for fields
     private static final int FIELD_HEIGHT = 30; // Height for the input fields and button
-
+    
     public SignInPage() {
         super();
-
+        
         // Add background image
         JLabel backgroundLabel = new JLabel(new ImageIcon("assets/images/background.png"));
         backgroundLabel.setBounds(0, 0, contentArea.getWidth(), contentArea.getHeight());

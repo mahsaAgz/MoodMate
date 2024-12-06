@@ -41,7 +41,7 @@
     (printout t "RSES Score for user " ?id ": " ?score crlf)
     (printout t "RSES Level: " ?level crlf))
 
-; Rules for different combinations
+; Rules for different combinations - simplified to one recommendation each
 (defrule trigger-yes-rses-high
     (declare (salience 90))
     (trigger-status (user_id ?id) (has-trigger true))
@@ -49,13 +49,7 @@
 =>
     (assert (recommendation 
         (user_id ?id)
-        (message "It's great that you have high self-esteem! Reflecting on this trigger might help you learn more about what challenges you and how you can grow stronger from it.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "Your confidence is your strength—use it to address this trigger constructively and focus on maintaining a positive mindset.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "You seem resilient! Consider journaling about this experience to process your emotions and reinforce your self-image."))))
+        (message "It's great that you have high self-esteem! Use your confidence to address this trigger constructively and maintain a positive mindset."))))
 
 (defrule trigger-yes-rses-moderate
     (declare (salience 90))
@@ -64,69 +58,52 @@
 =>
     (assert (recommendation 
         (user_id ?id)
-        (message "Your balanced self-perception can help you navigate this trigger. Remember that it's normal to feel challenged sometimes.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "Consider talking to a friend or writing down your thoughts. Your moderate self-awareness suggests you can process this experience constructively.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "Take small steps to address this trigger. Your balanced self-image is a good foundation for working through challenges."))))
+        (message "Your balanced self-perception can help you navigate this trigger. Remember that it's normal to feel challenged sometimes."))))
 
 (defrule trigger-yes-rses-low
-	(declare (salience 90))
+    (declare (salience 90))
     (trigger-status (user_id ?id) (has-trigger true))
     (rses-level (user_id ?id) (level "low"))
 =>
     (assert (recommendation 
         (user_id ?id)
-        (message "Even though this trigger has affected you, remember that setbacks don't define your worth. Try focusing on one small, positive action today.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "It's okay to feel shaken by this situation. Speaking to someone you trust might help you gain perspective and build your self-esteem.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "Be kind to yourself. Triggers can be tough, but recognizing them is a step toward growth. Practice self-compassion and celebrate small wins."))))
+        (message "Even though this trigger has affected you, remember that setbacks don't define your worth. Try focusing on one small, positive action today."))))
 
 (defrule trigger-no-rses-high
     (declare (salience 90))
-    (trigger-status (user_id ?id) (has-trigger false))  ; Corrected this line
+    (trigger-status (user_id ?id) (has-trigger false))
     (rses-level (user_id ?id) (level "high"))
 =>
     (assert (recommendation 
         (user_id ?id)
-        (message "Your high self-esteem shows! Without a trigger present, take this time to appreciate how you've been managing your emotions effectively.")))
+        (message "Your high self-esteem shows! Take this time to appreciate how you've been managing your emotions effectively and set goals that align with your strengths."))))
+
+(defrule trigger-no-rses-moderate
+    (declare (salience 90))
+    (trigger-status (user_id ?id) (has-trigger false))
+    (rses-level (user_id ?id) (level "moderate"))
+=>
     (assert (recommendation 
         (user_id ?id)
-        (message "Enjoy the calm moments and consider reinforcing your positivity by engaging in an activity that brings you joy or helps others.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "Your self-image is strong, which is a fantastic foundation. Use this peaceful time to set goals that align with your strengths."))))
+        (message "With your balanced outlook, this is a good time to engage in activities that reinforce your self-worth and personal growth."))))
 
 (defrule trigger-no-rses-low
-	(declare (salience 90))
+    (declare (salience 90))
     (trigger-status (user_id ?id) (has-trigger false))
     (rses-level (user_id ?id) (level "low"))
 =>
     (assert (recommendation 
         (user_id ?id)
-        (message "This is a good time to focus on yourself. Reflecting on positive experiences or achievements might help strengthen your self-esteem.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "You're in a calm space, so take a moment to practice self-affirmation or mindfulness to nurture your self-worth.")))
-    (assert (recommendation 
-        (user_id ?id)
-        (message "Without a trigger affecting you, this could be an opportunity to explore activities that help you feel accomplished and valued."))))
+        (message "This is a good time to focus on yourself. Take a moment to practice self-affirmation or mindfulness to nurture your self-worth."))))
 
 ; Check for moderate RSES and no trigger for second factors
 (defrule check-second-factors
-	(declare (salience 89))
+    (declare (salience 89))
     (trigger-status (user_id ?id) (has-trigger false))
     (rses-level (user_id ?id) (level "moderate"))
 =>
     (assert (need-second-factors (user_id ?id) (need TRUE)))
     (printout t "RSES is moderate and no trigger present. Checking secondary factors..." crlf))
-
-
 
 ; Print recommendation with user_id
 (defrule print-recommendation
@@ -137,4 +114,3 @@
     (assert (printed-recommendation (user_id ?id)))
     (printout t crlf "Recommendation for user " ?id ":" crlf)
     (printout t ?m crlf))
-

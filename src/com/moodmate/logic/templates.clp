@@ -214,10 +214,6 @@
     (slot warning-type)   ; "macronutrient" or "meal"
     (slot message))
 
-(deftemplate appetite-recommendation
-    (slot user_id)
-    (slot message))
-
 ; Update the emotional-pattern template to include a default value for persistence
 (deftemplate emotional-pattern
     (slot user_id)

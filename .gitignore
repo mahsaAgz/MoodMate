@@ -5,6 +5,7 @@
 # Ignore Eclipse/Java IDE files
 .classpath
 .project
+.settings/
 
 # Ignore specific files in directories
 src/.DS_Store

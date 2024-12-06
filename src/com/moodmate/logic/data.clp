@@ -94,7 +94,7 @@
     (duration 100)            
     (intensity "light")))
 
-(assert (appetite-status (user_id 1) (option "0a")))
+(assert (appetite-status (user_id 1) (option "3")))
 (assert (macronutrient-intake 
     (user_id 1)
     (carbs 30)       ; Lower than needed
