@@ -1,6 +1,6 @@
 package com.moodmate.GUI;
-import jess.Rete;
-import jess.JessException;
+import jess.*;
+
 
 public class ReteEngineManager {
 
@@ -26,6 +26,7 @@ public class ReteEngineManager {
                 rete.batch("src/com/moodmate/logic/depression_rules.clp");
                 rete.batch("src/com/moodmate/logic/eating_disorder_rules.clp");
                 rete.batch("src/com/moodmate/logic/suggestion_rules.clp");
+                rete.batch("src/com/moodmate/logic/rules_weather.clp");
 
             } catch (JessException e) {
                 e.printStackTrace();

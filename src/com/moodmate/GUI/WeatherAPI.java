@@ -16,13 +16,18 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.moodmate.GUI.SignInPage.GlobalVariable;
 public class WeatherAPI {
-    public static void main(String[] args) {
+	Rete engine = ReteEngineManager.getInstance();
+	
+	public WeatherAPI(Rete engine) {
+		this.engine = engine;		
+	}
+    public void fetchWeather() {
         String city = "Daejeon";  // Example city
         String apiKey = "d15bc8c7724a3d65233de5301a550fba";  // Replace with your OpenWeatherMap API key
         // Database credentials
-        String jdbcUrl = "jdbc:mysql://localhost:3306/moodmate";  // Change to your database URL
-        String dbUser = "root";  // Change to your database username
-        String dbPassword = "17Aug1993";  // Change to your database password
+        //String jdbcUrl = "jdbc:mysql://localhost:3306/moodmate";  // Change to your database URL
+        //String dbUser = "root";  // Change to your database username
+        //String dbPassword = "17Aug1993";  // Change to your database password
         try {
             // Create the API URL
             String urlString = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
@@ -65,7 +70,7 @@ public class WeatherAPI {
             System.out.println("Temperature in is: " + temperature + "°C");       
             System.out.println("Humidity: " + humidity + " %");
             System.out.println("Weather Condition: " + weatherCondition);
-            Rete engine= new Rete();
+            
             engine.batch("src/com/moodmate/logic/rules_weather.clp");
             engine.eval("(assert (weather-input (condition \"" + weatherCondition + "\")))");
             engine.eval("(assert (temperature-input (value " + temperature + ")))");
@@ -74,32 +79,32 @@ public class WeatherAPI {
             engine.eval("(run)");
             
             // Retrieve facts from Jess
-            String temperatureValue = "";
-            int weatherImpact = 0;
-            String weatherCon = "";
+            //String temperatureValue = "";
+            //int weatherImpact = 0;
+            //String weatherCon = "";
             
          // Retrieve facts from working memory (example: weather-input, temperature-input)
-            Iterator<Fact> facts = engine.listFacts();  // Get an iterator of all facts
+           /* Iterator<Fact> facts = engine.listFacts();  // Get an iterator of all facts
             while (facts.hasNext()) {
                 Fact fact = facts.next();
                 String factName = fact.getName();  // Get the name of the fact
                 if (factName.equals("MAIN::FinalEffect")) {
                     // Retrieve the condition value from the fact's slot
                     Value conditionValue = fact.getSlotValue("temperature");
-                    Value scoreValue = fact.getSlotValue("final-mood-score");
+                    //Value scoreValue = fact.getSlotValue("final-mood-score");
                     if (conditionValue != null) {
                         System.out.println("Condition (temperature) value: " + conditionValue.stringValue(engine.getGlobalContext()));
                         temperatureValue = conditionValue.stringValue(engine.getGlobalContext());  // Set condition
                     } else {
                         System.out.println("Temperature slot not found in fact: " + fact);
                     }
-                    if (scoreValue != null) {
+                    /*if (scoreValue != null) {
                         System.out.println("Final mood score value: " + scoreValue.stringValue(engine.getGlobalContext()));
                         weatherImpact = Integer.parseInt(scoreValue.stringValue(engine.getGlobalContext()));  // Set finalMoodScore
                     } else {
                         System.out.println("Final-mood-score slot not found in fact: " + fact);
-                    }
-                }
+                    }*/
+                /*}
                 if (factName.equals("MAIN::Weather")) {
                 	 // Retrieve the condition value from the fact's slot
                     Value weatherValue = fact.getSlotValue("condition");
@@ -117,13 +122,13 @@ public class WeatherAPI {
             // Print out retrieved values
             System.out.println("Temperature value: " + temperatureValue);
             System.out.println("Final Mood Score: " + weatherImpact);
-            saveWeatherDataToDatabase(temperatureValue, weatherCon, jdbcUrl, dbUser, dbPassword);
+            saveWeatherDataToDatabase(temperatureValue, weatherCon, jdbcUrl, dbUser, dbPassword);*/
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-private static void saveWeatherDataToDatabase(String temperatureValue, String weatherCon, String jdbcUrl, String dbUser, String dbPassword) 
+/*private static void saveWeatherDataToDatabase(String temperatureValue, String weatherCon, String jdbcUrl, String dbUser, String dbPassword) 
 {
 // Database connection and insertion logic
 Connection conn = null;
@@ -156,5 +161,5 @@ System.out.println("Weather data saved to the database!");
         e.printStackTrace();
     }
 }
-}
+}*/
 }
