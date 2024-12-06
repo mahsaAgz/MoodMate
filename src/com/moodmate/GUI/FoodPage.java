@@ -43,9 +43,9 @@ public class FoodPage extends BaseHomePage {
     String emotionName;
     
  // Database credentials
-    String jdbcUrl = "jdbc:mysql://localhost:3306/moodmate";  // Change to your database URL
+    String jdbcUrl = "jdbc:mysql://localhost:3306/moodMate";  // Change to your database URL
     String dbUser = "root";  // Change to your database username
-    String dbPassword = "17Aug1993";  // Change to your database password
+    String dbPassword = "002915";  // Change to your database password
     
     private static final Map<String, String> APPETITE_CODES;
     static {
@@ -231,6 +231,7 @@ public class FoodPage extends BaseHomePage {
         nextButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         nextButton.addActionListener(e -> {
+        	
             try {
                 // Validate meal count input
                 int mealsToday = (int) mealCountSpinner.getValue();
@@ -294,8 +295,9 @@ public class FoodPage extends BaseHomePage {
                 System.out.println("Facts in the engine:");
                 while (facts.hasNext()) {
                        
-                    	Fact fact = (Fact) facts.next();
-                    	System.out.println("Processing fact: " + fact);
+                	Fact fact = (Fact) facts.next();
+                    System.out.println("Processing fact: " + fact);
+                    
                         if (fact.getName().equals("MAIN::food-score")) {
                         	 foodScore = fact.getSlotValue("total-score").intValue(null);
                         	 //percentage = fact.getSlotValue("percentage").intValue(null);
@@ -337,9 +339,9 @@ public class FoodPage extends BaseHomePage {
                        	 pAScore = fact.getSlotValue("score").intValue(null);
                        	System.out.println("Physical Activity Score: "+pAScore);
                    }
-                        else   if (fact.getName().equals("MAIN::FinalEffect")) {
+                        else   if (fact.getName().equals("MAIN::categorized-temperature")) {
                             // Retrieve the condition value from the fact's slot
-                            Value conditionValue = fact.getSlotValue("temperature");
+                            Value conditionValue = fact.getSlotValue("category");
                             //Value scoreValue = fact.getSlotValue("final-mood-score");
                             if (conditionValue != null) {
                                 System.out.println("Condition (temperature) value: " + conditionValue.stringValue(engine.getGlobalContext()));
@@ -354,7 +356,7 @@ public class FoodPage extends BaseHomePage {
                                 System.out.println("Final-mood-score slot not found in fact: " + fact);
                             }*/
                         }
-                        else if (fact.getName().equals("MAIN::Weather")) {
+                        else if (fact.getName().equals("MAIN::categorized-weather")) {
                         	 // Retrieve the condition value from the fact's slot
                             Value weatherValue = fact.getSlotValue("condition");
                             if (weatherValue != null) {

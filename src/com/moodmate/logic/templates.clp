@@ -353,6 +353,8 @@
     (slot user_id)
     (slot message))
     
-(deftemplate Weather
+(deftemplate categorized-weather
    (slot condition)) ;; sunny, rainy, cloudy, stormy, etc.
-    
+   
+(deftemplate categorized-temperature
+   (slot category))

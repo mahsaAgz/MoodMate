@@ -16,6 +16,7 @@
                                                    (eq ?raw-condition "Sand") (eq ?raw-condition "Ash"))
                                                 then "hazardous"
                                                 else "unknown")))))))
+                                                
 ; Function to get weather mood impact based on category
 (deffunction get-weather-impact (?condition)
     (bind ?category (map-weather-condition ?condition))
@@ -50,19 +51,7 @@
                                                 then "Hazardous conditions - stay indoors and follow local health advisories. "
                                                 else "Check local weather updates for specific conditions. ")))))))
 
-; Function to get weather mood impact
-(deffunction get-weather-impact (?condition)
-    (if (or (eq ?condition "Clear") (eq ?condition "Sunny"))
-        then 3
-        else (if (eq ?condition "Rain")
-                then -3
-                else (if (eq ?condition "Clouds")
-                        then -1
-                        else (if (eq ?condition "Thunderstorm")
-                                then -4
-                                else (if (eq ?condition "Snow")
-                                        then 1
-                                        else 0))))))
+
 
 (deffunction get-temp-impact (?temp)
     (if (< ?temp 10)
@@ -81,6 +70,22 @@
                 else (if (< ?temp 30)
                         then "warm"
                         else "hot"))))
+                        
+; Rule to categorize weather condition and assert new fact
+(defrule categorize-weather
+    ?w <- (weather-input (condition ?wcond))
+    =>
+    (bind ?category (map-weather-condition ?wcond))
+    (assert (categorized-weather (condition ?category)))
+    (printout t "Weather categorized as: " ?category crlf))
+
+; Rule to categorize temperature and assert new fact
+(defrule categorize-temperature
+    ?t <- (temperature-input (value ?temp))
+    =>
+    (bind ?temp-cat (get-temp-category ?temp))
+    (assert (categorized-temperature (category ?temp-cat)))
+    (printout t "Temperature categorized as: " ?temp-cat crlf))
 
 (deffunction get-humidity-impact (?humid)
     (if (< ?humid 30)
