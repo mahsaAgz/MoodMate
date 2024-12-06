@@ -73,26 +73,26 @@
 (assert (self-image-answer (user_id 1) (question_id 9) (answer 3)))
 (assert (self-image-answer (user_id 1) (question_id 10) (answer 4)))
 
-(assert (sleepiness (user_id 1) (sleepy TRUE)))
+(assert (sleepiness (user_id 1) (sleepy FALSE)))
 ; Based on satisfaction level (0-3):
 ; 3 = Very good quality -> recommend power nap
 ; 2 = Fairly good -> recommend consistent schedule
 ; 1 = Needs improvement -> recommend sleep hygiene
 ; 0 = Poor quality -> recommend medical consultation
-(assert (sleep-quality 
-    (user_id 1)
-    (satisfaction 2)    
-    (sleep-time "00:30")
-    (wake-time "09:00")
-    (sleep-decimal 0.5)
-    (wake-decimal 9)))
+;(assert (sleep-quality 
+ ;   (user_id 1)
+  ;  (satisfaction 2)    
+   ; (sleep-time "00:30")
+    ;(wake-time "09:00")
+    ;(sleep-decimal 0.5)
+    ;(wake-decimal 9)))
 
-(assert (activity (user_id 1) (has-activity TRUE)))
-(assert (physical-activity  ; Example 1: Short duration
-    (user_id 1)
-    (has-activity TRUE)
-    (duration 100)            
-    (intensity "light")))
+(assert (activity (user_id 1) (has-activity FALSE)))
+;(assert (physical-activity  ; Example 1: Short duration
+ ;   (user_id 1)
+  ;  (has-activity TRUE)
+  ;  (duration 100)            
+   ; (intensity "light")))
 
 (assert (appetite-status (user_id 1) (option "3")))
 (assert (macronutrient-intake 
