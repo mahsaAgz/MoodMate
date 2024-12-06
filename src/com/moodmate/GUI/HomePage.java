@@ -26,6 +26,16 @@ public class HomePage extends BaseHomePage {
     private static final int MOTIVATION_HEIGHT = 80; //
     private static final int PART1_HEIGHT = 100; //
     private static final int PART2_HEIGHT = 450; //
+    
+    private static final Color joyColor = new Color(255, 165, 0);    // A warm orange
+    private static final Color sadnessColor = new Color(70, 130, 180);     // A calming steel blue
+    private static final Color angerColor = new Color(255, 99, 71);       // A warm tomato red
+    private static final Color scaredColor = new Color(147, 112, 219);  // A soft lavender purple
+    private static final Color confusedColor = new Color(144, 238, 144);   // A fresh light green
+
+  
+    
+    
 //    private static final int PART3_HEIGHT = 300; 
     
     private static class EmotionData {
@@ -269,7 +279,7 @@ public class HomePage extends BaseHomePage {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
                 String[] emotions = {"Happy", "Sad", "Angry", "Scared", "Confused"};
-                Color[] colors = {Color.YELLOW, Color.BLUE, Color.RED, Color.PINK, Color.GREEN};
+                Color[] colors = {joyColor, sadnessColor, angerColor, scaredColor, confusedColor};
 
                 int width = getWidth(), height = getHeight() - 50, margin = 40;
                 int graphWidth = width - 2 * margin, graphHeight = height - 2 * margin;
@@ -314,7 +324,13 @@ public class HomePage extends BaseHomePage {
                     if (hours.size() > 1) {
                         x = margin + (i * graphWidth) / (hours.size() - 1);
                     }
-                    g2.drawString(hours.get(i) + ":00", x - 10, height - margin + 20);
+                    // Format hour from 1213 to 12:13
+                    int rawHour = hours.get(i);
+                    String formattedHour = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
+
+                    // Draw formatted hour on the graph
+                    g2.drawString(formattedHour, x - 10, height - margin + 20);
+               
                 }
 
                 // Draw emotion labels
@@ -330,12 +346,12 @@ public class HomePage extends BaseHomePage {
 
                 // Draw axes labels
                 g2.setColor(Color.BLACK);
-                g2.drawString("Time", width / 2, height - margin + 20);
+//                g2.drawString("Time", width / 2, height - margin + 20);
                 g2.drawString("Score (%)", margin - 30, height / 2);
             }
         };
 
-        chartArea.setPreferredSize(new Dimension(400, 200));
+        chartArea.setPreferredSize(new Dimension(400, 10));
         graphPanel.add(chartArea, BorderLayout.CENTER);
 
      // Modified Suggestions section
@@ -370,14 +386,8 @@ public class HomePage extends BaseHomePage {
         }
         suggestionsPanel.add(Box.createVerticalGlue());
         
-        // Wrap suggestions panel in a scroll pane in case content is too long
-        JScrollPane suggestionsScrollPane = new JScrollPane(suggestionsPanel);
-        suggestionsScrollPane.setOpaque(false);
-        suggestionsScrollPane.getViewport().setOpaque(false);
-        suggestionsScrollPane.setBorder(null);
-        suggestionsScrollPane.setPreferredSize(new Dimension(400, 120));  // Set fixed height for suggestions area
-        
-        graphPanel.add(suggestionsScrollPane, BorderLayout.SOUTH);
+
+        graphPanel.add(suggestionsPanel, BorderLayout.SOUTH);
         return graphPanel;
     }
 
@@ -411,19 +421,19 @@ public class HomePage extends BaseHomePage {
             if (suggestions.isEmpty()) {
                 switch (timeframe.toLowerCase()) {
                     case "daily":
-                        suggestions.add("Take a 10-minute walk");
-                        suggestions.add("Drink a glass of water");
-                        suggestions.add("Write down 3 things you're grateful for");
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
                         break;
                     case "weekly":
-                        suggestions.add("Review your week's achievements");
-                        suggestions.add("Plan your meals for the week");
-                        suggestions.add("Schedule a call with a loved one");
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
                         break;
                     case "monthly":
-                        suggestions.add("Set your goals for the month");
-                        suggestions.add("Declutter your workspace");
-                        suggestions.add("Reflect on personal growth");
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
                         break;
                 }
             }
