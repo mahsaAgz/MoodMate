@@ -67,8 +67,7 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     gender TINYINT,
     age INT,
     mbti VARCHAR(4),
-    hobbies TEXT,
-    self_image_score DECIMAL(5,2)
+    hobbies TEXT
     );
 
     -- Daily_Record table
