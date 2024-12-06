@@ -10,7 +10,17 @@
 (defrule analyze-non-sleepy
     (declare (salience 84))
     (sleepiness (user_id ?id) (sleepy FALSE))
+    (not (sleep-score-calculated (user_id ?id)))
 =>
+	(assert (sleep-quality
+        (user_id ?id)
+        (satisfaction 3) ; Highest satisfaction
+        (sleep-time 0)   ; No specific sleep time
+        (wake-time 0)    ; No specific wake time
+        (sleep-decimal 0) ; No specific decimal representation of sleep time
+        (wake-decimal 0) ; No specific decimal representation of wake time
+        (score 100)))    ; Maximum score
+    (assert (sleep-score-calculated (user_id ?id)))
     (assert (sleep-recommendation 
         (user_id ?id)
         (message "Sleep Score: 100/100. Your alertness is good - keep maintaining your current sleep schedule.")))
@@ -68,8 +78,12 @@
                     then 15
                     else 10)))
     
-    ; Calculate total score
-    (bind ?total-score (round (+ ?satisfaction-score ?duration-score ?timing-score ?midpoint-score)))
+    ; Calculate total raw score
+    (bind ?raw-total-score (+ ?satisfaction-score ?duration-score ?timing-score ?midpoint-score))
+
+    ; Normalize the score to 0–100
+    (bind ?max-score 120) ; Adjust this if the maximum possible score changes
+    (bind ?total-score (round (* (/ ?raw-total-score ?max-score) 100)))
     
     ; Generate message using consistent format
     (bind ?message 

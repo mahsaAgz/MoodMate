@@ -50,18 +50,22 @@ public class RealTimeSuggestionPage extends BaseHomePage {
         templateIcons.put("MAIN::physical-activity-recommendation", "physical_activity.png");
         templateIcons.put("food-recommendation", "food.png");
         templateIcons.put("MAIN::food-recommendation", "food.png");
+        templateIcons.put("Recommendation", "weather.png");
+        templateIcons.put("MAIN::Recommendation", "weather.png");
+        templateIcons.put("weather-recommendation", "weather.png");
 
 
         try {
             // Define the list of templates to retrieve recommendations from
-            List<String> templates = Arrays.asList(
-                "recommendation",
-                "sleep-recommendation",
-                "physical-activity-recommendation",
-                "food-recommendation"
-            );
+        	List<String> templates = Arrays.asList(
+        		    "recommendation",
+        		    "sleep-recommendation",
+        		    "physical-activity-recommendation",
+        		    "food-recommendation",
+        		    "Recommendation",  // This catches general recommendations including weather
+        		    "weather-recommendation"  // This is for specific weather recommendations
+        		);
 
-            // Retrieve and display recommendations for each template
             for (String template : templates) {
                 List<String> recommendations = getRecommendations(engine, template);
                 for (String recommendation : recommendations) {
@@ -69,22 +73,19 @@ public class RealTimeSuggestionPage extends BaseHomePage {
                     container.setLayout(null);
                     container.setBounds(PADDING_X, currentY, contentWidth - 2 * PADDING_X, PIC_SIZE + FIELD_HEIGHT + 10);
 
-                    // Icon for the recommendation type
                     String iconPath = "assets/images/suggestions/" + templateIcons.getOrDefault(
-                    	    template.replace("MAIN::", ""), 
-                    	    "default.png"
-                    	);
+                        template.replace("MAIN::", ""), 
+                        "default.png"
+                    );
                     JLabel iconLabel = new JLabel(new ImageIcon(iconPath));
                     iconLabel.setBounds(0, 0, PIC_SIZE, PIC_SIZE);
                     container.add(iconLabel);
 
-                    // Text Label for recommendation
                     JLabel textLabel = new JLabel("<html>" + recommendation + "</html>");
-                    textLabel.setFont(new Font(customFont, Font.PLAIN, 14));  // Changed from 16 to 14
+                    textLabel.setFont(new Font(customFont, Font.PLAIN, 14));
                     textLabel.setBounds(PIC_SIZE + 10, 0, contentWidth - PIC_SIZE - PADDING_X * 2, PIC_SIZE);
                     container.add(textLabel);
 
-                    // Add container to content panel
                     contentPanel.add(container);
                     currentY += PIC_SIZE + FIELD_HEIGHT + MARGIN;
                 }
@@ -99,11 +100,11 @@ public class RealTimeSuggestionPage extends BaseHomePage {
                 JOptionPane.ERROR_MESSAGE
             );
         }
+
      
 
         currentY += MARGIN;
 
-        // Next Button
         JButton nextButton = new JButton("Next");
         nextButton.setBounds(PADDING_X, currentY, contentWidth - 2 * PADDING_X, FIELD_HEIGHT + 10);
         nextButton.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 0, true));
@@ -134,17 +135,47 @@ public class RealTimeSuggestionPage extends BaseHomePage {
 
         while (facts.hasNext()) {
             Fact fact = (Fact) facts.next();
-            // Check for both with and without MAIN:: prefix
-            if (fact.getName().equals(templateName) || 
-                fact.getName().equals("MAIN::" + templateName)) {
-                // Check if the fact has user_id slot matching current user
-                Value userIdValue = fact.getSlotValue("user_id");
-                if (!userIdValue.equals(Funcall.NIL) && 
-                    userIdValue.intValue(engine.getGlobalContext()) == userId) {
-                    // Only get message if it matches current user
-                    String message = fact.getSlotValue("message").stringValue(null);
-                    recommendations.add(message);
+            String factName = fact.getName();
+            
+            // Skip facts that aren't recommendations
+            if (!factName.contains("recommendation") && 
+                !factName.equals("MAIN::Recommendation")) {
+                continue;
+            }
+
+            try {
+                // Handle general recommendations (including weather)
+                if (templateName.equals("Recommendation") && 
+                    factName.equals("MAIN::Recommendation")) {
+                    Value messageValue = fact.getSlotValue("message");
+                    if (!messageValue.equals(Funcall.NIL)) {
+                        String message = messageValue.stringValue(null);
+                        if (message.toLowerCase().contains("weather") || 
+                            message.toLowerCase().contains("cloudy") ||
+                            message.toLowerCase().contains("temperature")) {
+                            recommendations.add(message);
+                        }
+                    }
+                } 
+                // Handle specific recommendations
+                else if (factName.equals(templateName) || 
+                         factName.equals("MAIN::" + templateName)) {
+                    Value messageValue = fact.getSlotValue("message");
+                    if (!messageValue.equals(Funcall.NIL)) {
+                        if (templateName.equals("weather-recommendation")) {
+                            recommendations.add(messageValue.stringValue(null));
+                        } else {
+                            Value userIdValue = fact.getSlotValue("user_id");
+                            if (!userIdValue.equals(Funcall.NIL) && 
+                                userIdValue.intValue(engine.getGlobalContext()) == userId) {
+                                recommendations.add(messageValue.stringValue(null));
+                            }
+                        }
+                    }
                 }
+            } catch (JessException e) {
+                // Skip facts that don't have the expected slots
+                continue;
             }
         }
         return recommendations;

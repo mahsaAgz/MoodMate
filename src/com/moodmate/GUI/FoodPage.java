@@ -68,7 +68,7 @@ public class FoodPage extends BaseHomePage {
         Rete engine = ReteEngineManager.getInstance();
      // Fetch weather data and assert into Jess
         WeatherAPI weatherAPI = new WeatherAPI(engine);
-        weatherAPI.fetchWeather();
+        weatherAPI.getWeatherUpdate();
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(null); // Absolute positioning

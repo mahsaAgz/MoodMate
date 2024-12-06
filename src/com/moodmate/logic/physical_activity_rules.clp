@@ -1,7 +1,6 @@
 ; Rule to check if physical activity assessment is needed
 (defrule check-physical-activity
     (declare (salience 82))
-    (need-second-factors (user_id ?id) (need TRUE))
     (activity (user_id ?id) (has-activity TRUE))
 =>
     (printout t crlf "Checking physical activity factors..." crlf))
@@ -9,13 +8,23 @@
 ; Rule for no physical activity
 (defrule evaluate-no-activity
     (declare (salience 81))
-    (need-second-factors (user_id ?id) (need TRUE))
     (activity (user_id ?id) (has-activity FALSE))
+    (not (activity-score-calculated (user_id ?id))) 
 =>
+    ; Assert a physical-activity fact with the lowest score
+    (assert (physical-activity
+        (user_id ?id)
+        (has-activity FALSE)
+        (duration 0)
+        (intensity "none")
+        (score 0))) ; Lowest possible score
+
+    (assert (activity-score-calculated (user_id ?id)))
     (assert (physical-activity-recommendation 
         (user_id ?id)
-        (message "Consider incorporating some light physical activity into your day. Even a short walk can help improve your mood.")))
-    (printout t "Physical Activity Analysis Complete" crlf))
+        (message "Physical Activity Score: 0/100. Consider incorporating some light physical activity into your day. Even a short walk can help improve your mood.")))
+
+    (printout t "No physical activity detected. Physical activity fact asserted with lowest score and recommendation." crlf))
 
 
 ; Rule to calculate physical activity score

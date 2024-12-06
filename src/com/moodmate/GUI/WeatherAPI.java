@@ -1,40 +1,38 @@
 package com.moodmate.GUI;
+import com.moodmate.GUI.SignInPage.GlobalVariable;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
+
 import jess.*;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.moodmate.GUI.SignInPage.GlobalVariable;
+import java.text.SimpleDateFormat;
+
 public class WeatherAPI {
 	Rete engine = ReteEngineManager.getInstance();
 	
 	public WeatherAPI(Rete engine) {
 		this.engine = engine;		
 	}
-    public void fetchWeather() {
         String city = "Daejeon";  // Example city
         String apiKey = "d15bc8c7724a3d65233de5301a550fba";  // Replace with your OpenWeatherMap API key
-        // Database credentials
-        //String jdbcUrl = "jdbc:mysql://localhost:3306/moodmate";  // Change to your database URL
-        //String dbUser = "root";  // Change to your database username
-        //String dbPassword = "17Aug1993";  // Change to your database password
+    private static final String CITY = "Daejeon";
+    private static final String API_KEY = "d15bc8c7724a3d65233de5301a550fba";
+    private static final int userId = GlobalVariable.userId;
+    public static void getWeatherUpdate() {
         try {
-            // Create the API URL
-            String urlString = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey;
+            String urlString = "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "&appid=" + API_KEY;
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            // Read the response
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder response = new StringBuilder();
             String line;
@@ -42,52 +40,62 @@ public class WeatherAPI {
                 response.append(line);
             }
             reader.close();
-            //System.out.println("Raw JSON response: " + response.toString());
-            // Parse the JSON response
+
             JsonObject jsonResponse = JsonParser.parseString(response.toString()).getAsJsonObject();
-         // Extract temperature, humidity, and weather condition
             JsonObject main = jsonResponse.getAsJsonObject("main");
             JsonArray weatherArray = jsonResponse.getAsJsonArray("weather");
-            JsonObject weather = weatherArray.get(0).getAsJsonObject(); // Get the first element in the array
-            
-         // Extract the Unix timestamp (dt) for the date and time
+            JsonObject weather = weatherArray.get(0).getAsJsonObject();
+
             long unixTimestamp = jsonResponse.get("dt").getAsLong();
-            
-            // Convert Unix timestamp to human-readable date
-            Date date = new Date(unixTimestamp * 1000); // Multiply by 1000 to convert to milliseconds
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // Only include the date
+            Date date = new Date(unixTimestamp * 1000);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); // Updated format
             String formattedDate = sdf.format(date);
-            
-         // Convert temperature from Kelvin to Celsius
+
             double temperature = main.get("temp").getAsDouble() - 273.15;
+            String weatherCondition = weather.get("main").getAsString();
             int humidity = main.get("humidity").getAsInt();
-            String weatherCondition = weather.get("main").getAsString(); // Now this works correctly
-           
             
-            // Print the temperature
-            System.out.println("Weather in " + city + ":");
-            System.out.println("Date: " + formattedDate); // Only the date
-            System.out.println("Temperature in is: " + temperature + "°C");       
+            System.out.println("\nWeather in " + CITY + ":");
+            System.out.println("Date: " + formattedDate);
+            System.out.println("Temperature: " + String.format("%.1f", temperature) + "°C");
             System.out.println("Humidity: " + humidity + " %");
             System.out.println("Weather Condition: " + weatherCondition);
-            
+            Rete engine = ReteEngineManager.getInstance();
             engine.batch("src/com/moodmate/logic/rules_weather.clp");
+
+            
+            engine.batch("src/com/moodmate/logic/templates_weather.clp");
+
+            // Assert `weather-input` facts
             engine.eval("(assert (weather-input (condition \"" + weatherCondition + "\")))");
             engine.eval("(assert (temperature-input (value " + temperature + ")))");
             engine.eval("(assert (humidity-input (level " + humidity + ")))");
-            engine.eval("(assert (finalize-score))");
+
+            // Assert the `daily-weather` fact
+            String dailyWeatherFact = String.format(
+                "(assert (daily-weather (user_id %d) (day \"%s\") (condition \"%s\") (temperature %.1f)))",
+                userId, formattedDate, weatherCondition, temperature
+            );
+            System.out.println("Asserting fact: " + dailyWeatherFact);
+            engine.eval(dailyWeatherFact);
+
+            // Run the engine
+            engine.eval("(assert (user-id (userId " + userId + ")))");
             engine.eval("(run)");
             
             // Retrieve facts from Jess
-            //String temperatureValue = "";
+            String temperatureValue = "";
             //int weatherImpact = 0;
             //String weatherCon = "";
             
          // Retrieve facts from working memory (example: weather-input, temperature-input)
-           /* Iterator<Fact> facts = engine.listFacts();  // Get an iterator of all facts
+            Iterator<Fact> facts = engine.listFacts();  // Get an iterator of all facts
+
+            //Iterator<Fact> facts = engine.listFacts();
             while (facts.hasNext()) {
                 Fact fact = facts.next();
-                String factName = fact.getName();  // Get the name of the fact
+                String factName = fact.getName();
+
                 if (factName.equals("MAIN::FinalEffect")) {
                     // Retrieve the condition value from the fact's slot
                     Value conditionValue = fact.getSlotValue("temperature");
@@ -123,8 +131,28 @@ public class WeatherAPI {
             System.out.println("Temperature value: " + temperatureValue);
             System.out.println("Final Mood Score: " + weatherImpact);
             saveWeatherDataToDatabase(temperatureValue, weatherCon, jdbcUrl, dbUser, dbPassword);*/
+                    Value tempCondition = fact.getSlotValue("temperature");
+                    Value scoreValue = fact.getSlotValue("final-mood-score");
+                    Value suggestionValue = fact.getSlotValue("suggestion");
+
+                    System.out.println("\nWeather Analysis Results:");
+                    if (tempCondition != null) {
+                        System.out.println("Temperature Condition: " +
+                            tempCondition.stringValue(engine.getGlobalContext()));
+                    }
+                    if (scoreValue != null) {
+                        System.out.println("Weather Impact Score: " +
+                            scoreValue.stringValue(engine.getGlobalContext()) + "/100");
+                    }
+                    if (suggestionValue != null) {
+                        System.out.println("Recommendation: " +
+                            suggestionValue.stringValue(engine.getGlobalContext()));
+                    }
+                }
+            }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Error getting weather update: " + e.getMessage());
         }
     }
     
@@ -162,4 +190,8 @@ System.out.println("Weather data saved to the database!");
     }
 }
 }*/
+    // Main method for testing
+    public static void main(String[] args) {
+        getWeatherUpdate();
+    }
 }
