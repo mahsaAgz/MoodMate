@@ -31,7 +31,7 @@ public class HomePage extends BaseHomePage {
     private static final Color sadnessColor = new Color(70, 130, 180);     // A calming steel blue
     private static final Color angerColor = new Color(255, 99, 71);       // A warm tomato red
     private static final Color scaredColor = new Color(147, 112, 219);  // A soft lavender purple
-    private static final Color confusedColor = new Color(144, 238, 144);   // A fresh light green
+    private static final Color confusedColor = new Color(102, 205, 170);   // A fresh light green
 
   
     
@@ -421,6 +421,9 @@ public class HomePage extends BaseHomePage {
             if (suggestions.isEmpty()) {
                 switch (timeframe.toLowerCase()) {
                     case "daily":
+                        suggestions.add("No data for now");
+                        suggestions.add("Press Begin");
+                        suggestions.add("and get personolized suggestions");
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
                         suggestions.add("and get personolized suggestions");
