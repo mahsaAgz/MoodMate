@@ -354,7 +354,7 @@ public class HomePage extends BaseHomePage {
         suggestionsTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
         suggestionsPanel.add(suggestionsTitle);
         suggestionsPanel.add(Box.createVerticalStrut(5));  // Add spacing
-
+     
         String[] suggestions = generateSuggestions(timeframe);
         for (String suggestion : suggestions) {
             // Create a panel for each suggestion with proper wrapping
@@ -384,7 +384,7 @@ public class HomePage extends BaseHomePage {
     private String[] generateSuggestions(String timeframe) {
         List<String> suggestions = new ArrayList<>();
 
-        suggestions.add("Default suggestions for " + timeframe);
+//        suggestions.add("Default suggestions for " + timeframe);
 
         try {
             Rete engine = ReteEngineManager.getInstance();
@@ -392,11 +392,13 @@ public class HomePage extends BaseHomePage {
             
             while (facts.hasNext()) {
                 Fact fact = (Fact) facts.next();
+                
                 // Check for various types of recommendations
                 if (fact.getName().equals("MAIN::recommendation") ||
                     fact.getName().equals("MAIN::food-recommendation") || 
                     fact.getName().equals("MAIN::sleep-recommendation") ||
-                    fact.getName().equals("MAIN::physical-activity-recommendation")) {
+                    fact.getName().equals("MAIN::physical-activity-recommendation") || 
+                    fact.getName().equals("MAIN::weather-recommendation")) {
                     try {
                         jess.Value messageValue = fact.getSlotValue("message");
                         String message = messageValue.stringValue(null);

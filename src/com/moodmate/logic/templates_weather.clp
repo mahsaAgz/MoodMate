@@ -82,6 +82,7 @@
 
 ; Main rule to generate weather effect
 (defrule generate-weather-effect
+    ?user <- (user-id (userId ?userId))
     ?w <- (weather-input (condition ?wcond))
     ?t <- (temperature-input (value ?temp))
     ?h <- (humidity-input (level ?humid))

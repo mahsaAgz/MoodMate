@@ -30,6 +30,9 @@
     (slot password)
 )
 
+(deftemplate user-id
+    (slot userId)
+)
 
 (deftemplate profile-input
     (slot user_id)              ;; Integer, unique identifier
