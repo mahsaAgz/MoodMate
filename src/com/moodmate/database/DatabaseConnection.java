@@ -1,13 +1,16 @@
 
 package com.moodmate.database;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.moodmate.logic.User;
 
@@ -100,6 +103,34 @@ public class DatabaseConnection {
             } else {
                 System.out.println("User not found for username: " + testUsername);
             }
+        }
+
+     // Method to fetch user information from the user-info table using user_id
+        public static Map<String, Object> fetchUserInfoById(int userId) {
+            String query = "SELECT * FROM `user_info` WHERE user_id = ?";
+            Map<String, Object> userInfo = new HashMap<>();
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+                
+                // Set the user_id parameter
+                statement.setInt(1, userId);
+                
+                // Execute the query
+                ResultSet resultSet = statement.executeQuery();
+                if (resultSet.next()) {
+                    // Populate the map with user information
+                    userInfo.put("user_id", resultSet.getInt("user_id"));
+                    userInfo.put("name", resultSet.getString("name"));
+                    userInfo.put("gender", resultSet.getByte("gender"));
+                    userInfo.put("age", resultSet.getInt("age"));
+                    userInfo.put("mbti", resultSet.getString("mbti"));
+                    userInfo.put("hobbies", resultSet.getString("hobbies"));
+                    userInfo.put("notification", resultSet.getInt("notification"));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return userInfo; // Return the map (empty if no data found)
         }
     }
 
