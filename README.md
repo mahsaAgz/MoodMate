@@ -45,9 +45,7 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     * jsr94.jar
     * [gson-2.8.8.jar](https://search.maven.org/artifact/com.google.code.gson/gson/2.8.8/jar)
     * [mysql-connector-j-9.1.0.jar](https://dev.mysql.com/downloads/connector/j/?os=26)
-3. **Set up Jess:** \
-   Download and configure Jess. Add the 'jess.jar file' to your project's classpath.  
-4. **Set up MySQL:** \
+3. **Set up MySQL:** \
    Install MySQL Server. Set up the database using the provided SQL scripts (see Database Setup).  
 
 
