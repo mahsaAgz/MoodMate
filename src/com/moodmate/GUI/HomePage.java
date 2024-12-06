@@ -462,24 +462,38 @@ public class HomePage extends BaseHomePage {
             while (facts.hasNext()) {
                 Fact fact = (Fact) facts.next();
                 
-                // Check for various types of recommendations
-                if (fact.getName().equals("MAIN::recommendation") ||
-                    fact.getName().equals("MAIN::food-recommendation") || 
-                    fact.getName().equals("MAIN::sleep-recommendation") ||
-                    fact.getName().equals("MAIN::physical-activity-recommendation") || 
-                    fact.getName().equals("MAIN::weather-recommendation")) {
-                    try {
-                        jess.Value messageValue = fact.getSlotValue("message");
-                        String message = messageValue.stringValue(null);
-                        if (message != null && !message.isEmpty()) {
-                            suggestions.add(message);
+                if (timeframe.equals("daily")) {
+                    // For daily tab, keep the existing recommendations
+                    if (fact.getName().equals("MAIN::recommendation") ||
+                        fact.getName().equals("MAIN::food-recommendation") || 
+                        fact.getName().equals("MAIN::sleep-recommendation") ||
+                        fact.getName().equals("MAIN::physical-activity-recommendation") || 
+                        fact.getName().equals("MAIN::weather-recommendation")) {
+                        try {
+                            jess.Value messageValue = fact.getSlotValue("message");
+                            String message = messageValue.stringValue(null);
+                            if (message != null && !message.isEmpty()) {
+                                suggestions.add(message);
+                            }
+                        } catch (JessException e) {
+                            System.out.println("Error reading recommendation message: " + e.getMessage());
                         }
-                    } catch (JessException e) {
-                        System.out.println("Error reading recommendation message: " + e.getMessage());
+                    }
+                } else {
+                    // For weekly and monthly tabs, show therapy suggestions
+                    if (fact.getName().equals("MAIN::therapy-suggestion")) {
+                        try {
+                            jess.Value messageValue = fact.getSlotValue("message");
+                            String message = messageValue.stringValue(null);
+                            if (message != null && !message.isEmpty()) {
+                                suggestions.add(message);
+                            }
+                        } catch (JessException e) {
+                            System.out.println("Error reading therapy suggestion message: " + e.getMessage());
+                        }
                     }
                 }
             }
-            
             // If no recommendations found, provide default suggestions
             if (suggestions.isEmpty()) {
                 switch (timeframe.toLowerCase()) {

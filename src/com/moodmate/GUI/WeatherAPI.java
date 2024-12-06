@@ -61,7 +61,7 @@ public class WeatherAPI {
             System.out.println("Humidity: " + humidity + " %");
             System.out.println("Weather Condition: " + weatherCondition);
             Rete engine = ReteEngineManager.getInstance();
-            engine.batch("src/com/moodmate/logic/rules_weather.clp");
+//            engine.batch("src/com/moodmate/logic/rules_weather.clp");
 
             
             engine.batch("src/com/moodmate/logic/templates_weather.clp");
