@@ -14,6 +14,11 @@ import javax.swing.*;
 import jess.Fact;
 import jess.JessException;
 import jess.Rete;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 
 public class HomePage extends BaseHomePage {
 
@@ -187,8 +192,39 @@ public class HomePage extends BaseHomePage {
             Arrays.asList(0, 0, 0, 0, 0),
             Arrays.asList(0, 0, 0, 0, 0)
         );
-        List<Integer> defaultHours = Arrays.asList(8, 10, 12, 14, 16);
-
+        List<Integer> defaultHours;
+        LocalDate now = LocalDate.now();
+        
+     // Set appropriate default values based on timeframe
+        switch (timeframe) {
+            case "daily":
+                defaultHours = Arrays.asList(800, 1000, 1200, 1400, 1600);
+                break;
+            case "weekly":
+                // Create dates for the last 5 days in YYYYMMDD format
+                defaultHours = new ArrayList<>();
+                for (int i = 4; i >= 0; i--) {
+                    LocalDate date = now.minusDays(i);
+                    int dateNum = date.getYear() * 10000 + 
+                                date.getMonthValue() * 100 + 
+                                date.getDayOfMonth();
+                    defaultHours.add(dateNum);
+                }
+                break;
+            case "monthly":
+                // Create months for the last 5 months in YYYYMM format
+                defaultHours = new ArrayList<>();
+                for (int i = 4; i >= 0; i--) {
+                    LocalDate date = now.minusMonths(i);
+                    int monthNum = date.getYear() * 100 + 
+                                 date.getMonthValue();
+                    defaultHours.add(monthNum);
+                }
+                break;
+            default:
+                defaultHours = Arrays.asList(800, 1000, 1200, 1400, 1600);
+        }
+        
         Map<Integer, Map<String, Integer>> emotionData = new HashMap<>();
         List<Integer> hours = new ArrayList<>();
 
@@ -220,6 +256,17 @@ public class HomePage extends BaseHomePage {
                     }
 
                     emotionData.computeIfAbsent(day, k -> new HashMap<>()).put(emotionName.toLowerCase(), avgPercentage);
+                } else if (fact.getName().equals("MAIN::monthly-emotion-summary") && timeframe.equals("monthly")) {
+                    int month = fact.getSlotValue("month").intValue(null);
+                    String emotionName = fact.getSlotValue("emotion-name").stringValue(null);
+                    int avgPercentage = fact.getSlotValue("avg-percentage").intValue(null);
+
+                    if (!hours.contains(month)) {
+                        hours.add(month);
+                    }
+
+                    emotionData.computeIfAbsent(month, k -> new HashMap<>())
+                              .put(emotionName.toLowerCase(), avgPercentage);
                 }
             }
 
@@ -250,7 +297,6 @@ public class HomePage extends BaseHomePage {
     }
 
 
-
     private JPanel createGraphPanel(String timeframe, List<List<Integer>> scores, List<Integer> hours) {
         JPanel graphPanel = new JPanel();
         graphPanel.setLayout(new BorderLayout());
@@ -267,26 +313,25 @@ public class HomePage extends BaseHomePage {
                 Color[] colors = {joyColor, sadnessColor, angerColor, scaredColor, confusedColor};
 
                 int width = getWidth();
-                int height = getHeight() - 50; // Reserve space for labels
+                int height = getHeight() - 50;
                 int margin = 40;
                 int graphWidth = width - 2 * margin;
                 int graphHeight = height - 2 * margin;
 
                 // Draw axes
-                g2.setColor(Color.BLACK); // Set color explicitly for axes
+                g2.setColor(Color.BLACK);
                 g2.drawLine(margin, height - margin, margin, margin);
                 g2.drawLine(margin, height - margin, width - margin, height - margin);
 
-                // Skip drawing if no data
                 if (scores.isEmpty() || hours.isEmpty()) {
-                    g2.setColor(Color.BLACK); // Explicitly set color for "No data available"
+                    g2.setColor(Color.BLACK);
                     g2.drawString("No data available", width / 2 - 50, height / 2);
                     return;
                 }
 
                 // Draw points and lines
                 for (int i = 0; i < scores.size(); i++) {
-                    g2.setColor(colors[i]); // Use colors for emotion lines
+                    g2.setColor(colors[i]);
                     List<Integer> emotionScores = scores.get(i);
 
                     for (int j = 0; j < hours.size(); j++) {
@@ -302,24 +347,55 @@ public class HomePage extends BaseHomePage {
                     }
                 }
 
-                // Draw labels explicitly in black
-                g2.setColor(Color.BLACK); // Reset to black for text labels
+                // Draw labels with modified formatting based on timeframe
+                g2.setColor(Color.BLACK);
                 g2.setFont(new Font(customFont, Font.PLAIN, 10));
-                for (int i = 0; i < hours.size(); i++) {
 
+                for (int j = 0; j < hours.size(); j++) {
                     int x = margin;
                     if (hours.size() > 1) {
-                        x = margin + (i * graphWidth) / (hours.size() - 1);
+                        x = margin + (j * graphWidth) / (hours.size() - 1);
                     }
-                    // Format hour from 1213 to 12:13
-                    int rawHour = hours.get(i);
-                    String formattedHour = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
+                    
+                    String label;
+                    if (timeframe.equals("weekly")) {
+                        // Parse the YYYYMMDD format for weekly view
+                        int dateNum = hours.get(j);
+                        String dateStr = String.valueOf(dateNum);
+                        if (dateStr.length() == 8) {
+                            int year = Integer.parseInt(dateStr.substring(0, 4));
+                            int month = Integer.parseInt(dateStr.substring(4, 6));
+                            int day = Integer.parseInt(dateStr.substring(6, 8));
+                            
+                            LocalDate date = LocalDate.of(year, month, day);
+                            label = date.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                        } else {
+                            label = "Invalid";
+                        }
+                    } else if (timeframe.equals("monthly")) {
+                        // Parse the YYYYMM format for monthly view
+                        int dateNum = hours.get(j);
+                        String dateStr = String.valueOf(dateNum);
+                        if (dateStr.length() >= 6) {
+                            int year = Integer.parseInt(dateStr.substring(0, 4));
+                            int month = Integer.parseInt(dateStr.substring(4, 6));
+                            
+                            LocalDate date = LocalDate.of(year, month, 1);
+                            label = date.getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault());
+                        } else {
+                            label = "Invalid";
+                        }
+                    } else {
+                        // Original hour formatting for daily view
+                        int rawHour = hours.get(j);
+                        label = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
+                    }
 
-                    // Draw formatted hour on the graph
-                    g2.drawString(formattedHour, x - 10, height - margin + 20);
-           
+                    // Draw the formatted label
+                    g2.drawString(label, x - 10, height - margin + 20);
                 }
 
+                // Rest of the method remains the same...
                 // Draw emotion labels
                 int labelY = height - margin + 40;
                 int labelXStart = margin;
@@ -333,48 +409,41 @@ public class HomePage extends BaseHomePage {
 
                 // Draw axes labels
                 g2.setColor(Color.BLACK);
-//                g2.drawString("Time", width / 2, height - margin + 20);
                 g2.drawString("Score (%)", margin - 30, height / 2);
-
             }
         };
-
         chartArea.setPreferredSize(new Dimension(400, 10));
         graphPanel.add(chartArea, BorderLayout.CENTER);
 
-
-     // Modified Suggestions section
+        // Modified Suggestions section
         JPanel suggestionsPanel = new JPanel();
         suggestionsPanel.setLayout(new BoxLayout(suggestionsPanel, BoxLayout.Y_AXIS));
         suggestionsPanel.setOpaque(false);
-        suggestionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));  // Add padding
+        suggestionsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JLabel suggestionsTitle = new JLabel("Suggestions");
         suggestionsTitle.setFont(new Font(customFont, Font.BOLD, 14));
         suggestionsTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
         suggestionsPanel.add(suggestionsTitle);
-        suggestionsPanel.add(Box.createVerticalStrut(5));  // Add spacing
-     
+        suggestionsPanel.add(Box.createVerticalStrut(5));
+
         String[] suggestions = generateSuggestions(timeframe);
         for (String suggestion : suggestions) {
-            // Create a panel for each suggestion with proper wrapping
             JPanel suggestionItemPanel = new JPanel();
             suggestionItemPanel.setLayout(new BorderLayout());
             suggestionItemPanel.setOpaque(false);
-            suggestionItemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));  // Allow height to expand
+            suggestionItemPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
             suggestionItemPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
             
-            // Wrap the suggestion text in HTML for proper wrapping
             JLabel suggestionLabel = new JLabel("<html><body style='width: " + 
                 (contentArea.getWidth() - 100) + "px'>&bull; " + suggestion + "</body></html>");
             suggestionLabel.setFont(new Font(customFont, Font.PLAIN, 12));
             suggestionItemPanel.add(suggestionLabel, BorderLayout.CENTER);
             
             suggestionsPanel.add(suggestionItemPanel);
-            suggestionsPanel.add(Box.createVerticalStrut(5));  // Add spacing between items
+            suggestionsPanel.add(Box.createVerticalStrut(5));
         }
         suggestionsPanel.add(Box.createVerticalGlue());
-        
 
         graphPanel.add(suggestionsPanel, BorderLayout.SOUTH);
 
@@ -436,9 +505,9 @@ public class HomePage extends BaseHomePage {
             }
             
             // Limit to 3 suggestions to avoid overcrowding
-            if (suggestions.size() > 3) {
-                suggestions = suggestions.subList(0, 3);
-            }
+//            if (suggestions.size() > 3) {
+//                suggestions = suggestions.subList(0, 3);
+//            }
             
         } catch (Exception e) {
             e.printStackTrace();
