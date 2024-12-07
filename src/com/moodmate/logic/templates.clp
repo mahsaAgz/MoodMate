@@ -358,3 +358,14 @@
    
 (deftemplate categorized-temperature
    (slot category))
+
+; Rule to track food scores over time
+(deftemplate food-score-trend
+    (slot user_id)
+    (slot date)         ; YYYYMMDD format
+    (slot total-score)) ; Already includes meal count and appetite info
+    
+(deftemplate eating-disorder-status
+    (slot user_id)
+    (slot assessed (default FALSE)))
+    

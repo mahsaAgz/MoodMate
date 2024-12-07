@@ -192,6 +192,33 @@ public class SignInPage extends BasePage {
                                 } else {
                                     System.out.println("No emotion data found for user_id: " + GlobalVariable.userId);
                                 }
+                             // After emotion data assertion:
+                                Map<String, List<Object>> foodData = DatabaseConnection.fetchFoodDataByUserId(GlobalVariable.userId);
+
+                                if (!foodData.isEmpty() && !foodData.get("date").isEmpty()) {
+                                    List<Object> dates = foodData.get("date");
+                                    List<Object> scores = foodData.get("total-scores");
+                                    
+                                    for (int i = 0; i < dates.size(); i++) {
+                                        java.sql.Date date = (java.sql.Date) dates.get(i);
+                                        String dateStr = String.format("%1$tY%1$tm%1$td", date);
+                                        double score = ((Number) scores.get(i)).doubleValue();
+                                        
+                                        // Assert food score trend fact
+                                        Fact foodScoreFact = new Fact("food-score-trend", engine);
+                                        foodScoreFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                        foodScoreFact.setSlotValue("date", new Value(dateStr, RU.STRING));
+                                        foodScoreFact.setSlotValue("total-score", new Value(score, RU.FLOAT));
+                                        
+                                        engine.assertFact(foodScoreFact);
+                                    }
+                                    System.out.println("Food score records asserted for user: " + GlobalVariable.userId);
+                                } else {
+                                    System.out.println("No food score data found for user_id: " + GlobalVariable.userId);
+                                }
+
+                                // Run the engine after all facts are asserted
+                                engine.run(); 
                             } catch (JessException ex) {
                                 ex.printStackTrace();
                             }

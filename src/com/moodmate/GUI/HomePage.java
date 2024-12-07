@@ -470,33 +470,104 @@ public class HomePage extends BaseHomePage {
                         }
                     }
                 } else {
-                    // For weekly and monthly tabs, show therapy suggestions
-                    if (fact.getName().equals("MAIN::therapy-suggestion")) {
-                        try {
-                            jess.Value messageValue = fact.getSlotValue("reasoning");
-                            String message = messageValue.stringValue(null);
-                            if (message != null && !message.isEmpty()) {
-                                suggestions.add(message);
-                            }
-                        } catch (JessException e) {
-                            System.out.println("Error reading therapy suggestion message: " + e.getMessage());
+                    // For weekly and monthly tabs, show therapy suggestions and all assessments
+                	try {
+                        String factName = fact.getName();
+                        switch(factName) {
+                            case "MAIN::anxiety-assessment":
+                                String anxietyRec = fact.getSlotValue("recommendation").stringValue(null);
+                                if (anxietyRec != null && !anxietyRec.isEmpty()) {
+                                    suggestions.add("Anxiety Assessment: " + anxietyRec);
+                                }
+                                break;
+                                
+                            case "MAIN::depression-assessment":
+                                String depressionRec = fact.getSlotValue("recommendation").stringValue(null);
+                                if (depressionRec != null && !depressionRec.isEmpty()) {
+                                    suggestions.add("Depression Assessment: " + depressionRec);
+                                }
+                                break;
+                                
+                            case "MAIN::bipolar-assessment":
+                                String bipolarRec = fact.getSlotValue("recommendation").stringValue(null);
+                                if (bipolarRec != null && !bipolarRec.isEmpty()) {
+                                    suggestions.add("Bipolar Assessment: " + bipolarRec);
+                                }
+                                break;
+                                
+                            case "MAIN::sad-assessment":
+                                String sadRec = fact.getSlotValue("recommendation").stringValue(null);
+                                if (sadRec != null && !sadRec.isEmpty()) {
+                                    suggestions.add("Seasonal Affective Disorder Assessment: " + sadRec);
+                                }
+                                break;
+                                
+                            case "MAIN::eating-disorder-assessment":
+                                String edRec = fact.getSlotValue("recommendation").stringValue(null);
+                                String patternType = fact.getSlotValue("pattern-type").stringValue(null);
+                                if (edRec != null && !edRec.isEmpty()) {
+                                    suggestions.add("Eating Pattern Assessment (" + patternType + "): " + edRec);
+                                }
+                                break;
+
+                            case "MAIN::therapy-suggestion":
+                                String condition = fact.getSlotValue("condition").stringValue(null);
+                                String activityType = fact.getSlotValue("activity_type").stringValue(null);
+                                String severity = fact.getSlotValue("severity").stringValue(null);
+                                
+                                // Format activity type to be more readable
+                                activityType = activityType.replace("-", " ");
+                                
+                                // Create suggestion based on condition
+                                String suggestion;
+                                switch(condition) {
+                                    case "anxiety":
+                                        suggestion = String.format("Consider %s to help manage anxiety (Risk level: %s)", 
+                                            activityType, severity);
+                                        break;
+                                    case "depression":
+                                        suggestion = String.format("Try %s to improve mood and energy (Risk level: %s)", 
+                                            activityType, severity);
+                                        break;
+                                    case "bipolar":
+                                        suggestion = String.format("Explore %s to help stabilize emotions (Risk level: %s)", 
+                                            activityType, severity);
+                                        break;
+                                    case "SAD":
+                                        suggestion = String.format("Engage in %s to combat seasonal effects (Risk level: %s)", 
+                                            activityType, severity);
+                                        break;
+                                    case "eating-disorder":
+                                        suggestion = String.format("Practice %s to develop healthy coping mechanisms (Risk level: %s)", 
+                                            activityType, severity);
+                                        break;
+                                    case "wellness":
+                                        suggestion = String.format("Maintain wellbeing through regular %s", 
+                                            activityType);
+                                        break;
+                                    default:
+                                        suggestion = String.format("Try %s for mental health support", 
+                                            activityType);
+                                }
+                                suggestions.add(suggestion);
+                                break;
                         }
+                    } catch (JessException e) {
+                        System.out.println("Error reading fact data: " + e.getMessage());
                     }
                 }
             }
-            // If no recommendations found, provide default suggestions
+
+
+            // Default suggestions remain the same
             if (suggestions.isEmpty()) {
                 switch (timeframe.toLowerCase()) {
                     case "daily":
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
                         suggestions.add("and get personalized suggestions");
-			break;
-                    case "weekly":
-                        suggestions.add("No data for now");
-                        suggestions.add("Press Begin");
-                        suggestions.add("and get personalized suggestions");
                         break;
+                    case "weekly":
                     case "monthly":
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
@@ -504,15 +575,8 @@ public class HomePage extends BaseHomePage {
                         break;
                 }
             }
-            
-            // Limit to 3 suggestions to avoid overcrowding
-//            if (suggestions.size() > 3) {
-//                suggestions = suggestions.subList(0, 3);
-//            }
-            
         } catch (Exception e) {
             e.printStackTrace();
-            // Return default suggestions if there's an error
             return new String[]{
                 "Take care of yourself",
                 "Consider talking to someone you trust",

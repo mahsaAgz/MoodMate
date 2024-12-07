@@ -116,3 +116,7 @@
     (risk-level "moderate")
     (evidence "Elevated depression levels with physical symptoms")
     (recommendation "Consider professional consultation")))
+
+(assert (food-score-trend (user_id 1) (date 20241204) (total-score 80)))
+(assert (food-score-trend (user_id 1) (date 20241205) (total-score 10)))
+(assert (food-score-trend (user_id 1) (date 20241206) (total-score 10)))
