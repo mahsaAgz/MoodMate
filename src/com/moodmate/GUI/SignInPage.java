@@ -242,7 +242,30 @@ public class SignInPage extends BasePage {
                                 } else {
                                     System.out.println("No sleep score data found for user_id: " + GlobalVariable.userId);
                                 }
+                             // After sleep data assertion:
+                                Map<String, List<Object>> weatherData = DatabaseConnection.fetchWeatherDataByUserId(GlobalVariable.userId);
 
+                                if (!weatherData.isEmpty() && !weatherData.get("date").isEmpty()) {
+                                    List<Object> dates = weatherData.get("date");
+                                    List<Object> conditions = weatherData.get("conditions");
+                                    
+                                    for (int i = 0; i < dates.size(); i++) {
+                                        java.sql.Date date = (java.sql.Date) dates.get(i);
+                                        String dateStr = String.format("%1$tY%1$tm%1$td", date);
+                                        String condition = (String) conditions.get(i);
+                                        
+                                        // Assert daily weather fact without temperature
+                                        Fact weatherFact = new Fact("daily-weather", engine);
+                                        weatherFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                        weatherFact.setSlotValue("day", new Value(dateStr, RU.STRING));
+                                        weatherFact.setSlotValue("condition", new Value(condition, RU.STRING));
+                                        
+                                        engine.assertFact(weatherFact);
+                                    }
+                                    System.out.println("Weather records asserted for user: " + GlobalVariable.userId);
+                                } else {
+                                    System.out.println("No weather data found for user_id: " + GlobalVariable.userId);
+                                }
                                 // Run engine after all facts are asserted
                                 engine.run();
                             } catch (JessException ex) {

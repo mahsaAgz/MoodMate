@@ -283,7 +283,7 @@
     (slot user_id)
     (slot day)
     (slot condition)     ; "sunny", "cloudy", "rainy", "snowy"
-    (slot temperature))  ; temperature in Celsius
+   (slot temperature))  ; temperature in Celsius
 
 ; Template for SAD assessment
 (deftemplate sad-assessment

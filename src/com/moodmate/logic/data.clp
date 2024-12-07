@@ -25,14 +25,28 @@
 (assert (user-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "confused") (intensity 40)))
 
 
-
-(assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "happy") (percentage 85)))
-(assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "sad") (percentage 0)))
-(assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "angry") (percentage 5)))
+(assert (normalized-emotion (user_id 1) (day 20241203) (hour 8) (emotion-name "happy") (percentage 20)))
+(assert (normalized-emotion (user_id 1) (day 20241203) (hour 8) (emotion-name "sad") (percentage 60)))
+(assert (normalized-emotion (user_id 1) (day 20241203) (hour 8) (emotion-name "angry") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241203) (hour 8) (emotion-name "scared") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241203) (hour 8) (emotion-name "confused") (percentage 0)))
+(assert (normalized-emotion (user_id 1) (day 20241204) (hour 8) (emotion-name "happy") (percentage 20)))
+(assert (normalized-emotion (user_id 1) (day 20241204) (hour 8) (emotion-name "sad") (percentage 60)))
+(assert (normalized-emotion (user_id 1) (day 20241204) (hour 8) (emotion-name "angry") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241204) (hour 8) (emotion-name "scared") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241204) (hour 8) (emotion-name "confused") (percentage 0)))
+(assert (normalized-emotion (user_id 1) (day 20241205) (hour 8) (emotion-name "happy") (percentage 20)))
+(assert (normalized-emotion (user_id 1) (day 20241205) (hour 8) (emotion-name "sad") (percentage 60)))
+(assert (normalized-emotion (user_id 1) (day 20241205) (hour 8) (emotion-name "angry") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241205) (hour 8) (emotion-name "scared") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241205) (hour 8) (emotion-name "confused") (percentage 0)))
+(assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "happy") (percentage 20)))
+(assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "sad") (percentage 60)))
+(assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "angry") (percentage 10)))
 (assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "scared") (percentage 10)))
 (assert (normalized-emotion (user_id 1) (day 20241206) (hour 8) (emotion-name "confused") (percentage 0)))
-(assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "happy") (percentage 80)))
-(assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "sad") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "happy") (percentage 10)))
+(assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "sad") (percentage 80)))
 (assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "angry") (percentage 5)))
 (assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "scared") (percentage 0)))
 (assert (normalized-emotion (user_id 1) (day 20241206) (hour 10) (emotion-name "confused") (percentage 5)))
@@ -47,9 +61,9 @@
 (assert (normalized-emotion (user_id 1) (day 20241207) (hour 10) (emotion-name "scared") (percentage 10)))
 (assert (normalized-emotion (user_id 1) (day 20241207) (hour 10) (emotion-name "confused") (percentage 5)))
 (assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "happy") (percentage 8)))
-(assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "sad") (percentage 0)))
+(assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "sad") (percentage 60)))
 (assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "angry") (percentage 0)))
-(assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "scared") (percentage 60)))
+(assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "scared") (percentage 0)))
 (assert (normalized-emotion (user_id 1) (day 20241208) (hour 8) (emotion-name "confused") (percentage 32)))
 (assert (normalized-emotion (user_id 1) (day 20241208) (hour 10) (emotion-name "happy") (percentage 0)))
 (assert (normalized-emotion (user_id 1) (day 20241208) (hour 10) (emotion-name "sad") (percentage 70)))
@@ -106,9 +120,12 @@
 
 (assert (meal-info (user_id 1) (meals-per-day 2)))  ; Low frequency    
 
-(assert (daily-weather (user_id 1) (day 1) (condition "cloudy") (temperature 5)))
-
-(assert (daily-weather (user_id 1) (day 2) (condition "rainy") (temperature 8)))
+(assert (daily-weather (user_id 1) (day 20241203) (condition "cloudy")))
+(assert (daily-weather (user_id 1) (day 20241204) (condition "cloudy")))
+(assert (daily-weather (user_id 1) (day 20241205) (condition "cloudy")))
+(assert (daily-weather (user_id 1) (day 20241206) (condition "cloudy")))
+(assert (daily-weather (user_id 1) (day 20241207) (condition "rainy")))
+(assert (daily-weather (user_id 1) (day 20241208) (condition "rainy")))
 
 
 (assert (depression-assessment 
@@ -124,3 +141,4 @@
 (assert (sleep-score-trend (user_id 1) (date 20241204) (total-score 40)))
 (assert (sleep-score-trend (user_id 1) (date 20241205) (total-score 10)))
 (assert (sleep-score-trend (user_id 1) (date 20241206) (total-score 10)))
+
