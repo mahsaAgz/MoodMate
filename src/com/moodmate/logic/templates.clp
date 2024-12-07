@@ -368,4 +368,18 @@
 (deftemplate eating-disorder-status
     (slot user_id)
     (slot assessed (default FALSE)))
+    ; Template to track sleep scores over time
+    
+(deftemplate sleep-score-trend
+    (slot user_id)
+    (slot date)            ; YYYYMMDD format
+    (slot total-score))    ; 0-100 score from sleep quality analysis
+
+; Template for sleep disorder assessment
+(deftemplate sleep-disorder-assessment
+    (slot user_id)
+    (slot risk-level)        ; "low", "moderate", "high", "severe"
+    (slot pattern-type)      ; 
+    (slot evidence)
+    (slot recommendation))
     

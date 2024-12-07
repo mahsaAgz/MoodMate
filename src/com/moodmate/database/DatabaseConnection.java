@@ -209,6 +209,38 @@ public class DatabaseConnection {
             
             return foodData;
         }
+        
+        public static Map<String, List<Object>> fetchSleepDataByUserId(int userId) {
+            Map<String, List<Object>> foodData = new HashMap<>();
+            String query = "SELECT record_date, sleep_score " +
+                          "FROM daily_record WHERE user_id = ?";
+            
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+                
+                statement.setInt(1, userId);
+                ResultSet resultSet = statement.executeQuery();
+                
+                // Initialize lists to store data
+                List<Object> dates = new ArrayList<>();
+                List<Object> sleepScores = new ArrayList<>();
+                
+                while (resultSet.next()) {
+                    dates.add(resultSet.getDate("record_date"));
+                    sleepScores.add(resultSet.getDouble("sleep_score"));
+                }
+                
+                // Store all lists in the map
+                foodData.put("date", dates);
+                foodData.put("total-scores", sleepScores);
+
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            return foodData;
+        }
     }
 
 

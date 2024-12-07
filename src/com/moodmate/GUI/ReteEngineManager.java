@@ -27,7 +27,7 @@ public class ReteEngineManager {
                 rete.batch("src/com/moodmate/logic/bipolar_rules.clp");
                 rete.batch("src/com/moodmate/logic/depression_rules.clp");
                 rete.batch("src/com/moodmate/logic/eating_disorder_rules.clp");
-//                rete.batch("src/com/moodmate/logic/sleep_disorders_rules.clp");
+                rete.batch("src/com/moodmate/logic/sleep_disorders_rules.clp");
                 rete.batch("src/com/moodmate/logic/suggestion_rules.clp");
 //                rete.batch("src/com/moodmate/logic/rules_weather.clp");
 

@@ -216,9 +216,35 @@ public class SignInPage extends BasePage {
                                 } else {
                                     System.out.println("No food score data found for user_id: " + GlobalVariable.userId);
                                 }
+                                
 
-                                // Run the engine after all facts are asserted
-                                engine.run(); 
+                             // After food data assertion:
+                                Map<String, List<Object>> sleepData = DatabaseConnection.fetchSleepDataByUserId(GlobalVariable.userId);
+
+                                if (!sleepData.isEmpty() && !sleepData.get("date").isEmpty()) {
+                                    List<Object> dates = sleepData.get("date");
+                                    List<Object> scores = sleepData.get("total-scores");
+                                    
+                                    for (int i = 0; i < dates.size(); i++) {
+                                        java.sql.Date date = (java.sql.Date) dates.get(i);
+                                        String dateStr = String.format("%1$tY%1$tm%1$td", date);
+                                        double score = ((Number) scores.get(i)).doubleValue();
+                                        
+                                        // Assert sleep score trend fact
+                                        Fact sleepScoreFact = new Fact("sleep-score-trend", engine);
+                                        sleepScoreFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                        sleepScoreFact.setSlotValue("date", new Value(dateStr, RU.STRING));
+                                        sleepScoreFact.setSlotValue("total-score", new Value(score, RU.FLOAT));
+                                        
+                                        engine.assertFact(sleepScoreFact);
+                                    }
+                                    System.out.println("Sleep score records asserted for user: " + GlobalVariable.userId);
+                                } else {
+                                    System.out.println("No sleep score data found for user_id: " + GlobalVariable.userId);
+                                }
+
+                                // Run engine after all facts are asserted
+                                engine.run();
                             } catch (JessException ex) {
                                 ex.printStackTrace();
                             }

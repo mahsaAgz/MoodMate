@@ -504,12 +504,20 @@ public class HomePage extends BaseHomePage {
                                 
                             case "MAIN::eating-disorder-assessment":
                                 String edRec = fact.getSlotValue("recommendation").stringValue(null);
-                                String patternType = fact.getSlotValue("pattern-type").stringValue(null);
+                                String eat_patternType = fact.getSlotValue("pattern-type").stringValue(null);
                                 if (edRec != null && !edRec.isEmpty()) {
-                                    suggestions.add("Eating Pattern Assessment (" + patternType + "): " + edRec);
+                                    suggestions.add("Eating Pattern Assessment (" + eat_patternType + "): " + edRec);
                                 }
                                 break;
-
+                                
+                            case "MAIN::sleep-disorder-assessment":    // Add this new case
+                                String sleepRec = fact.getSlotValue("recommendation").stringValue(null);
+                                String sleep_patternType = fact.getSlotValue("pattern-type").stringValue(null);
+                                if (sleepRec != null && !sleepRec.isEmpty()) {
+                                    suggestions.add("Sleep Pattern Assessment (" + sleep_patternType + "): " + sleepRec);
+                                }
+                                break;
+                                
                             case "MAIN::therapy-suggestion":
                                 String condition = fact.getSlotValue("condition").stringValue(null);
                                 String activityType = fact.getSlotValue("activity_type").stringValue(null);
