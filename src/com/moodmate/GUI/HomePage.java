@@ -11,6 +11,8 @@ import java.util.Map;
 import java.awt.*;
 import javax.swing.*;
 
+import com.moodmate.database.DatabaseConnection;
+
 import jess.Fact;
 import jess.JessException;
 import jess.Rete;
@@ -58,6 +60,7 @@ public class HomePage extends BaseHomePage {
 	public HomePage() {
 	    super();
 	    WeatherScheduler.startWeatherUpdates();
+	    
 	    int currentY = 20;
 	
 	    JPanel contentPanel = new JPanel();
@@ -529,4 +532,5 @@ public class HomePage extends BaseHomePage {
         WeatherScheduler.stopWeatherUpdates();
         super.dispose();
     }
+    
 }

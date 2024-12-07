@@ -81,10 +81,8 @@ public class SignInPage extends BasePage {
                 );
             } else {
                 try {
-                    Rete engine = new Rete();
+                	Rete engine = ReteEngineManager.getInstance();
                     engine.reset();
-                    engine.batch("src/com/moodmate/logic/templates.clp");
-                    engine.batch("src/com/moodmate/logic/rule_signin.clp");
                     
                     List<User> users = DatabaseConnection.fetchAllUsers();
                     for (User user : users) {
@@ -150,7 +148,7 @@ public class SignInPage extends BasePage {
                                         hobbiesList.add(new Value(hobby.trim(), RU.STRING));
                                     }
                                 }
-                                profileFact.setSlotValue("hobbies", new Value(hobbiesList, RU.LIST));
+                                profileFact.setSlotValue("hobbies", new Value(hobbies, RU.STRING));
 
                                 // Set notification frequency (if null, use default value 1)
                                 Integer notificationFrequency = (Integer) userInfo.get("notification");
@@ -158,7 +156,42 @@ public class SignInPage extends BasePage {
 
                                 // Assert the fact into the Jess engine
                                 engine.assertFact(profileFact);
+                                
                                 System.out.println("Profile fact asserted: " + profileFact);
+                             // Add the emotion data fetching and assertion:
+                             // Fetch and assert emotion data
+                                Map<String, List<Object>> emotionData = DatabaseConnection.fetchEmotionDataByUserId(GlobalVariable.userId);
+
+                                if (!emotionData.isEmpty() && !emotionData.get("dates").isEmpty()) {
+                                    List<Object> dates = emotionData.get("dates");
+                                    String[] emotions = {"happy", "sad", "angry", "confused", "scared"};
+                                    
+                                    for (int i = 0; i < dates.size(); i++) {
+                                        java.sql.Date date = (java.sql.Date) dates.get(i);
+                                        String dateStr = String.format("%1$tY%1$tm%1$td", date);
+                                        
+                                        for (String emotion : emotions) {
+                                            List<Object> scores = emotionData.get(emotion);
+                                            double score = ((Number) scores.get(i)).doubleValue();
+                                            
+                                            // Create a separate fact for each emotion
+                                            Fact emotionFact = new Fact("daily-emotion-summary", engine);
+                                            emotionFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                            emotionFact.setSlotValue("day", new Value(dateStr, RU.STRING));
+                                            emotionFact.setSlotValue("emotion-name", new Value(emotion, RU.STRING));
+                                            emotionFact.setSlotValue("avg-percentage", new Value(score, RU.FLOAT));
+                                            emotionFact.setSlotValue("reading-count", new Value(1, RU.INTEGER));
+                                            
+                                            engine.assertFact(emotionFact);
+                                        }
+                                    }
+                                    System.out.println("Emotion records asserted for user: " + GlobalVariable.userId);
+                                    
+                                    // Run the engine to process the emotion records
+                                    engine.run();
+                                } else {
+                                    System.out.println("No emotion data found for user_id: " + GlobalVariable.userId);
+                                }
                             } catch (JessException ex) {
                                 ex.printStackTrace();
                             }

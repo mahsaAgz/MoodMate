@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import jess.*;
+import java.sql.*;
+import java.util.*;
 
 import com.moodmate.logic.User;
 
@@ -131,6 +134,49 @@ public class DatabaseConnection {
                 e.printStackTrace();
             }
             return userInfo; // Return the map (empty if no data found)
+        }
+        
+        public static Map<String, List<Object>> fetchEmotionDataByUserId(int userId) {
+            Map<String, List<Object>> emotionData = new HashMap<>();
+            String query = "SELECT record_date, happy_score, sad_score, angry_score, confused_score, scared_score " +
+                          "FROM daily_record WHERE user_id = ?";
+            
+            try (Connection connection = getConnection();
+                 PreparedStatement statement = connection.prepareStatement(query)) {
+                
+                statement.setInt(1, userId);
+                ResultSet resultSet = statement.executeQuery();
+                
+                // Initialize lists to store data
+                List<Object> dates = new ArrayList<>();
+                List<Object> happyScores = new ArrayList<>();
+                List<Object> sadScores = new ArrayList<>();
+                List<Object> angryScores = new ArrayList<>();
+                List<Object> confusedScores = new ArrayList<>();
+                List<Object> scaredScores = new ArrayList<>();
+                
+                while (resultSet.next()) {
+                    dates.add(resultSet.getDate("record_date"));
+                    happyScores.add(resultSet.getDouble("happy_score"));
+                    sadScores.add(resultSet.getDouble("sad_score"));
+                    angryScores.add(resultSet.getDouble("angry_score"));
+                    confusedScores.add(resultSet.getDouble("confused_score"));
+                    scaredScores.add(resultSet.getDouble("scared_score"));
+                }
+                
+                // Store all lists in the map
+                emotionData.put("dates", dates);
+                emotionData.put("happy", happyScores);
+                emotionData.put("sad", sadScores);
+                emotionData.put("angry", angryScores);
+                emotionData.put("confused", confusedScores);
+                emotionData.put("scared", scaredScores);
+                
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            
+            return emotionData;
         }
     }
 

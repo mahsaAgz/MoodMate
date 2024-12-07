@@ -14,6 +14,7 @@ public class ReteEngineManager {
             try {
                 // Load your Jess files only once
                 rete.batch("src/com/moodmate/logic/templates.clp");
+                rete.batch("src/com/moodmate/logic/rule_signin.clp");
                 rete.batch("src/com/moodmate/logic/EFT_rules.clp");
                 rete.batch("src/com/moodmate/logic/EFT_daily_rules.clp");
                 rete.batch("src/com/moodmate/logic/primary_reason_rules.clp");
