@@ -473,7 +473,7 @@ public class HomePage extends BaseHomePage {
                     // For weekly and monthly tabs, show therapy suggestions
                     if (fact.getName().equals("MAIN::therapy-suggestion")) {
                         try {
-                            jess.Value messageValue = fact.getSlotValue("message");
+                            jess.Value messageValue = fact.getSlotValue("reasoning");
                             String message = messageValue.stringValue(null);
                             if (message != null && !message.isEmpty()) {
                                 suggestions.add(message);
