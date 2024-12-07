@@ -261,6 +261,7 @@ public class HomePage extends BaseHomePage {
 	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	    scrollPane.setPreferredSize(new Dimension(FRAME_WIDTH - 100, 300)); // Adjust the size as needed
 	    graphPanel.add(scrollPane, BorderLayout.SOUTH);
+	    
 	
 	    return graphPanel;
 	}

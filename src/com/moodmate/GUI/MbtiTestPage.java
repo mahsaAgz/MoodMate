@@ -11,24 +11,32 @@ import jess.Rete;
 
 import java.awt.*;
 import java.util.Hashtable;
+import java.util.IllegalFormatConversionException;
 
 public class MbtiTestPage extends BasePage {
 
     private static final int PADDING_X = 60; // Horizontal padding for fields
     private static final int FIELD_HEIGHT = 30; // Height for the input fields
     private static final int MARGIN = 20; // Vertical margin between components
-    private static String name="";
-    private static int age=0;
-    private static String gender="";
     private JSlider[] mbtiSliders = new JSlider[8];
-    private static int userId = 1; 
+    private int userId;
+    private String username;
+    private int age;
+    private int gender;
+
     
     int contentWidth= contentArea.getWidth();
-    public MbtiTestPage(String username, int age, int gender) {
+    public MbtiTestPage(int userId, String username, int age, int gender) {
         super(); // Call BasePage setup
-        this.name = username;
+        this.userId = userId;
+        this.username = username;
         this.age = age;
-        this.gender = gender == 1 ? "Male" : gender == 2 ? "Female" : "Prefer not to say";
+        this.gender = gender;
+        System.out.println("Navigated to MbtiTestPage with User ID: " + userId);
+        System.out.println("GlobalVariable.userId: " + GlobalVariable.userId);
+        System.out.println("username: " + username);
+        System.out.println("age: " + age);
+        System.out.println("gender: " + gender);
         // Create a contentPanel for all components
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(null); // Absolute positioning
@@ -91,21 +99,31 @@ public class MbtiTestPage extends BasePage {
                 engine.batch("src/com/moodmate/logic/templates.clp");
                 engine.batch("src/com/moodmate/logic/user_profile_rules.clp");
                 // Assert profile input
-                String profileAssert = String.format(
-                		"(assert (profile-input (user_id %d) (name \"%s\") (age %d) (gender %d) (mbti \"unknown\")))",
-                	    GlobalVariable.userId,name, age, gender
-                	);
-                engine.eval(profileAssert);
+                try {
+                    String profileAssert = String.format(
+                        "(assert (profile-input (user_id %d) (name \"%s\") (age %d) (gender %d) (mbti \"unknown\")))",
+                        GlobalVariable.userId, // Ensure this is an integer
+                        username, // Ensure this is a string
+                        age, // Ensure this is an integer
+                        gender // Ensure this is an integer
+                    );
+                    System.out.println("Profile Assert Command: " + profileAssert);
+                    engine.eval(profileAssert);
+                } catch (IllegalFormatConversionException ex) {
+                    System.err.println("Error in String.format: " + ex.getMessage());
+                    ex.printStackTrace();
+                }
                
                 // Assert mbti-answer facts using the exact format
                 String[] dimensions = {"EI", "EI", "SN", "SN", "TF", "TF", "JP", "JP"};
                 for (int i = 0; i < mbtiSliders.length; i++) {
-                    String assertCommand = String.format(
-                    		"(assert (mbti-answer (user_id %d) (dimension \"%s\") (question_id %d) (score %d)))",
-                        dimensions[i],
-                        (i % 2) + 1,
-                        mbtiSliders[i].getValue()
-                    );
+                	String assertCommand = String.format(
+                		    "(assert (mbti-answer (user_id %d) (dimension \"%s\") (question_id %d) (score %d)))",
+                		    GlobalVariable.userId,      // First %d - user_id (integer)
+                		    dimensions[i],             // %s - dimension (string)
+                		    (i % 2) + 1,              // %d - question_id (integer)
+                		    mbtiSliders[i].getValue()  // %d - score (integer)
+                		);
                     engine.eval(assertCommand);
                     
                     // Debug print
@@ -224,6 +242,6 @@ public class MbtiTestPage extends BasePage {
     }
 
     public static void main(String[] args) {
-        new MbtiTestPage("test",0,0);
+        new MbtiTestPage(0,"test",0,0);
     }
 }

@@ -211,7 +211,7 @@ public class UserProfilePage extends BasePage {
                 addToNavigationStack();
                 
                 // Pass data to MbtiTestPage
-                MbtiTestPage mbtiTestPage = new MbtiTestPage(username, age, gender);
+                MbtiTestPage mbtiTestPage = new MbtiTestPage(GlobalVariable.userId, username, age, gender);
                 mbtiTestPage.setVisible(true);
                 dispose();
             }

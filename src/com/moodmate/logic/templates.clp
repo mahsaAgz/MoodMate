@@ -37,7 +37,7 @@
 (deftemplate profile-input
     (slot user_id)              ;; Integer, unique identifier
     (slot name)                 ;; String, user name
-    (slot gender)               ;; Integer, 0 for male, 1 for female, 2 for other
+    (slot gender)               ;; Integer, 0 for prefer not to say, 1 for male, 2 for female
     (slot age)                  ;; Integer, age in years
     (slot mbti (default nil))   ;; String, one of 16 MBTI types or "unknown"
     (slot hobbies)              ;;list of hobbies
