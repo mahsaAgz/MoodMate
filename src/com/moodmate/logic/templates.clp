@@ -305,13 +305,26 @@
 (deftemplate irregular-pattern-assessed
     (slot user_id))
 
+; Template for eating pattern tracking
+(deftemplate eating-pattern
+    (slot user_id)
+    (slot date1)
+    (slot date2)
+    (slot score1)
+    (slot score2)
+    (slot persistence)
+    (slot pattern-type))     ; "restrictive", "binge", "irregular", "normal"
+
 ; Template for eating disorder assessment
 (deftemplate eating-disorder-assessment
     (slot user_id)
     (slot risk-level)        ; "low", "moderate", "high", "severe"
-    (slot pattern-type)      ; "anorexic", "bulimic", "binge", "restrictive"
-    (slot evidence)
-    (slot recommendation))
+    (slot pattern-type)      ; "restrictive", "binge", "irregular"
+    (slot evidence)          ; Description of evidence
+    (slot confidence)        ; 0-100%
+    (slot recommendation))   ; Clinical recommendations
+
+
 
 (deftemplate therapy-suggestion
     (slot user_id)
@@ -375,11 +388,22 @@
     (slot date)            ; YYYYMMDD format
     (slot total-score))    ; 0-100 score from sleep quality analysis
 
-; Template for sleep disorder assessment
+; Templates for sleep pattern tracking
+(deftemplate sleep-pattern
+    (slot user_id)
+    (slot date1)
+    (slot date2)
+    (slot score1)
+    (slot score2)
+    (slot persistence)
+    (slot pattern-type))     ; "poor", "irregular", "oversleeping", "normal"
+
 (deftemplate sleep-disorder-assessment
     (slot user_id)
     (slot risk-level)        ; "low", "moderate", "high", "severe"
-    (slot pattern-type)      ; 
-    (slot evidence)
+    (slot pattern-type)      ; "insomnia", "irregular", "hypersomnia"
+    (slot confidence)        ; 0-100%
+    (slot evidence)          
     (slot recommendation))
+
     
