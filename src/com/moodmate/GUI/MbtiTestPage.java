@@ -209,6 +209,7 @@ public class MbtiTestPage extends BasePage {
 
     	
         JSlider mbtiSlider = new JSlider(-5, 5, -5); 
+        mbtiSlider.setOpaque(false); 
         mbtiSliders[index] = mbtiSlider;
         mbtiSlider.setBounds(PADDING_X -20, currentY, 300, FIELD_HEIGHT * 2); 
 //        mbtiSlider.setMajorTickSpacing(2);
