@@ -266,6 +266,112 @@ public class SignInPage extends BasePage {
                                 } else {
                                     System.out.println("No weather data found for user_id: " + GlobalVariable.userId);
                                 }
+                                try {
+                                    String[][] normalizedEmotions = {
+                                            {"20241209", "0805", "happy", "50"},
+                                            {"20241209", "0805", "sad", "30"},
+                                            {"20241209", "0805", "angry", "20"},
+                                            {"20241209", "0805", "scared", "10"},
+                                            {"20241209", "0805", "confused", "32"},
+                                            {"20241209", "1024", "happy", "80"},
+                                            {"20241209", "1024", "sad", "20"},
+                                            {"20241209", "1024", "angry", "0"},
+                                            {"20241209", "1024", "scared", "0"},
+                                            {"20241209", "1024", "confused", "10"},
+                                            {"20241209", "1217", "happy", "50"},
+                                            {"20241209", "1217", "sad", "0"},
+                                            {"20241209", "1217", "angry", "10"},
+                                            {"20241209", "1217", "scared", "0"},
+                                            {"20241209", "1217", "confused", "10"},
+                                            {"20241209", "1409", "happy", "40"},
+                                            {"20241209", "1409", "sad", "30"},
+                                            {"20241209", "1409", "angry", "0"},
+                                            {"20241209", "1409", "scared", "0"},
+                                            {"20241209", "1409", "confused", "50"},
+                                            {"20241209", "1612", "happy", "70"},
+                                            {"20241209", "1612", "sad", "20"},
+                                            {"20241209", "1612", "angry", "0"},
+                                            {"20241209", "1612", "scared", "0"},
+                                            {"20241209", "1612", "confused", "20"}
+                                        };
+
+                                        for (String[] emotionData_day : normalizedEmotions) {
+                                            Fact normalizedEmotion = new Fact("user-emotion", engine);
+                                            normalizedEmotion.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                            normalizedEmotion.setSlotValue("day", new Value(emotionData_day[0], RU.STRING));
+                                            normalizedEmotion.setSlotValue("hour", new Value(emotionData_day[1], RU.STRING));
+                                            normalizedEmotion.setSlotValue("emotion-name", new Value(emotionData_day[2], RU.STRING));
+                                            normalizedEmotion.setSlotValue("intensity", new Value(Integer.parseInt(emotionData_day[3]), RU.INTEGER));
+                                            
+                                            engine.assertFact(normalizedEmotion);
+                                        }
+                                        
+                                        System.out.println("Normalized emotion facts asserted for user: " + GlobalVariable.userId);
+                                    } catch (JessException ex) {
+                                        System.err.println("Error asserting normalized emotion facts: " + ex.getMessage());
+                                        ex.printStackTrace();
+                                    }
+                                try {
+                                    // Assert rses-level fact
+                                	// Assert RSES level fact
+                                	// RSES level fact
+                                	Fact rsesLevelFact = new Fact("rses-level", engine);
+                                	rsesLevelFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                	rsesLevelFact.setSlotValue("level", new Value("low", RU.STRING));
+                                	engine.assertFact(rsesLevelFact);
+
+                                	// Trigger status fact
+                                	Fact triggerStatusFact = new Fact("trigger-status", engine);
+                                	triggerStatusFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                	// Use RU.SYMBOL instead of RU.BOOLEAN
+                                	triggerStatusFact.setSlotValue("has-trigger", new Value("true", RU.SYMBOL));
+                                	engine.assertFact(triggerStatusFact);
+                                    // Run the Jess engine after asserting new facts
+                                    
+                                } catch (JessException ex) {
+                                    System.err.println("Error asserting rses-level or trigger-status facts: " + ex.getMessage());
+                                    ex.printStackTrace();
+                                }
+                                
+//                                Fact sleepQualityFact = new Fact("sleep-quality", engine);
+//                                sleepQualityFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+//                                sleepQualityFact.setSlotValue("satisfaction", new Value((Integer) 2, RU.INTEGER));
+//                                sleepQualityFact.setSlotValue("sleep-time", new Value((String) "23:30", RU.STRING));
+//                                sleepQualityFact.setSlotValue("wake-time", new Value((String) "09:00", RU.STRING));
+//                                sleepQualityFact.setSlotValue("sleep-decimal", new Value((Double) 11.5, RU.FLOAT));
+//                                sleepQualityFact.setSlotValue("wake-decimal", new Value((Double) 9.0, RU.FLOAT));
+//                                engine.assertFact(sleepQualityFact);
+//                                
+//                                Fact physicalActivityFact = new Fact("physical-activity", engine);
+//                                physicalActivityFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+//                                physicalActivityFact.setSlotValue("has-activity", new Value("TRUE", RU.SYMBOL));
+//                                physicalActivityFact.setSlotValue("duration", new Value(10, RU.INTEGER));
+//                                physicalActivityFact.setSlotValue("intensity", new Value("moderate", RU.STRING));
+//                                engine.assertFact(physicalActivityFact);
+                                
+                             // Appetite status fact
+//                                Fact appetiteFact = new Fact("appetite-status", engine);
+//                                appetiteFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+//                                appetiteFact.setSlotValue("option", new Value("1a", RU.STRING));
+//                                engine.assertFact(appetiteFact);
+//
+//                                // Meal info fact
+//                                Fact mealFact = new Fact("meal-info", engine);
+//                                mealFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+//                                mealFact.setSlotValue("meals-per-day", new Value(2, RU.INTEGER));
+//                                engine.assertFact(mealFact);
+
+                                // Macronutrient intake fact
+//                                Fact macroFact = new Fact("macronutrient-intake", engine);
+//                                macroFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+//                                macroFact.setSlotValue("carbs", new Value(30, RU.INTEGER));
+//                                macroFact.setSlotValue("protein", new Value(45, RU.INTEGER));
+//                                macroFact.setSlotValue("fat", new Value(50, RU.INTEGER));
+//                                macroFact.setSlotValue("minerals", new Value(40, RU.INTEGER));
+//                                macroFact.setSlotValue("vitamins", new Value(45, RU.INTEGER));
+//                                macroFact.setSlotValue("water", new Value(20, RU.INTEGER));
+//                                engine.assertFact(macroFact);
+                                
                                 // Run engine after all facts are asserted
                                 engine.run();
                             } catch (JessException ex) {
