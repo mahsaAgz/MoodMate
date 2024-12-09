@@ -73,7 +73,7 @@
         (pattern-type "restrictive")
         (confidence 95)
         (evidence (str-cat "Severe restrictive eating pattern persisting for " ?p " days"))
-        (recommendation "Immediate clinical intervention needed - Extended pattern of severe food restriction"))))
+        (recommendation "Immediate clinical intervention is strongly recommended. The observed persistent pattern of severe food restriction over the past ?p days may indicate serious health risks. Professional evaluation can provide essential support and guidance."))))
 
 ; Rule to detect persistent binge pattern
 (defrule detect-persistent-binge-pattern
@@ -89,7 +89,7 @@
         (pattern-type "binge")
         (confidence 90)
         (evidence (str-cat "Binge eating pattern persisting for " ?p " days"))
-        (recommendation "Clinical evaluation needed - Sustained binge eating pattern detected"))))
+        (recommendation "Clinical consultation is advised. The sustained binge eating pattern over ?p days suggests potential challenges with eating habits. A healthcare provider can offer tailored strategies to address this behavior effectively."))))
 
 ; Rule to detect persistent irregular pattern
 (defrule detect-persistent-irregular-pattern
@@ -105,7 +105,7 @@
         (pattern-type "irregular")
         (confidence 85)
         (evidence (str-cat "Irregular eating patterns persisting for " ?p " days"))
-        (recommendation "Clinical evaluation recommended - Persistent disordered eating patterns observed"))))
+        (recommendation "A clinical evaluation is recommended to understand and address the persistent irregular eating patterns observed over ?p days. Early support can help restore consistency and improve overall well-being."))))
 
 ; Rule to detect moderate risk patterns
 (defrule detect-moderate-eating-risk
@@ -123,7 +123,7 @@
         (pattern-type ?type)
         (confidence 75)
         (evidence (str-cat "Early " ?type " eating pattern detected for " ?p " days"))
-        (recommendation "Monitor eating patterns closely and consider clinical consultation"))))
+        (recommendation "Monitoring your eating patterns is strongly encouraged. The early signs of ?type eating patterns over ?p days may benefit from further attention. If these patterns persist or intensify, consulting a healthcare provider is recommended."))))
 
 ; Rule to print eating disorder assessment
 (defrule print-eating-disorder-assessment

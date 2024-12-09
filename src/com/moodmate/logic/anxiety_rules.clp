@@ -18,7 +18,7 @@
         (user_id ?id)
         (risk-level "severe")
         (evidence (str-cat "Severe anxiety persisting for " ?p1 " days with significant cognitive symptoms (" ?c "% confusion)"))
-        (recommendation "Immediate clinical intervention needed - Severe persistent anxiety disorder indicated"))))
+        (recommendation "Immediate professional intervention is strongly recommended. Symptoms suggest severe and persistent anxiety, potentially impacting cognitive function. A licensed mental health professional can provide tailored support and care."))))
 
 ; Rule to detect chronic anxiety-depression comorbidity
 (defrule assess-anxiety-depression-comorbid
@@ -37,7 +37,7 @@
         (user_id ?id)
         (risk-level "high")
         (evidence (str-cat "Concurrent anxiety for " ?p1 " days and depressive patterns for " ?p2 " days"))
-        (recommendation "Clinical evaluation needed - Mixed anxiety-depressive disorder indicated"))))
+        (recommendation "Clinical assessment is highly recommended. The concurrent patterns of anxiety and depressive symptoms may indicate a mixed anxiety-depressive condition. Early evaluation can facilitate appropriate and effective treatment options."))))
 
 ; Rule to detect persistent moderate anxiety
 (defrule assess-persistent-moderate-anxiety
@@ -57,7 +57,7 @@
         (user_id ?id)
         (risk-level "high")
         (evidence (str-cat "Persistent moderate anxiety (" ?sc "%) for " ?p " days"))
-        (recommendation "Clinical evaluation recommended - Generalized anxiety disorder possible"))))
+        (recommendation "A professional consultation is advised. Persistent moderate anxiety with noticeable fear patterns may align with generalized anxiety. A mental health professional can help clarify and address these concerns"))))
 
 ; Rule to detect anxiety with chronic irritability
 (defrule assess-anxious-irritability
@@ -76,7 +76,7 @@
         (user_id ?id)
         (risk-level "high")
         (evidence (str-cat "Anxiety pattern for " ?p1 " days with sustained irritability for " ?p2 " days"))
-        (recommendation "Clinical evaluation needed - Consider anxiety disorder with irritable features"))))
+        (recommendation "Professional evaluation is recommended. Sustained anxiety accompanied by chronic irritability may suggest an anxiety disorder with additional features. Early intervention can improve emotional regulation and well-being."))))
 
 ; Rule to detect fluctuating mild anxiety
 (defrule assess-mild-anxiety
@@ -96,7 +96,7 @@
         (user_id ?id)
         (risk-level "moderate")  ; Upgraded to moderate if persistent
         (evidence (str-cat "Mild but persistent anxiety (" ?sc "%) for " ?p " days"))
-        (recommendation "Consider clinical consultation - Persistent mild anxiety may benefit from treatment"))))
+        (recommendation "Clinical consultation is encouraged. Persistent mild anxiety, though manageable, may benefit from proactive strategies such as stress management, therapy, or lifestyle adjustments to prevent escalation."))))
 
 ; Rule to print anxiety assessment
 (defrule print-anxiety-assessment

@@ -12,7 +12,7 @@
         (risk-level "severe")
         (confidence 95)        ; High confidence due to long persistence
         (evidence (str-cat "Severe depressive pattern persisting for " ?p1 " days"))
-        (recommendation "Immediate clinical evaluation needed - Major Depressive Episode indicated")))
+        (recommendation "Immediate professional intervention is strongly recommended. Symptoms align with a Major Depressive Episode, persisting for an extended period. Timely support from a licensed mental health professional can provide critical care and relief.")))
         
 ; Rule to detect persistent moderate depression
 (defrule assess-persistent-moderate-depression
@@ -29,7 +29,7 @@
         (risk-level "high")
         (confidence (min 90 (+ 70 (* ?p1 2))))  ; Confidence increases with persistence
         (evidence (str-cat "Moderate depressive pattern persisting for " ?p1 " days"))
-        (recommendation "Clinical evaluation recommended - Persistent depressive symptoms require assessment"))))
+        (recommendation "A clinical evaluation is advised to address persistent depressive symptoms. Early intervention can prevent further escalation and provide tailored strategies to manage mood effectively."))))
 
 ; Rule to detect early depression signs
 (defrule assess-early-depression
@@ -46,7 +46,7 @@
         (risk-level "moderate")
         (confidence (+ 50 (* ?p1 5)))  ; Base confidence plus 5% per day
         (evidence (str-cat "Early depression warning signs for " ?p1 " days"))
-        (recommendation "Consider clinical consultation if symptoms persist - Monitor closely"))))
+        (recommendation "Close monitoring of symptoms is encouraged. If the depressive patterns persist or intensify, consulting a mental health provider can offer valuable insights and early support to address potential concerns."))))
 ; Rule to print depression assessment
 (defrule print-depression-assessment
     (declare (salience 73))

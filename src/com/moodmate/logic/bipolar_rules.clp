@@ -26,7 +26,7 @@
         (risk-level "severe")
         (confidence 95)
         (evidence (str-cat "Severe manic pattern for " ?p1 " days and severe depressive pattern for " ?p2 " days"))
-        (recommendation "Immediate clinical intervention required - Clear bipolar I pattern with extended episodes"))))
+        (recommendation "Immediate consultation with a mental health professional is strongly advised. The observed extended severe manic and depressive episodes are indicative of Bipolar I Disorder, and early intervention can significantly improve management and outcomes."))))
 
 ; Rule to detect bipolar type II pattern with improved criteria
 (defrule assess-bipolar-2
@@ -52,7 +52,7 @@
         (risk-level "high")
         (confidence 90)
         (evidence (str-cat "Moderate manic (hypomanic) pattern for " ?p1 " days with severe depressive pattern for " ?p2 " days"))
-        (recommendation "Clinical evaluation needed - Pattern suggests Bipolar II with prominent depressive features"))))
+        (recommendation "A comprehensive evaluation by a licensed mental health provider is recommended. The presence of hypomanic episodes alongside severe depressive patterns suggests Bipolar II Disorder. Early diagnosis can facilitate appropriate therapeutic support tailored to individual needs."))))
 
 ; Rule to detect rapid cycling - revised version
 (defrule assess-rapid-cycling
@@ -80,7 +80,7 @@
         (risk-level "severe")
         (confidence 95)
         (evidence (str-cat "Four mood switches detected within " (- ?d4 ?d1) " days, indicating rapid cycling pattern"))
-        (recommendation "Immediate clinical intervention needed - Rapid cycling requires specialized treatment approach"))))
+        (recommendation "Rapid cycling patterns, characterized by frequent mood shifts, require immediate attention from a mental health specialist. These patterns may indicate a complex form of bipolar disorder that benefits from specialized interventions. Prompt action is essential for effective management."))))
 
 ; Rule to detect moderate risk with extended monitoring
 (defrule assess-moderate-bipolar-risk
@@ -100,7 +100,7 @@
         (risk-level "moderate")
         (confidence 80)
         (evidence "Sustained moderate mood episodes detected requiring careful monitoring")
-        (recommendation "Schedule clinical evaluation within 2 weeks - Consider mood tracking and preventive interventions"))))
+        (recommendation "A clinical evaluation is recommended within two weeks to further assess and address the detected moderate mood episodes. Regular mood tracking and lifestyle adjustments during this period can support preventive care and provide valuable insights for further diagnosis."))))
 ; Rule to print bipolar assessment
 (defrule print-bipolar-assessment
     (declare (salience 73))

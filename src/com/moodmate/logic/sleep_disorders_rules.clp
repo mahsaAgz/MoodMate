@@ -52,7 +52,7 @@
         (pattern-type "insomnia")
         (confidence 95)
         (evidence (str-cat "Severe sleep disturbance - consistently very poor sleep scores (<40) for 5+ consecutive days"))
-        (recommendation "Immediate sleep specialist evaluation needed - Extended pattern of severe sleep disturbance detected"))))
+        (recommendation "Immediate evaluation by a sleep specialist is strongly recommended. Consistently very poor sleep scores over 5+ consecutive days indicate severe insomnia, which may significantly affect your overall health and well-being. Timely professional support can provide effective treatment options."))))
 
 ; Rule to detect persistent moderate insomnia
 (defrule detect-persistent-moderate-insomnia
@@ -74,7 +74,7 @@
         (pattern-type "insomnia")
         (confidence 85)
         (evidence (str-cat "Persistent poor sleep - consecutive sleep scores below 50 for 3+ days"))
-        (recommendation "Clinical sleep evaluation recommended - Pattern suggests chronic sleep disturbance"))))
+        (recommendation "A clinical evaluation is advised to address persistent sleep issues. Consecutive nights with poor sleep scores suggest a chronic pattern that could impact daily functioning. A healthcare professional can help identify and treat underlying causes."))))
 
 ; Rule to detect chronic irregular sleep
 (defrule detect-chronic-irregular-sleep
@@ -97,7 +97,7 @@
         (pattern-type "irregular")
         (confidence 90)
         (evidence (str-cat "Chronic irregular sleep pattern - significant daily variations over 3+ days"))
-        (recommendation "Sleep specialist consultation needed - Persistent irregular sleep patterns detected"))))
+        (recommendation "Consultation with a sleep specialist is recommended. The observed irregular sleep patterns with significant daily variations over multiple days suggest the need for professional assessment to restore a regular sleep schedule."))))
 
 ; Rule to detect early sleep issues
 (defrule detect-early-sleep-issues
@@ -116,7 +116,7 @@
         (pattern-type "disturbed")
         (confidence 75)
         (evidence (str-cat "Early signs of sleep disturbance - suboptimal sleep scores for consecutive days"))
-        (recommendation "Monitor sleep patterns and consider sleep hygiene evaluation if issues persist"))))
+        (recommendation "Monitoring your sleep patterns is encouraged. Early signs of suboptimal sleep suggest the importance of evaluating sleep hygiene practices, such as maintaining consistent bedtime routines or limiting screen time before sleep. Seek professional advice if these issues persist or worsen."))))
 
 ; Rule to print sleep disorder assessment
 (defrule print-sleep-disorder-assessment
