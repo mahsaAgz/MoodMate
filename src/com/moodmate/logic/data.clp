@@ -73,7 +73,7 @@
 
 
 
-(assert (trigger-status (user_id 1) (has-trigger FALSE)))
+(assert (trigger-status (user_id 1) (has-trigger false)))
 (assert (rses-level (user_id 1) (level "moderate")))
 
 (assert (self-image-answer (user_id 1) (question_id 1) (answer 3)))
