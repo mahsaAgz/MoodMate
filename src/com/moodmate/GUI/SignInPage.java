@@ -267,31 +267,31 @@ public class SignInPage extends BasePage {
                                     System.out.println("No weather data found for user_id: " + GlobalVariable.userId);
                                 }try {
                                     String[][] normalizedEmotions = {
-                                            {"20241209", "0800", "happy", "50"},
-                                            {"20241209", "0800", "sad", "30"},
-                                            {"20241209", "0800", "angry", "20"},
-                                            {"20241209", "0800", "scared", "10"},
-                                            {"20241209", "0800", "confused", "32"},
-                                            {"20241209", "1000", "happy", "80"},
-                                            {"20241209", "1000", "sad", "20"},
-                                            {"20241209", "1000", "angry", "0"},
-                                            {"20241209", "1000", "scared", "0"},
-                                            {"20241209", "1000", "confused", "10"},
-                                            {"20241209", "1200", "happy", "50"},
-                                            {"20241209", "1200", "sad", "0"},
-                                            {"20241209", "1200", "angry", "10"},
-                                            {"20241209", "1200", "scared", "0"},
-                                            {"20241209", "1200", "confused", "10"},
-                                            {"20241209", "1400", "happy", "40"},
-                                            {"20241209", "1400", "sad", "30"},
-                                            {"20241209", "1400", "angry", "0"},
-                                            {"20241209", "1400", "scared", "0"},
-                                            {"20241209", "1400", "confused", "50"},
-                                            {"20241209", "1600", "happy", "70"},
-                                            {"20241209", "1600", "sad", "20"},
-                                            {"20241209", "1600", "angry", "0"},
-                                            {"20241209", "1600", "scared", "0"},
-                                            {"20241209", "1600", "confused", "20"}
+                                            {"20241209", "0805", "happy", "50"},
+                                            {"20241209", "0805", "sad", "30"},
+                                            {"20241209", "0805", "angry", "20"},
+                                            {"20241209", "0805", "scared", "10"},
+                                            {"20241209", "0805", "confused", "32"},
+                                            {"20241209", "1024", "happy", "80"},
+                                            {"20241209", "1024", "sad", "20"},
+                                            {"20241209", "1024", "angry", "0"},
+                                            {"20241209", "1024", "scared", "0"},
+                                            {"20241209", "1024", "confused", "10"},
+                                            {"20241209", "1217", "happy", "50"},
+                                            {"20241209", "1217", "sad", "0"},
+                                            {"20241209", "1217", "angry", "10"},
+                                            {"20241209", "1217", "scared", "0"},
+                                            {"20241209", "1217", "confused", "10"},
+                                            {"20241209", "1409", "happy", "40"},
+                                            {"20241209", "1409", "sad", "30"},
+                                            {"20241209", "1409", "angry", "0"},
+                                            {"20241209", "1409", "scared", "0"},
+                                            {"20241209", "1409", "confused", "50"},
+                                            {"20241209", "1612", "happy", "70"},
+                                            {"20241209", "1612", "sad", "20"},
+                                            {"20241209", "1612", "angry", "0"},
+                                            {"20241209", "1612", "scared", "0"},
+                                            {"20241209", "1612", "confused", "20"}
                                         };
 
                                         for (String[] emotionData_day : normalizedEmotions) {
@@ -310,6 +310,27 @@ public class SignInPage extends BasePage {
                                         System.err.println("Error asserting normalized emotion facts: " + ex.getMessage());
                                         ex.printStackTrace();
                                     }
+                                try {
+                                    // Assert rses-level fact
+                                	// Assert RSES level fact
+                                	// RSES level fact
+                                	Fact rsesLevelFact = new Fact("rses-level", engine);
+                                	rsesLevelFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                	rsesLevelFact.setSlotValue("level", new Value("low", RU.STRING));
+                                	engine.assertFact(rsesLevelFact);
+
+                                	// Trigger status fact
+                                	Fact triggerStatusFact = new Fact("trigger-status", engine);
+                                	triggerStatusFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                	// Use RU.SYMBOL instead of RU.BOOLEAN
+                                	triggerStatusFact.setSlotValue("has-trigger", new Value("true", RU.SYMBOL));
+                                	engine.assertFact(triggerStatusFact);
+                                    // Run the Jess engine after asserting new facts
+                                    engine.run();
+                                } catch (JessException ex) {
+                                    System.err.println("Error asserting rses-level or trigger-status facts: " + ex.getMessage());
+                                    ex.printStackTrace();
+                                }
                                 // Run engine after all facts are asserted
                                 engine.run();
                             } catch (JessException ex) {
