@@ -6,104 +6,101 @@
     (slot evidence)          ; Description of evidence
     (slot recommendation))   ; Clinical recommendations
 
-; Rule to detect bipolar type I pattern (severe manic + depressive episodes)
+; Rule to detect bipolar type I pattern with improved criteria
 (defrule assess-bipolar-1
     (declare (salience 75))
-    ; Find severe manic episode
+    ; Find persistent severe manic pattern for at least 7 days
     (emotional-pattern (user_id ?id) 
                       (pattern-type "manic")
                       (intensity "severe")
-                      (persistence ?p1&:(> ?p1 3)))  ; Persists more than 3 days
-    ; Find depressive episode
+                      (persistence ?p1&:(>= ?p1 7)))
+    ; Find severe depressive pattern
     (emotional-pattern (user_id ?id)
                       (pattern-type "depressive")
-                      (intensity ?di&:(or (eq ?di "moderate") (eq ?di "severe"))))
-    (not (bipolar-assessment (user_id ?id)))  ; Haven't assessed yet
+                      (intensity "severe")
+                      (persistence ?p2&:(>= ?p2 14)))  ; Added minimum duration for depression
+    (not (bipolar-assessment (user_id ?id)))
 =>
     (assert (bipolar-assessment
         (user_id ?id)
-        (risk-level "high")
-        (confidence 85)
-        (evidence "Severe manic episode lasting more than 3 days with depressive episode")
-        (recommendation "Urgent clinical evaluation recommended for potential Bipolar I Disorder"))))
+        (risk-level "severe")
+        (confidence 95)
+        (evidence (str-cat "Severe manic pattern for " ?p1 " days and severe depressive pattern for " ?p2 " days"))
+        (recommendation "Immediate clinical intervention required - Clear bipolar I pattern with extended episodes"))))
 
-; Rule to detect bipolar type II pattern (hypomanic + severe depressive)
+; Rule to detect bipolar type II pattern with improved criteria
 (defrule assess-bipolar-2
     (declare (salience 75))
     ; No severe manic episodes
     (not (emotional-pattern (user_id ?id) 
                           (pattern-type "manic")
                           (intensity "severe")))
-    ; Find hypomanic episode
+    ; Find hypomanic episode with minimum duration
     (emotional-pattern (user_id ?id)
                       (pattern-type "manic")
-                      (intensity "moderate"))
-    ; Find severe depressive episode
+                      (intensity "moderate")
+                      (persistence ?p1&:(>= ?p1 4)))
+    ; Find severe depressive episode with minimum duration
     (emotional-pattern (user_id ?id)
                       (pattern-type "depressive")
-                      (intensity "severe"))
+                      (intensity "severe")
+                      (persistence ?p2&:(>= ?p2 14)))
     (not (bipolar-assessment (user_id ?id)))
 =>
     (assert (bipolar-assessment
         (user_id ?id)
         (risk-level "high")
-        (confidence 80)
-        (evidence "Hypomanic episode with severe depressive episode")
-        (recommendation "Clinical evaluation recommended for potential Bipolar II Disorder"))))
+        (confidence 90)
+        (evidence (str-cat "Moderate manic (hypomanic) pattern for " ?p1 " days with severe depressive pattern for " ?p2 " days"))
+        (recommendation "Clinical evaluation needed - Pattern suggests Bipolar II with prominent depressive features"))))
 
-; Rule to detect rapid cycling bipolar
+; Rule to detect rapid cycling - revised version
 (defrule assess-rapid-cycling
     (declare (salience 75))
-    ; First switch
+    ; Find first switch
     (emotional-pattern (user_id ?id)
-                      (pattern-type "switch")
+                      (pattern-type "manic")
                       (day ?d1))
-    ; Second switch at a different time
+    ; Find second switch
     (emotional-pattern (user_id ?id)
-                      (pattern-type "switch")
-                      (day ?d2&:(> ?d2 ?d1)))
+                      (pattern-type "depressive")
+                      (day ?d2&:(and (> ?d2 ?d1) (< (- ?d2 ?d1) 365))))
+    ; Find third switch
+    (emotional-pattern (user_id ?id)
+                      (pattern-type "manic")
+                      (day ?d3&:(and (> ?d3 ?d2) (< (- ?d3 ?d1) 365))))
+    ; Find fourth switch
+    (emotional-pattern (user_id ?id)
+                      (pattern-type "depressive")
+                      (day ?d4&:(and (> ?d4 ?d3) (< (- ?d4 ?d1) 365))))
     (not (bipolar-assessment (user_id ?id)))
 =>
     (assert (bipolar-assessment
         (user_id ?id)
         (risk-level "severe")
-        (confidence 90)
-        (evidence "Multiple mood switches detected indicating rapid cycling")
-        (recommendation "Immediate clinical evaluation recommended for rapid cycling bipolar disorder"))))
+        (confidence 95)
+        (evidence (str-cat "Four mood switches detected within " (- ?d4 ?d1) " days, indicating rapid cycling pattern"))
+        (recommendation "Immediate clinical intervention needed - Rapid cycling requires specialized treatment approach"))))
 
-; Rule to detect mixed features
-(defrule assess-mixed-features
-    (declare (salience 75))
-    (emotional-pattern (user_id ?id)
-                      (pattern-type "mixed-mood")
-                      (intensity "severe"))
-    (not (bipolar-assessment (user_id ?id)))
-=>
-    (assert (bipolar-assessment
-        (user_id ?id)
-        (risk-level "high")
-        (confidence 75)
-        (evidence "Severe mixed mood episodes detected")
-        (recommendation "Clinical evaluation recommended for bipolar disorder with mixed features"))))
-
-; Rule to detect moderate risk
+; Rule to detect moderate risk with extended monitoring
 (defrule assess-moderate-bipolar-risk
     (declare (salience 74))
     (or (emotional-pattern (user_id ?id)
                           (pattern-type "manic")
-                          (intensity "moderate"))
+                          (intensity "moderate")
+                          (persistence ?p1&:(>= ?p1 3)))
         (emotional-pattern (user_id ?id)
                           (pattern-type "depressive")
-                          (intensity "moderate")))
+                          (intensity "moderate")
+                          (persistence ?p2&:(>= ?p2 7))))
     (not (bipolar-assessment (user_id ?id)))
 =>
     (assert (bipolar-assessment
         (user_id ?id)
         (risk-level "moderate")
-        (confidence 60)
-        (evidence "Moderate mood episodes detected")
-        (recommendation "Monitor mood patterns and consider clinical consultation"))))
-
+        (confidence 80)
+        (evidence "Sustained moderate mood episodes detected requiring careful monitoring")
+        (recommendation "Schedule clinical evaluation within 2 weeks - Consider mood tracking and preventive interventions"))))
 ; Rule to print bipolar assessment
 (defrule print-bipolar-assessment
     (declare (salience 73))

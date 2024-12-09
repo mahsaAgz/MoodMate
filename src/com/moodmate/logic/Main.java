@@ -8,10 +8,10 @@ public class Main {
 	public static void main(String[] args) {
 		String file1 = "src/com/moodmate/logic/templates.clp";
 		String file2 = "src/com/moodmate/logic/data.clp";
-		String file5 ="src/com/moodmate/logic/SAD_rules.clp";
-//		String file4 ="src/com/moodmate/logic/EFT_daily_rules.clp";
-		String file4 ="src/com/moodmate/logic/pattern_recognize_rules.clp";
-		String file3 ="src/com/moodmate/logic/EFT_daily_rules.clp";
+//		String file5 ="src/com/moodmate/logic/SAD_rules.clp";
+		String file3 ="src/com/moodmate/logic/pattern_recognize_rules.clp";
+		String file4 ="src/com/moodmate/logic/sleep_disorders_rules.clp";
+//		String file5 ="src/com/moodmate/logic/EFT_daily_rules.clp";
 
 
 		
@@ -24,9 +24,9 @@ public class Main {
 			
 			r.eval("(batch " + file1 + ")");
 			r.eval("(batch " + file2 + ")");
-			r.eval("(batch " + file3 + ")");
+//			r.eval("(batch " + file3 + ")");
 			r.eval("(batch " + file4 + ")");
-			r.eval("(batch " + file5 + ")");
+//			r.eval("(batch " + file5 + ")");
 			
 //			r.eval("(facts)");
 			r.eval("( run)");

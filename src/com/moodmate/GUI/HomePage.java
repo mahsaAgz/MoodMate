@@ -236,7 +236,7 @@ public class HomePage extends BaseHomePage {
 	
 	    // Create a scrollable suggestions panel
 	    JPanel suggestionsPanel = new JPanel();
-	    suggestionsPanel.setLayout(null));
+	    suggestionsPanel.setLayout(null);
 	    suggestionsPanel.setOpaque(false);
 
 	    JLabel suggestionsTitle = new JLabel("Suggestions");
