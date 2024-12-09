@@ -78,7 +78,7 @@
         (pattern-type "restrictive")
         (confidence 95)
         (evidence (str-cat "Severe restrictive eating pattern - consistently very low food scores (below 40) for 5+ consecutive days from " ?d1 " to " ?d5))
-        (recommendation "Immediate clinical intervention is strongly recommended. A severe restrictive eating pattern has been observed with very low food scores consistently over 5+ consecutive days (from ?d1 to ?d5). Early professional support can help address this behavior and mitigate health risks effectively."))))
+        (recommendation "Immediate clinical intervention is strongly recommended. A severe restrictive eating pattern has been observed with very low food scores consistently over 5+ consecutive days. Early professional support can help address this behavior and mitigate health risks effectively."))))
 
 ; Rule to detect moderate restrictive eating disorder
 (defrule assess-moderate-restrictive

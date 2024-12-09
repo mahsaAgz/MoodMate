@@ -267,25 +267,40 @@ public class SignInPage extends BasePage {
                                     System.out.println("No weather data found for user_id: " + GlobalVariable.userId);
                                 }try {
                                     String[][] normalizedEmotions = {
-                                            {"20241208", "0800", "happy", "8"},
-                                            {"20241208", "0800", "sad", "60"},
-                                            {"20241208", "0800", "angry", "0"},
-                                            {"20241208", "0800", "scared", "0"},
-                                            {"20241208", "0800", "confused", "32"},
-                                            {"20241208", "0010", "happy", "0"},
-                                            {"20241208", "0010", "sad", "70"},
-                                            {"20241208", "0010", "angry", "0"},
-                                            {"20241208", "0010", "scared", "0"},
-                                            {"20241208", "0010", "confused", "30"}
+                                            {"20241209", "0800", "happy", "50"},
+                                            {"20241209", "0800", "sad", "30"},
+                                            {"20241209", "0800", "angry", "20"},
+                                            {"20241209", "0800", "scared", "10"},
+                                            {"20241209", "0800", "confused", "32"},
+                                            {"20241209", "1000", "happy", "80"},
+                                            {"20241209", "1000", "sad", "20"},
+                                            {"20241209", "1000", "angry", "0"},
+                                            {"20241209", "1000", "scared", "0"},
+                                            {"20241209", "1000", "confused", "10"},
+                                            {"20241209", "1200", "happy", "50"},
+                                            {"20241209", "1200", "sad", "0"},
+                                            {"20241209", "1200", "angry", "10"},
+                                            {"20241209", "1200", "scared", "0"},
+                                            {"20241209", "1200", "confused", "10"},
+                                            {"20241209", "1400", "happy", "40"},
+                                            {"20241209", "1400", "sad", "30"},
+                                            {"20241209", "1400", "angry", "0"},
+                                            {"20241209", "1400", "scared", "0"},
+                                            {"20241209", "1400", "confused", "50"},
+                                            {"20241209", "1600", "happy", "70"},
+                                            {"20241209", "1600", "sad", "20"},
+                                            {"20241209", "1600", "angry", "0"},
+                                            {"20241209", "1600", "scared", "0"},
+                                            {"20241209", "1600", "confused", "20"}
                                         };
 
                                         for (String[] emotionData_day : normalizedEmotions) {
-                                            Fact normalizedEmotion = new Fact("normalized-emotion", engine);
+                                            Fact normalizedEmotion = new Fact("user-emotion", engine);
                                             normalizedEmotion.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
                                             normalizedEmotion.setSlotValue("day", new Value(emotionData_day[0], RU.STRING));
                                             normalizedEmotion.setSlotValue("hour", new Value(emotionData_day[1], RU.STRING));
                                             normalizedEmotion.setSlotValue("emotion-name", new Value(emotionData_day[2], RU.STRING));
-                                            normalizedEmotion.setSlotValue("percentage", new Value(Integer.parseInt(emotionData_day[3]), RU.INTEGER));
+                                            normalizedEmotion.setSlotValue("intensity", new Value(Integer.parseInt(emotionData_day[3]), RU.INTEGER));
                                             
                                             engine.assertFact(normalizedEmotion);
                                         }
