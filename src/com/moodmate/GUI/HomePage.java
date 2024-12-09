@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import javax.swing.*;
 
 import com.moodmate.database.DatabaseConnection;
@@ -30,12 +34,14 @@ public class HomePage extends BaseHomePage {
     private static final int MARGIN = 20; //
     private static final int MOTIVATION_HEIGHT = 80; //
     private static final int PART1_HEIGHT = 100; //
-    private static final int PART2_HEIGHT = 600; //
-    
-    
+
     private static final int CHART_HEIGHT = 300;
 
-
+    private static int SUG_HEIGHT = 200;
+    
+    
+    private static int PART2_HEIGHT = CHART_HEIGHT + SUG_HEIGHT + FIELD_HEIGHT + 150; //
+    
     
     
     private static final Color joyColor = new Color(255, 165, 0);    // A warm orange
@@ -44,8 +50,8 @@ public class HomePage extends BaseHomePage {
     private static final Color scaredColor = new Color(147, 112, 219);  // A soft lavender purple
     private static final Color confusedColor = new Color(102, 205, 170);   // A fresh light green
 
-  
-    
+    int contentWidth= FRAME_WIDTH - 60;
+
 
     private static class EmotionData {
         List<List<Integer>> scores;
@@ -60,35 +66,56 @@ public class HomePage extends BaseHomePage {
 	public HomePage() {
 	    super();
 	    WeatherScheduler.startWeatherUpdates();
-	    
+	
 	    int currentY = 20;
 	
+	    // Create contentPanel with null layout
 	    JPanel contentPanel = new JPanel();
 	    contentPanel.setLayout(null);
 	
+	    // Create a fixed background label
 	    JLabel backgroundLabel = new JLabel(new ImageIcon("assets/images/background_homePage.png"));
 	    backgroundLabel.setBounds(0, 0, contentArea.getWidth(), contentArea.getHeight());
+	    backgroundLabel.setLayout(null); // No layout needed for the background
 	    contentPanel.add(backgroundLabel);
-	    backgroundLabel.setLayout(null);
 	
+	    // Add content to contentPanel (not backgroundLabel)
 	    JPanel motivationContainer = createMotivationContainer(currentY);
-	    backgroundLabel.add(motivationContainer);
+	    contentPanel.add(motivationContainer);
 	    currentY += MOTIVATION_HEIGHT + MARGIN;
 	
 	    JPanel partOneContainer = createPartOneContainer(currentY);
-	    backgroundLabel.add(partOneContainer);
+	    contentPanel.add(partOneContainer);
 	    currentY += PART1_HEIGHT + MARGIN;
 	
 	    JPanel partTwoContainer = createPartTwoContainer(currentY);
-	    backgroundLabel.add(partTwoContainer);
+	    contentPanel.add(partTwoContainer);
 	    currentY += PART2_HEIGHT + MARGIN;
 	
-	    contentPanel.setPreferredSize(new Dimension(contentWidth, currentY + 100));
+	    // Ensure contentPanel height matches content
+	    contentPanel.setPreferredSize(new Dimension(contentArea.getWidth(), currentY + 40));
+	    contentPanel.setBounds(0, 0, contentArea.getWidth(), currentY + 40);
+	
+	    // Ensure backgroundLabel stays at the bottom
+	    contentPanel.setComponentZOrder(backgroundLabel, contentPanel.getComponentCount() - 1);
+	
+	    // Add contentPanel to scrollPane
 	    JScrollPane scrollPane = new JScrollPane(contentPanel);
 	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	
+	    // Add scrollPane to contentArea
 	    contentArea.add(scrollPane, BorderLayout.CENTER);
+	
+	    // Revalidate and repaint
+	    contentPanel.revalidate();
+	    contentPanel.repaint();
+	    scrollPane.revalidate();
+	    scrollPane.repaint();
+	    contentArea.revalidate();
+	    contentArea.repaint();
 	}
 
+	
 	private JPanel createPartTwoContainer(int currentY) {
 	    JPanel partTwoContainer = new JPanel() {
 	        @Override
@@ -96,24 +123,30 @@ public class HomePage extends BaseHomePage {
 	            super.paintComponent(g);
 	            Graphics2D g2 = (Graphics2D) g;
 	            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	            g2.setColor(new Color(255, 255, 255, 200));
+	            g2.setColor(new Color(255, 255, 255, 200)); // Semi-transparent white
 	            g2.fillRoundRect(0, 0, getWidth(), getHeight(), CORNER_RADIUS, CORNER_RADIUS);
 	            g2.setColor(Color.WHITE);
 	            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, CORNER_RADIUS, CORNER_RADIUS);
 	        }
 	    };
-	    partTwoContainer.setLayout(new BorderLayout());
-	    partTwoContainer.setOpaque(false);
+	
+	    partTwoContainer.setLayout(null); // Absolute positioning
 	    partTwoContainer.setBounds(PADDING_X, currentY, FRAME_WIDTH - 60, PART2_HEIGHT);
 	
+	    // Title for Container Two
 	    JLabel partTwoTitle = new JLabel("View Your Data", SwingConstants.CENTER);
 	    partTwoTitle.setFont(new Font(customFont, Font.BOLD, 16));
-	    partTwoTitle.setBorder(BorderFactory.createEmptyBorder(MARGIN - 20, 10, MARGIN - 20, 0));
-	    partTwoContainer.add(partTwoTitle, BorderLayout.NORTH);
+	    partTwoTitle.setBounds(0, 0, FRAME_WIDTH - 80, 30); // Adjusted for proper alignment
+	    partTwoContainer.add(partTwoTitle);
 	
+	    // Tabbed Pane for Daily, Weekly, Monthly
 	    JTabbedPane tabbedPane = new JTabbedPane();
 	    tabbedPane.setFont(new Font(customFont, Font.PLAIN, 14));
-	
+	    tabbedPane.setBounds(10, 30, FRAME_WIDTH - 80, PART2_HEIGHT - 60);
+//	    tabbedPane.setBackground(Color.black);
+	    tabbedPane.setOpaque(false);
+
+	    // Create and add tabs with graphs
 	    EmotionData dailyData = getEmotionDataFromJess("daily");
 	    JPanel dailyTab = createGraphPanel("daily", dailyData.scores, dailyData.hours);
 	    tabbedPane.addTab("Daily", dailyTab);
@@ -125,158 +158,27 @@ public class HomePage extends BaseHomePage {
 	    EmotionData monthlyData = getEmotionDataFromJess("monthly");
 	    JPanel monthlyTab = createGraphPanel("monthly", monthlyData.scores, monthlyData.hours);
 	    tabbedPane.addTab("Monthly", monthlyTab);
-	
-	    partTwoContainer.add(tabbedPane, BorderLayout.CENTER);
-	
+	    
+	    
+
+
+	    partTwoContainer.add(tabbedPane);
+	    
+	    partTwoContainer.revalidate();
+	    partTwoContainer.repaint();
+
+	    
+
 	    return partTwoContainer;
 	}
-	private JPanel createGraphPanel2(String timeframe, List<List<Integer>> scores, List<Integer> hours) {
-	    JPanel graphPanel = new JPanel();
-	    graphPanel.setLayout(new BorderLayout());
-	    graphPanel.setOpaque(false);
 	
-	    JPanel chartArea = new JPanel() {
-	        @Override
-	        protected void paintComponent(Graphics g) {
-	            super.paintComponent(g);
-	            Graphics2D g2 = (Graphics2D) g;
-	            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-	
-	            String[] emotions = {"Happy", "Sad", "Angry", "Scared", "Confused"};
-	            Color[] colors = {joyColor, sadnessColor, angerColor, scaredColor, confusedColor};
-	
-	            int width = getWidth();
-	            int height = getHeight() - 50;
-	            int margin = 40;
-	            int graphWidth = width - 2 * margin;
-	            int graphHeight = height - 2 * margin;
-	
-	            // Draw axes
-	            g2.setColor(Color.BLACK);
-	            g2.drawLine(margin, height - margin, margin, margin);
-	            g2.drawLine(margin, height - margin, width - margin, height - margin);
-	
-	            if (scores.isEmpty() || hours.isEmpty()) {
-	                g2.setColor(Color.BLACK);
-	                g2.drawString("No data available", width / 2 - 50, height / 2);
-	                return;
-	            }
-	
-	            // Draw points and lines
-	            for (int i = 0; i < scores.size(); i++) {
-	                g2.setColor(colors[i]);
-	                List<Integer> emotionScores = scores.get(i);
-	
-	                for (int j = 0; j < hours.size(); j++) {
-	                    int x = margin + (j * graphWidth) / (Math.max(1, hours.size() - 1));
-	                    int y = height - margin - (emotionScores.get(j) * graphHeight) / 100;
-	                    g2.fillOval(x - 3, y - 3, 6, 6);
-	
-	                    if (j < hours.size() - 1) {
-	                        int nextX = margin + ((j + 1) * graphWidth) / (Math.max(1, hours.size() - 1));
-	                        int nextY = height - margin - (emotionScores.get(j + 1) * graphHeight) / 100;
-	                        g2.drawLine(x, y, nextX, nextY);
-	                    }
-	                }
-	            }
-	
-	            // Draw labels with modified formatting based on timeframe
-	            g2.setColor(Color.BLACK);
-	            g2.setFont(new Font(customFont, Font.PLAIN, 10));
-	
-	            for (int j = 0; j < hours.size(); j++) {
-	                int x = margin;
-	                if (hours.size() > 1) {
-	                    x = margin + (j * graphWidth) / (hours.size() - 1);
-	                }
-	
-	                String label;
-	                if (timeframe.equals("weekly")) {
-	                    int dateNum = hours.get(j);
-	                    String dateStr = String.valueOf(dateNum);
-	                    label = dateStr.length() == 8
-	                            ? LocalDate.of(
-	                                Integer.parseInt(dateStr.substring(0, 4)),
-	                                Integer.parseInt(dateStr.substring(4, 6)),
-	                                Integer.parseInt(dateStr.substring(6, 8))
-	                            ).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault())
-	                            : "Invalid";
-	                } else if (timeframe.equals("monthly")) {
-	                    int dateNum = hours.get(j);
-	                    String dateStr = String.valueOf(dateNum);
-	                    label = dateStr.length() >= 6
-	                            ? LocalDate.of(
-	                                Integer.parseInt(dateStr.substring(0, 4)),
-	                                Integer.parseInt(dateStr.substring(4, 6)),
-	                                1
-	                            ).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault())
-	                            : "Invalid";
-	                } else {
-	                    int rawHour = hours.get(j);
-	                    label = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
-	                }
-	
-	                g2.drawString(label, x - 10, height - margin + 20);
-	            }
-	
-	            // Draw emotion labels
-	            int labelY = height - margin + 40;
-	            int labelXStart = margin;
-	            int labelSpacing = (graphWidth - (emotions.length * 50)) / Math.max(1, emotions.length - 1);
-	
-	            for (int i = 0; i < emotions.length; i++) {
-	                int labelX = labelXStart + i * (50 + labelSpacing);
-	                g2.setColor(colors[i]);
-	                g2.drawString(emotions[i], labelX, labelY);
-	            }
-	        }
-	    };
-	    chartArea.setPreferredSize(new Dimension(400, CHART_HEIGHT));
-	    graphPanel.add(chartArea, BorderLayout.CENTER);
-	
-	    // Create a scrollable suggestions panel
-	    JPanel suggestionsPanel = new JPanel();
-	    suggestionsPanel.setLayout(null));
-	    suggestionsPanel.setOpaque(false);
-
-	    JLabel suggestionsTitle = new JLabel("Suggestions");
-	    suggestionsTitle.setFont(new Font(customFont, Font.BOLD, 14));
-	    suggestionsPanel.add(suggestionsTitle);
-
-	    String[] suggestions = generateSuggestions(timeframe);
-	    //int suggestionCount = Math.min(suggestions.length, 2); // Show only first 2 suggestions
-	    for (int i = 0; i < 2; i++) {
-	        JLabel suggestionLabel = new JLabel(
-	                "<html> - " + suggestions[i] + "</html>"
-	        );
-	        suggestionLabel.setFont(new Font(customFont, Font.PLAIN, 12));
-	        suggestionsPanel.add(Box.createVerticalStrut(10)); // Add spacing between suggestions
-	        suggestionsPanel.add(suggestionLabel);
-	    }
-
-	    if (suggestions.length > 2) {
-	        JButton moreSuggestionsButton = new JButton("More...");
-	        moreSuggestionsButton.setFont(new Font(customFont, Font.PLAIN, 12));
-//	        moreSuggestionsButton.addActionListener(e -> {
-//	            JOptionPane.showMessageDialog(graphPanel,
-//	                    String.join("\n", Arrays.copyOfRange(suggestions, 2, suggestions.length)),
-//	                    "More Suggestions",
-//	                    JOptionPane.INFORMATION_MESSAGE);
-//	        });
-//	        suggestionsPanel.add(Box.createVerticalStrut(10)); // Add spacing
-	        suggestionsPanel.add(moreSuggestionsButton);
-	    }
-
-	    graphPanel.add(suggestionsPanel, BorderLayout.SOUTH);
-
-	    return graphPanel;
-	}
-
+			
 	private JPanel createGraphPanel(String timeframe, List<List<Integer>> scores, List<Integer> hours) {
 	    JPanel graphPanel = new JPanel();
-	    graphPanel.setLayout(new BorderLayout());
-	    graphPanel.setOpaque(false);
+	    graphPanel.setLayout(null); // Absolute positioning
+	    graphPanel.setOpaque(true);
 	
+	    // Chart Area with Custom Painting
 	    JPanel chartArea = new JPanel() {
 	        @Override
 	        protected void paintComponent(Graphics g) {
@@ -288,15 +190,15 @@ public class HomePage extends BaseHomePage {
 	            Color[] colors = {joyColor, sadnessColor, angerColor, scaredColor, confusedColor};
 	
 	            int width = getWidth();
-	            int height = getHeight() - 50;
+	            int height = getHeight() - 50; // Leave space for labels
 	            int margin = 40;
 	            int graphWidth = width - 2 * margin;
 	            int graphHeight = height - 2 * margin;
 	
-	            // Draw axes
+	            // Draw Axes
 	            g2.setColor(Color.BLACK);
-	            g2.drawLine(margin, height - margin, margin, margin);
-	            g2.drawLine(margin, height - margin, width - margin, height - margin);
+	            g2.drawLine(margin, height - margin, margin, margin); // Y-axis
+	            g2.drawLine(margin, height - margin, width - margin, height - margin); // X-axis
 	
 	            if (scores.isEmpty() || hours.isEmpty()) {
 	                g2.setColor(Color.BLACK);
@@ -304,7 +206,7 @@ public class HomePage extends BaseHomePage {
 	                return;
 	            }
 	
-	            // Draw points and lines
+	            // Plot Points and Draw Lines
 	            for (int i = 0; i < scores.size(); i++) {
 	                g2.setColor(colors[i]);
 	                List<Integer> emotionScores = scores.get(i);
@@ -312,17 +214,17 @@ public class HomePage extends BaseHomePage {
 	                for (int j = 0; j < hours.size(); j++) {
 	                    int x = margin + (j * graphWidth) / (Math.max(1, hours.size() - 1));
 	                    int y = height - margin - (emotionScores.get(j) * graphHeight) / 100;
-	                    g2.fillOval(x - 3, y - 3, 6, 6);
+	                    g2.fillOval(x - 3, y - 3, 6, 6); // Draw point
 	
 	                    if (j < hours.size() - 1) {
 	                        int nextX = margin + ((j + 1) * graphWidth) / (Math.max(1, hours.size() - 1));
 	                        int nextY = height - margin - (emotionScores.get(j + 1) * graphHeight) / 100;
-	                        g2.drawLine(x, y, nextX, nextY);
+	                        g2.drawLine(x, y, nextX, nextY); // Draw line to next point
 	                    }
 	                }
 	            }
 	
-	            // Draw labels with modified formatting based on timeframe
+	            // Draw Labels for Time and Emotions
 	            g2.setColor(Color.BLACK);
 	            g2.setFont(new Font(customFont, Font.PLAIN, 10));
 	
@@ -333,26 +235,9 @@ public class HomePage extends BaseHomePage {
 	                }
 	
 	                String label;
-	                if (timeframe.equals("weekly")) {
-	                    int dateNum = hours.get(j);
-	                    String dateStr = String.valueOf(dateNum);
-	                    label = dateStr.length() == 8
-	                            ? LocalDate.of(
-	                                Integer.parseInt(dateStr.substring(0, 4)),
-	                                Integer.parseInt(dateStr.substring(4, 6)),
-	                                Integer.parseInt(dateStr.substring(6, 8))
-	                            ).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault())
-	                            : "Invalid";
-	                } else if (timeframe.equals("monthly")) {
-	                    int dateNum = hours.get(j);
-	                    String dateStr = String.valueOf(dateNum);
-	                    label = dateStr.length() >= 6
-	                            ? LocalDate.of(
-	                                Integer.parseInt(dateStr.substring(0, 4)),
-	                                Integer.parseInt(dateStr.substring(4, 6)),
-	                                1
-	                            ).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault())
-	                            : "Invalid";
+	                if (timeframe.equals("weekly") || timeframe.equals("monthly")) {
+	                    int rawHour = hours.get(j);
+	                    label = String.valueOf(rawHour);
 	                } else {
 	                    int rawHour = hours.get(j);
 	                    label = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
@@ -361,7 +246,7 @@ public class HomePage extends BaseHomePage {
 	                g2.drawString(label, x - 10, height - margin + 20);
 	            }
 	
-	            // Draw emotion labels
+	            // Draw Emotion Labels Below the Chart
 	            int labelY = height - margin + 40;
 	            int labelXStart = margin;
 	            int labelSpacing = (graphWidth - (emotions.length * 50)) / Math.max(1, emotions.length - 1);
@@ -373,43 +258,100 @@ public class HomePage extends BaseHomePage {
 	            }
 	        }
 	    };
-	    chartArea.setPreferredSize(new Dimension(400, CHART_HEIGHT));
-	    graphPanel.add(chartArea, BorderLayout.CENTER);
 	
-	    // Create a scrollable suggestions panel
+	    // Chart Area Bounds
+	    chartArea.setBounds(0, 10, FRAME_WIDTH - 80, CHART_HEIGHT);
+	    chartArea.setOpaque(false);
+	    graphPanel.add(chartArea);
+	
+	    // Suggestions Panel
 	    JPanel suggestionsPanel = new JPanel();
 	    suggestionsPanel.setLayout(new BoxLayout(suggestionsPanel, BoxLayout.Y_AXIS));
 	    suggestionsPanel.setOpaque(false);
 	
-	    JLabel suggestionsTitle = new JLabel("Suggestions");
-	    suggestionsTitle.setFont(new Font(customFont, Font.BOLD, 14));
-	    suggestionsPanel.add(suggestionsTitle);
-	
+	    // Suggestions logic
 	    String[] suggestions = generateSuggestions(timeframe);
-	    for (int i =0; i < suggestions.length; i++ ) {
-	    	String suggestion = suggestions[i];
-	    	JLabel suggestionLabel = new JLabel(
-	    		    "<html><body style='width: 220px;'> - " + suggestion + "</body></html>"
-	    		);
-	        suggestionLabel.setFont(new Font(customFont, Font.PLAIN, 12));
-	        suggestionsPanel.add(Box.createVerticalStrut(10)); // Add spacing between suggestions
-	        
-	        suggestionsPanel.setOpaque(false);
-	        suggestionsPanel.add(suggestionLabel);
-	    }
-	    
-	 
+	  
+	    String suggestionString = "<html><body style='width: 230px;'>";
+
+  
+	    for (String suggestion : suggestions) {
+	    	suggestionString+= "<li>" + suggestion+ "</li>";
+	     }
+	    suggestionString += "</body></html>";
+	    JLabel suggestionLabel = new JLabel(suggestionString);
+        suggestionLabel.setFont(new Font(customFont, Font.PLAIN, 12));
+        suggestionsPanel.add(suggestionLabel);
+
 	
-//	    JScrollPane scrollPane = new JScrollPane(suggestionsPanel);
-//	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//	    scrollPane.setPreferredSize(new Dimension(FRAME_WIDTH - 100, 300)); // Adjust the size as needed
-	    graphPanel.add(suggestionsPanel, BorderLayout.SOUTH);
+	    suggestionsPanel.setBounds(0, CHART_HEIGHT + 20, FRAME_WIDTH - 80, SUG_HEIGHT);
+
 	    
+	    graphPanel.add(suggestionsPanel);
+	    
+	    Dimension suggestionPreferredSize = suggestionLabel.getPreferredSize();
+//	    System.out.println("suggestionLabel preferred height: " + suggestionPreferredSize.height);
+
+	    if (suggestionPreferredSize.height > SUG_HEIGHT) {
+	    	
+		    // TODO
+		    // read more button that has all the suggestions and goes to SuggestionPage.java
+		    // Add "Read More" button
+		    JButton readMoreButton = new JButton("Read More ...");
+		    readMoreButton.setBounds(20, CHART_HEIGHT + SUG_HEIGHT + 20, 120, FIELD_HEIGHT);
+		    readMoreButton.setBackground(customGreen);
+		    readMoreButton.setForeground(Color.black);
+		    readMoreButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//		    readMoreButton.setBorder(BorderFactory.createLineBorder(customGreen, 1, true));
+		    readMoreButton.setOpaque(false);
+		    
+		    readMoreButton.addActionListener(e -> {
+		        // Generate the suggestions
+		        String[] suggestions2 = generateSuggestions(timeframe);
+
+		        // Combine all suggestions into a single HTML-formatted string
+		        StringBuilder suggestionHtml = new StringBuilder("<html><body style='width: 250px;'><ul>");
+		        for (String suggestion : suggestions2) {
+		            suggestionHtml.append("<li>").append(suggestion).append("</li>");
+		        }
+		        suggestionHtml.append("</ul></body></html>");
+
+		        // Create a JLabel with the formatted suggestions
+		        JLabel suggestionsLabel = new JLabel(suggestionHtml.toString());
+
+		        // Wrap the JLabel in a JScrollPane
+		        JScrollPane scrollPane = new JScrollPane(suggestionsLabel);
+		        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		        scrollPane.setPreferredSize(new Dimension(350, 300)); // Set fixed width and height
+
+		        // Display the JScrollPane inside a JOptionPane
+		        JOptionPane.showMessageDialog(
+		                graphPanel, // Parent component
+		                scrollPane, // Message (the scrollable content)
+		                "All Suggestions", // Title
+		                JOptionPane.PLAIN_MESSAGE // Removes the icon
+		        );
+		    });
+
+
+
+
+		    graphPanel.add(readMoreButton);
+
+
+	    }
+
+
+	    
+	    graphPanel.revalidate();
+	    graphPanel.repaint();
 	
 	    return graphPanel;
 	}
+	
+		
 
+	
     private JPanel createMotivationContainer(int currentY) {
         JPanel motivationContainer = new JPanel();
         motivationContainer.setLayout(null);
@@ -425,52 +367,53 @@ public class HomePage extends BaseHomePage {
         return motivationContainer;
     }
 
-    private JPanel createPartOneContainer(int currentY) {
-        JPanel partOneContainer = new JPanel() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(255, 255, 255, 200));
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), CORNER_RADIUS, CORNER_RADIUS);
-                g2.setColor(Color.WHITE);
-                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, CORNER_RADIUS, CORNER_RADIUS);
-            }
-        };
-        partOneContainer.setLayout(null);
-        partOneContainer.setOpaque(false);
-        partOneContainer.setBounds(PADDING_X, currentY, FRAME_WIDTH - 60, PART1_HEIGHT);
-
-        JLabel titleLabel = new JLabel("Tell Me what you feel right now", SwingConstants.CENTER);
-        titleLabel.setFont(new Font(customFont, Font.BOLD, 18));
-        int titleWidth = partOneContainer.getWidth() - 40;
-        int titleHeight = FIELD_HEIGHT;
-        int titleX = (partOneContainer.getWidth() - titleWidth) / 2;
-        int titleY = (partOneContainer.getHeight() - FIELD_HEIGHT - MARGIN - FIELD_HEIGHT) / 2;
-        titleLabel.setBounds(titleX, titleY, titleWidth, titleHeight);
-        partOneContainer.add(titleLabel);
-
-        JButton beginButton = new JButton("Begin");
-        int buttonWidth = partOneContainer.getWidth() / 2;
-        int buttonHeight = FIELD_HEIGHT;
-        int buttonX = (partOneContainer.getWidth() - buttonWidth) / 2;
-        int buttonY = FIELD_HEIGHT + MARGIN;
-        beginButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
-        beginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        beginButton.setBackground(customGreen);
-        beginButton.setForeground(Color.WHITE);
-        beginButton.setBorder(BorderFactory.createLineBorder(customGreen, 1, true));
-        beginButton.setOpaque(true);
-        beginButton.addActionListener(e -> {
-            addToNavigationStack();
-            new EFTPage();
-            dispose();
-        });
-        partOneContainer.add(beginButton);
-
-        return partOneContainer;
-    }
+    
+	private JPanel createPartOneContainer(int currentY) {
+	        JPanel partOneContainer = new JPanel() {
+	            @Override
+	            protected void paintComponent(Graphics g) {
+	                super.paintComponent(g);
+	                Graphics2D g2 = (Graphics2D) g;
+	                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+	                g2.setColor(new Color(255, 255, 255, 200));
+	                g2.fillRoundRect(0, 0, getWidth(), getHeight(), CORNER_RADIUS, CORNER_RADIUS);
+	                g2.setColor(Color.WHITE);
+	                g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, CORNER_RADIUS, CORNER_RADIUS);
+	            }
+	        };
+	        partOneContainer.setLayout(null);
+	        partOneContainer.setOpaque(false);
+	        partOneContainer.setBounds(PADDING_X, currentY, FRAME_WIDTH - 60, PART1_HEIGHT);
+	
+	        JLabel titleLabel = new JLabel("Tell Me what you feel right now", SwingConstants.CENTER);
+	        titleLabel.setFont(new Font(customFont, Font.BOLD, 18));
+	        int titleWidth = partOneContainer.getWidth() - 40;
+	        int titleHeight = FIELD_HEIGHT;
+	        int titleX = (partOneContainer.getWidth() - titleWidth) / 2;
+	        int titleY = (partOneContainer.getHeight() - FIELD_HEIGHT - MARGIN - FIELD_HEIGHT) / 2;
+	        titleLabel.setBounds(titleX, titleY, titleWidth, titleHeight);
+	        partOneContainer.add(titleLabel);
+	
+	        JButton beginButton = new JButton("Begin");
+	        int buttonWidth = partOneContainer.getWidth() / 2;
+	        int buttonHeight = FIELD_HEIGHT;
+	        int buttonX = (partOneContainer.getWidth() - buttonWidth) / 2;
+	        int buttonY = FIELD_HEIGHT + MARGIN;
+	        beginButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+	        beginButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+	        beginButton.setBackground(customGreen);
+	        beginButton.setForeground(Color.WHITE);
+	        beginButton.setBorder(BorderFactory.createLineBorder(customGreen, 1, true));
+	        beginButton.setOpaque(true);
+	        beginButton.addActionListener(e -> {
+	            addToNavigationStack();
+	            new EFTPage();
+	            dispose();
+	        });
+	        partOneContainer.add(beginButton);
+	
+	        return partOneContainer;
+	    }
 
     private EmotionData getEmotionDataFromJess(String timeframe) {
         List<List<Integer>> defaultScores = Arrays.asList(
@@ -715,12 +658,17 @@ public class HomePage extends BaseHomePage {
             if (suggestions.isEmpty()) {
                 switch (timeframe.toLowerCase()) {
                     case "daily":
+                        suggestions.add("No data for now No data for now No data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for now");
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
                         suggestions.add("and get personalized suggestions");
+                        suggestions.add("No data for now No data for now No data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for nowNo data for now");
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
                         suggestions.add("and get personalized suggestions");
+                     
+                        break;
+                    case "weekly":
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
                         suggestions.add("and get personalized suggestions");
@@ -728,7 +676,6 @@ public class HomePage extends BaseHomePage {
                         suggestions.add("Press Begin");
                         suggestions.add("and get personalized suggestions");
                         break;
-                    case "weekly":
                     case "monthly":
                         suggestions.add("No data for now");
                         suggestions.add("Press Begin");
@@ -748,6 +695,8 @@ public class HomePage extends BaseHomePage {
         return suggestions.toArray(new String[0]);
     }
 
+    
+    
     public static void main(String[] args) {
         new HomePage();
     }
@@ -758,4 +707,144 @@ public class HomePage extends BaseHomePage {
         super.dispose();
     }
     
+    
+    
+    
+//	
+//
+//	private JPanel createGraphPanel2(String timeframe, List<List<Integer>> scores, List<Integer> hours) {
+//	    JPanel graphPanel = new JPanel();
+//	    graphPanel.setLayout(null); // Absolute positioning
+//	    graphPanel.setOpaque(true);
+//
+//	    // Chart Area with Custom Painting
+//	    JPanel chartArea = new JPanel() {
+//	        @Override
+//	        protected void paintComponent(Graphics g) {
+//	            super.paintComponent(g);
+//	            Graphics2D g2 = (Graphics2D) g;
+//	            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//
+//	            String[] emotions = {"Happy", "Sad", "Angry", "Scared", "Confused"};
+//	            Color[] colors = {joyColor, sadnessColor, angerColor, scaredColor, confusedColor};
+//
+//	            int width = getWidth();
+//	            int height = getHeight() - 50; // Leave space for labels
+//	            int margin = 40;
+//	            int graphWidth = width - 2 * margin;
+//	            int graphHeight = height - 2 * margin;
+//
+//	            // Draw Axes
+//	            g2.setColor(Color.BLACK);
+//	            g2.drawLine(margin, height - margin, margin, margin); // Y-axis
+//	            g2.drawLine(margin, height - margin, width - margin, height - margin); // X-axis
+//
+//	            if (scores.isEmpty() || hours.isEmpty()) {
+//	                g2.setColor(Color.BLACK);
+//	                g2.drawString("No data available", width / 2 - 50, height / 2);
+//	                return;
+//	            }
+//
+//	            // Plot Points and Draw Lines
+//	            for (int i = 0; i < scores.size(); i++) {
+//	                g2.setColor(colors[i]);
+//	                List<Integer> emotionScores = scores.get(i);
+//
+//	                for (int j = 0; j < hours.size(); j++) {
+//	                    int x = margin + (j * graphWidth) / (Math.max(1, hours.size() - 1));
+//	                    int y = height - margin - (emotionScores.get(j) * graphHeight) / 100;
+//	                    g2.fillOval(x - 3, y - 3, 6, 6); // Draw point
+//
+//	                    if (j < hours.size() - 1) {
+//	                        int nextX = margin + ((j + 1) * graphWidth) / (Math.max(1, hours.size() - 1));
+//	                        int nextY = height - margin - (emotionScores.get(j + 1) * graphHeight) / 100;
+//	                        g2.drawLine(x, y, nextX, nextY); // Draw line to next point
+//	                    }
+//	                }
+//	            }
+//
+//	            // Draw Labels for Time and Emotions
+//	            g2.setColor(Color.BLACK);
+//	            g2.setFont(new Font(customFont, Font.PLAIN, 10));
+//
+//	            for (int j = 0; j < hours.size(); j++) {
+//	                int x = margin;
+//	                if (hours.size() > 1) {
+//	                    x = margin + (j * graphWidth) / (hours.size() - 1);
+//	                }
+//
+//	                String label;
+//	                if (timeframe.equals("weekly") || timeframe.equals("monthly")) {
+//	                    int rawHour = hours.get(j);
+//	                    label = String.valueOf(rawHour);
+//	                } else {
+//	                    int rawHour = hours.get(j);
+//	                    label = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
+//	                }
+//
+//	                g2.drawString(label, x - 10, height - margin + 20);
+//	            }
+//
+//	            // Draw Emotion Labels Below the Chart
+//	            int labelY = height - margin + 40;
+//	            int labelXStart = margin;
+//	            int labelSpacing = (graphWidth - (emotions.length * 50)) / Math.max(1, emotions.length - 1);
+//
+//	            for (int i = 0; i < emotions.length; i++) {
+//	                int labelX = labelXStart + i * (50 + labelSpacing);
+//	                g2.setColor(colors[i]);
+//	                g2.drawString(emotions[i], labelX, labelY);
+//	            }
+//	        }
+//	    };
+//
+//	    // Chart Area Bounds
+//	    chartArea.setBounds(0, 10, FRAME_WIDTH - 80, CHART_HEIGHT);
+//	    chartArea.setOpaque(false);
+//	    
+////	    chartArea.setBackground(Color.green);
+//	    graphPanel.add(chartArea);
+//
+//	    // Suggestions Panel
+//	    JPanel suggestionsPanel = new JPanel();
+//	    suggestionsPanel.setLayout(new BoxLayout(suggestionsPanel, BoxLayout.Y_AXIS));
+//	    suggestionsPanel.setOpaque(false);
+//	    
+////	    suggestionsPanel.setBounds(10, CHART_HEIGHT + 20, FRAME_WIDTH - 80, SUG_HEIGHT);
+//	    suggestionsPanel.setBounds(0, CHART_HEIGHT + 20, FRAME_WIDTH - 80, SUG_HEIGHT + 200);
+//
+//	    JLabel suggestionsTitle = new JLabel("Suggestions");
+//	    suggestionsTitle.setFont(new Font(customFont, Font.BOLD, 14));
+////	    suggestionsPanel.setOpaque(false);
+//	    suggestionsPanel.add(suggestionsTitle);
+//
+////	    suggestionsPanel.add(Box.createVerticalStrut(10));
+//
+//
+//	    
+//	    String suggestionString = "<html><body style='width: 230px;'>";
+//
+//	    String[] suggestions = generateSuggestions(timeframe);
+//	    for (String suggestion : suggestions) {
+//	    	suggestionString+= "<li>" + suggestion + "</li>";
+//	    	
+//	    }
+//	    suggestionString += "</body></html>";
+//	    JLabel suggestionLabel = new JLabel(suggestionString);
+//	    suggestionLabel.setFont(new Font(customFont, Font.PLAIN, 12));
+//	    
+//	    suggestionsPanel.add(suggestionLabel);
+//	    
+//	    suggestionsPanel.setOpaque(false);
+//
+//	    graphPanel.add(suggestionsPanel);
+//	    graphPanel.setBounds(0,0,FRAME_WIDTH - 80, CHART_HEIGHT + SUG_HEIGHT + 60);
+//	    
+//	    graphPanel.revalidate();
+//	    graphPanel.repaint();
+//
+//	    return graphPanel;
+//	}
+//
+//    
 }
