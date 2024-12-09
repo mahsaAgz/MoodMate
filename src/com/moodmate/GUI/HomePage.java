@@ -98,19 +98,19 @@ public class HomePage extends BaseHomePage {
 	
 	    // Ensure backgroundLabel stays at the bottom
 	    contentPanel.setComponentZOrder(backgroundLabel, contentPanel.getComponentCount() - 1);
-	
-	    // Add contentPanel to scrollPane
-	    JScrollPane scrollPane = new JScrollPane(contentPanel);
-	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	
-	    // Add scrollPane to contentArea
-	    contentArea.add(scrollPane, BorderLayout.CENTER);
-	
+		
 	    // Revalidate and repaint
 	    contentPanel.revalidate();
 	    contentPanel.repaint();
+
+	    // Add contentPanel to scrollPane
+	    JScrollPane scrollPane = new JScrollPane(contentPanel);
+	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	    scrollPane.revalidate();
 	    scrollPane.repaint();
+	    // Add scrollPane to contentArea
+	    contentArea.add(scrollPane, BorderLayout.CENTER);
+
 	    contentArea.revalidate();
 	    contentArea.repaint();
 	}
@@ -235,10 +235,27 @@ public class HomePage extends BaseHomePage {
 	                }
 	
 	                String label;
-	                if (timeframe.equals("weekly") || timeframe.equals("monthly")) {
-	                    int rawHour = hours.get(j);
-	                    label = String.valueOf(rawHour);
-	                } else {
+	                if (timeframe.equals("weekly")) {
+	                    int dateNum = hours.get(j);
+	                    String dateStr = String.valueOf(dateNum);
+	                    label = dateStr.length() == 8
+	                            ? LocalDate.of(
+	                                Integer.parseInt(dateStr.substring(0, 4)),
+	                                Integer.parseInt(dateStr.substring(4, 6)),
+	                                Integer.parseInt(dateStr.substring(6, 8))
+	                            ).getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.getDefault())
+	                            : "Invalid";
+	                } else if (timeframe.equals("monthly")) {
+	                    int dateNum = hours.get(j);
+	                    String dateStr = String.valueOf(dateNum);
+	                    label = dateStr.length() >= 6
+	                            ? LocalDate.of(
+	                                Integer.parseInt(dateStr.substring(0, 4)),
+	                                Integer.parseInt(dateStr.substring(4, 6)),
+	                                1
+	                            ).getMonth().getDisplayName(TextStyle.SHORT, Locale.getDefault())
+	                            : "Invalid";
+                } else {
 	                    int rawHour = hours.get(j);
 	                    label = String.format("%02d:%02d", rawHour / 100, rawHour % 100);
 	                }
