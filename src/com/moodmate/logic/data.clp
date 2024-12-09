@@ -137,7 +137,6 @@
 
 
 
-
 (assert (daily-emotion-summary (user_id 1) (day 20241114) (emotion-name "happy") (avg-percentage 10)))
 (assert (daily-emotion-summary (user_id 1) (day 20241114) (emotion-name "sad") (avg-percentage 60)))
 (assert (daily-emotion-summary (user_id 1) (day 20241114) (emotion-name "angry") (avg-percentage 10)))
