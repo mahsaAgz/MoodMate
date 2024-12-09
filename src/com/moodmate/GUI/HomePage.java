@@ -674,27 +674,27 @@ public class HomePage extends BaseHomePage {
                                 String suggestion;
                                 switch(condition) {
                                     case "anxiety":
-                                        suggestion = String.format("Consider %s to help manage anxiety (Risk level: %s)", 
+                                        suggestion = String.format("Engage in %s to help alleviate anxiety and build resilience. This activity aligns with strategies for reducing stress and fostering a sense of calm (Risk level: %s).", 
                                             activityType, severity);
                                         break;
                                     case "depression":
-                                        suggestion = String.format("Try %s to improve mood and energy (Risk level: %s)", 
+                                        suggestion = String.format("Explore %s to enhance mood, boost energy, and develop a sense of purpose. This activity is tailored to counter depressive symptoms effectively (Risk level: %s).", 
                                             activityType, severity);
                                         break;
                                     case "bipolar":
-                                        suggestion = String.format("Explore %s to help stabilize emotions (Risk level: %s)", 
+                                        suggestion = String.format("Consider %s as a supportive approach to stabilizing emotions and maintaining balance during mood shifts. This activity complements therapeutic strategies for bipolar disorder (Risk level: %s).", 
                                             activityType, severity);
                                         break;
                                     case "SAD":
-                                        suggestion = String.format("Engage in %s to combat seasonal effects (Risk level: %s)", 
+                                        suggestion = String.format("Try %s to counter the effects of seasonal changes. This activity promotes light exposure and uplifting experiences to mitigate SAD symptoms (Risk level: %s).", 
                                             activityType, severity);
                                         break;
                                     case "eating-disorder":
-                                        suggestion = String.format("Practice %s to develop healthy coping mechanisms (Risk level: %s)", 
+                                        suggestion = String.format("Consider %s to foster healthy coping strategies and rebuild a positive relationship with food and self-image. This approach is designed to support recovery (Risk level: %s).", 
                                             activityType, severity);
                                         break;
                                     case "wellness":
-                                        suggestion = String.format("Maintain wellbeing through regular %s", 
+                                        suggestion = String.format("Enhance overall wellbeing with regular %s. This activity supports mental clarity, emotional balance, and sustained vitality.", 
                                             activityType);
                                         break;
                                     default:
