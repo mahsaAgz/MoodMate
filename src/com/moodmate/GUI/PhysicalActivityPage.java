@@ -51,16 +51,59 @@ public class PhysicalActivityPage extends BaseHomePage {
         // Radio buttons with pictures
         JRadioButton yesButton = new JRadioButton(new ImageIcon("assets/images/physical_yes.png"));
         JRadioButton noButton = new JRadioButton(new ImageIcon("assets/images/physical_no.png"));
+        // Create custom panels to wrap radio buttons
+        JPanel yesPanel = new JPanel(new BorderLayout());
+        JPanel noPanel = new JPanel(new BorderLayout());
+        yesPanel.setBackground(Color.WHITE);
+        noPanel.setBackground(Color.WHITE);
+        
+//        JRadioButton yesButton = new JRadioButton(new ImageIcon("assets/images/physical_yes.png"));
+//        JRadioButton noButton = new JRadioButton(new ImageIcon("assets/images/physical_no.png"));
 
+        yesPanel.add(yesButton, BorderLayout.CENTER);
+        noPanel.add(noButton, BorderLayout.CENTER);
+        
+        yesPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        noPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+
+//        ButtonGroup activityGroup = new ButtonGroup();
+//        activityGroup.add(yesButton);
+//        activityGroup.add(noButton);
+
+        yesPanel.setBounds(startX, currentY, buttonWidth, buttonHeight);
+        noPanel.setBounds(startX + buttonWidth + gap, currentY, buttonWidth, buttonHeight);
+
+        yesButton.addItemListener(e -> {
+            if (yesButton.isSelected()) {
+                yesPanel.setBorder(BorderFactory.createLineBorder(customGreen, 3, true));
+                yesPanel.setBackground(new Color(232, 245, 233));
+            } else {
+                yesPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+                yesPanel.setBackground(Color.WHITE);
+            }
+        });
+
+        noButton.addItemListener(e -> {
+            if (noButton.isSelected()) {
+                noPanel.setBorder(BorderFactory.createLineBorder(customGreen, 3, true));
+                noPanel.setBackground(new Color(232, 245, 233));
+            } else {
+                noPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+                noPanel.setBackground(Color.WHITE);
+            }
+        });
+
+        contentPanel.add(yesPanel);
+        contentPanel.add(noPanel);
         ButtonGroup activityGroup = new ButtonGroup();
         activityGroup.add(yesButton);
         activityGroup.add(noButton);
 
         yesButton.setBounds(startX, currentY, buttonWidth, buttonHeight);
         noButton.setBounds(startX + buttonWidth + gap, currentY, buttonWidth, buttonHeight);
-
-        contentPanel.add(yesButton);
-        contentPanel.add(noButton);
+        
+//        contentPanel.add(yesButton);
+//        contentPanel.add(noButton);
 
         currentY += buttonHeight + MARGIN;
 

@@ -50,21 +50,59 @@ public class SleepPage extends BaseHomePage {
         int gap = 20; // Gap between buttons
         int totalWidth = (2 * buttonWidth) + gap;
         int startX = (contentArea.getWidth() - totalWidth) / 2;
-
+        
+        // Create custom panels to wrap radio buttons
+        JPanel yesPanel = new JPanel(new BorderLayout());
+        JPanel noPanel = new JPanel(new BorderLayout());
+        yesPanel.setBackground(Color.WHITE);
+        noPanel.setBackground(Color.WHITE);
+        
         // Radio buttons with pictures
         JRadioButton yesButton = new JRadioButton(new ImageIcon("assets/images/sleep_yes.png"));
         JRadioButton noButton = new JRadioButton(new ImageIcon("assets/images/sleep_no.png"));
+     // Add buttons to panels
+        yesPanel.add(yesButton, BorderLayout.CENTER);
+        noPanel.add(noButton, BorderLayout.CENTER);
+        
+        // Set initial borders
+        yesPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+        noPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
 
         ButtonGroup sleepyGroup = new ButtonGroup();
+        
         sleepyGroup.add(yesButton);
         sleepyGroup.add(noButton);
-
+        
         yesButton.setBounds(startX, currentY, buttonWidth, buttonHeight);
         noButton.setBounds(startX + buttonWidth + gap, currentY, buttonWidth, buttonHeight);
+        yesPanel.setBounds(startX, currentY, buttonWidth, buttonHeight);
+        noPanel.setBounds(startX + buttonWidth + gap, currentY, buttonWidth, buttonHeight);
 
-        contentPanel.add(yesButton);
-        contentPanel.add(noButton);
+        // Add selection effect listeners
+        yesButton.addItemListener(e -> {
+            if (yesButton.isSelected()) {
+                yesPanel.setBorder(BorderFactory.createLineBorder(customGreen, 3, true));
+                yesPanel.setBackground(new Color(232, 245, 233));  // Light green background
+            } else {
+                yesPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+                yesPanel.setBackground(Color.WHITE);
+            }
+        });
 
+        noButton.addItemListener(e -> {
+            if (noButton.isSelected()) {
+                noPanel.setBorder(BorderFactory.createLineBorder(customGreen, 3, true));
+                noPanel.setBackground(new Color(232, 245, 233));  // Light green background
+            } else {
+                noPanel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2, true));
+                noPanel.setBackground(Color.WHITE);
+            }
+        });
+
+//        contentPanel.add(yesButton);
+//        contentPanel.add(noButton);
+        contentPanel.add(yesPanel);
+        contentPanel.add(noPanel);
         currentY += 100 + MARGIN;
 
         // Panel for additional questions if "Yes" is selected
