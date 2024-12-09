@@ -449,9 +449,8 @@ public class HomePage extends BaseHomePage {
                 defaultHours = Arrays.asList(800, 1000, 1200, 1400, 1600);
                 break;
             case "weekly":
-                // Create dates for the last 5 days in YYYYMMDD format
                 defaultHours = new ArrayList<>();
-                for (int i = 4; i >= 0; i--) {
+                for (int i = 6; i >= 0; i--) {
                     LocalDate date = now.minusDays(i);
                     int dateNum = date.getYear() * 10000 + 
                                 date.getMonthValue() * 100 + 
@@ -523,7 +522,11 @@ public class HomePage extends BaseHomePage {
             }
 
             Collections.sort(hours);
+            if (timeframe.equals("weekly") && hours.size() > 7) {
+                hours = hours.subList(hours.size() - 7, hours.size());
+            }
 
+         
             String[] emotions = {"happy", "sad", "angry", "scared", "confused"};
             List<List<Integer>> scores = new ArrayList<>();
 

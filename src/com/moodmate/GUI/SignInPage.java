@@ -332,7 +332,52 @@ public class SignInPage extends BasePage {
                                     System.err.println("Error asserting rses-level or trigger-status facts: " + ex.getMessage());
                                     ex.printStackTrace();
                                 }
-                                
+                             // Depressive episode (Nov 14 - Nov 28)
+                                for (int day = 14; day <= 28; day++) {
+                                    String date = String.format("202411%02d", day);
+                                    String[][] dailyData = {
+                                        {date, "happy", "10"},
+                                        {date, "sad", "80"}, 
+                                        {date, "angry", "30"},
+                                        {date, "scared", "40"},
+                                        {date, "confused", "40"}
+                                    };
+                                    
+                                    for (String[] data : dailyData) {
+                                        Fact emotionFact = new Fact("daily-emotion-summary", engine);
+                                        emotionFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                        emotionFact.setSlotValue("day", new Value(data[0], RU.STRING));
+                                        emotionFact.setSlotValue("emotion-name", new Value(data[1], RU.STRING));
+                                        emotionFact.setSlotValue("avg-percentage", new Value(Double.parseDouble(data[2]), RU.FLOAT));
+                                        engine.assertFact(emotionFact);
+                                    }
+                                }
+
+                                // Manic episode (Nov 29 - Dec 09)
+                                for (int month = 11; month <= 12; month++) {
+                                    int startDay = (month == 11) ? 29 : 1;
+                                    int endDay = (month == 11) ? 30 : 9;
+                                    
+                                    for (int day = startDay; day <= endDay; day++) {
+                                        String date = String.format("2024%02d%02d", month, day);
+                                        String[][] dailyData = {
+                                            {date, "happy", "90"},
+                                            {date, "sad", "10"},
+                                            {date, "angry", "50"},
+                                            {date, "scared", "10"},
+                                            {date, "confused", "20"}
+                                        };
+                                        
+                                        for (String[] data : dailyData) {
+                                            Fact emotionFact = new Fact("daily-emotion-summary", engine);
+                                            emotionFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                            emotionFact.setSlotValue("day", new Value(data[0], RU.STRING));
+                                            emotionFact.setSlotValue("emotion-name", new Value(data[1], RU.STRING));
+                                            emotionFact.setSlotValue("avg-percentage", new Value(Double.parseDouble(data[2]), RU.FLOAT));
+                                            engine.assertFact(emotionFact);
+                                        }
+                                    }
+                                }
 //                                Fact sleepQualityFact = new Fact("sleep-quality", engine);
 //                                sleepQualityFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
 //                                sleepQualityFact.setSlotValue("satisfaction", new Value((Integer) 2, RU.INTEGER));
