@@ -508,7 +508,7 @@ public class HomePage extends BaseHomePage {
                     String emotionName = fact.getSlotValue("emotion-name").stringValue(null);
                     int avgPercentage = fact.getSlotValue("avg-percentage").intValue(null);
 
-                    if (!hours.contains(month)) {
+                    if (!hours.contains(month)) {  
                         hours.add(month);
                     }
 

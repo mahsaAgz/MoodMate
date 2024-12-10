@@ -259,7 +259,6 @@
     (slot day2)
     (slot pattern-type))
 
-; Rule to detect pattern persistence
 (defrule detect-pattern-persistence
     (declare (salience 84))
     ; Find first pattern
@@ -271,7 +270,9 @@
     ; Find consecutive day pattern
     ?pattern2 <- (emotional-pattern (user_id ?id) 
                                   (pattern-type ?type) 
-                                  (day ?d2&:(= ?d2 (+ ?d1 1))))
+                                  (day ?d2))
+    ; Test if dates are consecutive by comparing as integers
+    (test (= (+ (integer ?d1) 1) (integer ?d2)))
     ; Ensure we haven't processed this pair
     (not (processed-persistence (user_id ?id)
                               (day1 ?d1)
@@ -306,7 +307,6 @@
     (retract ?pattern2)
     
     (printout t "Pattern " ?type " persists for " ?new-persistence " days (Days " ?d1 " to " ?d2 ")" crlf))
-
 ; Rule to clean up processed patterns
 (defrule cleanup-processed-persistence
     (declare (salience 82))
