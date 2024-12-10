@@ -100,7 +100,7 @@ MoodMate is an intelligent system designed to help users track and manage their 
     ```
 ## Test Cases
 ### Testing Real-Time Suggestions
-1. Input emotional and physical data directly through the GUI.
+1. Input emotional and other data directly through the GUI as demo video.
 2. Receive personalized recommendations based on the Jess inference engine.
 
 ### Testing Long-Term Suggestions
