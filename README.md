@@ -98,7 +98,7 @@ MoodMate is an intelligent system designed to help users track and manage their 
     PRIMARY KEY (user_id, record_date)
     );
     ```
-## Test Case
+## Test Cases
 ### Testing Real-Time Suggestions
 1. Input emotional and physical data directly through the GUI.
 2. Receive personalized recommendations based on the Jess inference engine.
