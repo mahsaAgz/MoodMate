@@ -87,7 +87,7 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     PRIMARY KEY (user_id, record_date)
     );
     
-  2. Add data to daily_record for testing bipolar
+2. Add data to daily_record for testing bipolar
   ```bash
   INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature) VALUES
   (30, '2024-11-14 12:00:00', 15.00, 45.00, 20.00, 10.00, 10.00, 40.00, 35.00, 30.00, 'cloudy', 'cold'),
