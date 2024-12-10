@@ -106,13 +106,13 @@ MoodMate is an intelligent system designed to help users track and manage their 
 ### Testing Long-Term Suggestions
 1. Insert mock data into the `Daily_Record` table for long-term analysis:
 2. Use SQL scripts provided in the repository for scenarios like bipolar, depression, anxiety, and eating disorders.
-3. Ensure previously added data with the same dates is removed to avoid conflicts. \
+3. Ensure previously added data with the same dates is removed to avoid conflicts. 
 4. Verify that the correct `user_id` matches the one in the `Authentication` table. 
 
 ### Notice 
-When testing: \
+When testing: 
 Remove old data before adding new data for the same date. 
-Use the user_id from the Authentication table to avoid errors. 
+Use the `user_id` from the `Authentication` table to avoid errors. 
 
 
 ### Example SQL for Bipolar Test
