@@ -1,18 +1,17 @@
-; Rule to detect severe persistent depression
 (defrule assess-severe-depression
     (declare (salience 75))
-    ; Find persistent severe depressive pattern
-    (emotional-pattern (user_id ?id) 
+    (emotional-pattern (user_id ?id)
                       (pattern-type "depressive")
                       (intensity "severe")
-                      (persistence ?p1&:(>= ?p1 14)))  ; Two weeks minimum
-    ?old-assessment <- (depression-assessment (user_id ?id))  ; Find existing assessment
+                      (persistence ?p1&:(>= ?p1 14)))
+    (not (depression-assessment (user_id ?id)))
 =>
-    (modify ?old-assessment  ; Update existing instead of asserting new
+    (assert (depression-assessment 
+        (user_id ?id)
         (risk-level "severe")
-        (confidence 95)        ; High confidence due to long persistence
+        (confidence 95)
         (evidence (str-cat "Severe depressive pattern persisting for " ?p1 " days"))
-        (recommendation "Immediate professional intervention is strongly recommended. Symptoms align with a Major Depressive Episode, persisting for an extended period. Timely support from a licensed mental health professional can provide critical care and relief.")))
+        (recommendation "Immediate professional intervention is strongly recommended. Symptoms align with a Major Depressive Episode, persisting for an extended period. Timely support from a licensed mental health professional can provide critical care and relief."))))
         
 ; Rule to detect persistent moderate depression
 (defrule assess-persistent-moderate-depression

@@ -9,7 +9,7 @@ public class Main {
 		String file1 = "src/com/moodmate/logic/templates.clp";
 		String file2 = "src/com/moodmate/logic/data.clp";
 //		String file5 ="src/com/moodmate/logic/SAD_rules.clp";
-		String file3 ="src/com/moodmate/logic/bipolar_rules.clp";
+		String file3 ="src/com/moodmate/logic/anxiety_rules.clp";
 		String file4 ="src/com/moodmate/logic/pattern_recognize_rules.clp";
 //		String file5 ="src/com/moodmate/logic/EFT_daily_rules.clp";
 

@@ -33,7 +33,7 @@ public class RealTimeSuggestionPage extends BaseHomePage {
         int currentY = 20; // Start Y position for components
 
         // Title Label
-        JLabel titleLabel = new JLabel("Monitor Your Nutrition", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("MoodMate Suggestions", SwingConstants.CENTER);
         titleLabel.setFont(new Font(customFont, Font.BOLD, 20));
         titleLabel.setBounds(PADDING_X, currentY, contentWidth - 2 * PADDING_X, FIELD_HEIGHT);
         contentPanel.add(titleLabel);
