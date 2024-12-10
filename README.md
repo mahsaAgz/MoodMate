@@ -104,15 +104,15 @@ MoodMate is an intelligent system designed to help users track and manage their 
 2. Receive personalized recommendations based on the Jess inference engine.
 
 ### Testing Long-Term Suggestions
-1. Insert mock data into the Daily_Record table for long-term analysis:
+1. Insert mock data into the `Daily_Record` table for long-term analysis:
 2. Use SQL scripts provided in the repository for scenarios like bipolar, depression, anxiety, and eating disorders.
 3. Ensure previously added data with the same dates is removed to avoid conflicts. \
-Verify that the correct user_id matches the one in the Authentication table. 
+4. Verify that the correct `user_id` matches the one in the `Authentication` table. 
 
 ### Notice 
 When testing: \
-Remove old data before adding new data for the same date. \
-Use the user_id from the Authentication table to avoid errors. \
+Remove old data before adding new data for the same date. 
+Use the user_id from the Authentication table to avoid errors. 
 
 
 ### Example SQL for Bipolar Test
@@ -145,7 +145,7 @@ Use the user_id from the Authentication table to avoid errors. \
   (30, '2024-12-08 12:00:00', 86.00, 4.00, 10.00, 0.00, 0.00, 65.00, 60.00, 55.00, 'sunny', 'warm'),
   (30, '2024-12-09 12:00:00', 80.00, 0.00, 0.00, 10.00, 10.00, 60.00, 55.00, 50.00, 'sunny', 'warm');
 ```
-3. Add data to daily_record for testing depression and SAD
+### Example SQL for depression and SAD
 ```bash
 INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature)
 VALUES
@@ -176,7 +176,7 @@ VALUES
 (30, '2024-12-08 12:00:00', 11.00, 64.00, 13.00, 7.00, 5.00, 88.00, 82.00, 85.00, 'sunny', 'warm'),
 (30, '2024-12-09 12:00:00', 10.00, 65.00, 12.00, 8.00, 5.00, 85.00, 78.00, 82.00, 'sunny', 'warm');
 ```
-4. Add data to daily_record for testing anxiety and sleep disorder
+### Example SQL for anxiety and sleep disorder
 ```bash
 INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature)
 VALUES
@@ -207,7 +207,7 @@ VALUES
 (30, '2024-12-08 12:00:00', 4.00, 15.00, 8.00, 33.00, 40.00, 42.00, 35.00, 38.00, 'sunny', 'warm'),
 (30, '2024-12-09 12:00:00', 5.00, 13.00, 9.00, 34.00, 39.00, 45.00, 38.00, 42.00, 'sunny', 'warm');
 ```
-5. Add data to daily_record for testing eating disorder
+### Example SQL for eating disorder
 ```bash
 INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature)
 VALUES
