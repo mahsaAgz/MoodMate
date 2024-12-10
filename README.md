@@ -109,7 +109,7 @@ MoodMate is an intelligent system designed to help users track and manage their 
 3. Ensure previously added data with the same dates is removed to avoid conflicts. \
 Verify that the correct user_id matches the one in the Authentication table. 
 
-### Notice \
+### Notice 
 When testing: \
 Remove old data before adding new data for the same date. \
 Use the user_id from the Authentication table to avoid errors. \
