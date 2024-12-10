@@ -277,7 +277,21 @@ public class SignInPage extends BasePage {
                                             {"20241210", "1024", "sad", "20"},
                                             {"20241210", "1024", "angry", "10"},
                                             {"20241210", "1024", "scared", "70"},
-                                            {"20241210", "1024", "confused", "70"}
+                                            {"20241210", "1024", "confused", "70"},                                            {"20241210", "1217", "happy", "20"},
+                                            {"20241210", "1217", "sad", "20"},
+                                            {"20241210", "1217", "angry", "0"},
+                                            {"20241210", "1217", "scared", "90"},
+                                            {"20241210", "1217", "confused", "60"},
+                                            {"20241210", "1409", "happy", "5"},
+                                            {"20241210", "1409", "sad", "20"},
+                                            {"20241210", "1409", "angry", "10"},
+                                            {"20241210", "1409", "scared", "80"},
+                                            {"20241210", "1409", "confused", "70"},
+                                            {"20241210", "1612", "happy", "0"},
+                                            {"20241210", "1612", "sad", "30"},
+                                            {"20241210", "1612", "angry", "0"},
+                                            {"20241210", "1612", "scared", "80"},
+                                            {"20241210", "1612", "confused", "40"}
                                         };
 
                                         for (String[] emotionData_day : normalizedEmotions) {
@@ -296,28 +310,62 @@ public class SignInPage extends BasePage {
                                         System.err.println("Error asserting normalized emotion facts: " + ex.getMessage());
                                         ex.printStackTrace();
                                     }
-//                                try {
-//                                    // Assert rses-level fact
-//                                	// Assert RSES level fact
-//                                	// RSES level fact
-//                                	Fact rsesLevelFact = new Fact("rses-level", engine);
-//                                	rsesLevelFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
-//                                	rsesLevelFact.setSlotValue("level", new Value("low", RU.STRING));
-//                                	engine.assertFact(rsesLevelFact);
-//
-//                                	// Trigger status fact
-//                                	Fact triggerStatusFact = new Fact("trigger-status", engine);
-//                                	triggerStatusFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
-//                                	// Use RU.SYMBOL instead of RU.BOOLEAN
-//                                	triggerStatusFact.setSlotValue("has-trigger", new Value("true", RU.SYMBOL));
-//                                	engine.assertFact(triggerStatusFact);
-//                                    // Run the Jess engine after asserting new facts
-//                                    
-//                                } catch (JessException ex) {
-//                                    System.err.println("Error asserting rses-level or trigger-status facts: " + ex.getMessage());
-//                                    ex.printStackTrace();
-//                                }
-                          
+                                try {
+                                    // Monthly emotion summary data for months 202406-202412
+                                    String[] months = {"202406", "202407", "202408", "202409", "202410", "202411", "202412"};
+                                    String[] emotions = {"happy", "sad", "angry", "confused", "scared"};
+                                    
+                                    // Sample percentages for each month (each row sums to 100)
+                                    double[][] percentages = {
+                                        {20.0, 25.0, 15.0, 20.0, 20.0},  // June
+                                        {15.0, 30.0, 15.0, 20.0, 20.0},  // July
+                                        {10.0, 35.0, 15.0, 20.0, 20.0},  // August
+                                        {10.0, 30.0, 20.0, 20.0, 20.0},  // September
+                                        {5.0, 35.0, 20.0, 20.0, 20.0},   // October
+                                        {5.0, 40.0, 15.0, 20.0, 20.0},   // November
+                                        {5.0, 35.0, 15.0, 25.0, 20.0}    // December
+                                    };
+
+                                    for (int monthIndex = 0; monthIndex < months.length; monthIndex++) {
+                                        for (int emotionIndex = 0; emotionIndex < emotions.length; emotionIndex++) {
+                                            Fact monthlyEmotion = new Fact("monthly-emotion-summary", engine);
+                                            monthlyEmotion.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                            monthlyEmotion.setSlotValue("month", new Value(months[monthIndex], RU.STRING));
+                                            monthlyEmotion.setSlotValue("emotion-name", new Value(emotions[emotionIndex], RU.STRING));
+                                            monthlyEmotion.setSlotValue("avg-percentage", new Value(percentages[monthIndex][emotionIndex], RU.FLOAT));
+                                            monthlyEmotion.setSlotValue("reading-count", new Value(30, RU.INTEGER)); // Assuming ~30 readings per month
+                                            
+                                            engine.assertFact(monthlyEmotion);
+                                        }
+                                    }
+                                    
+                                    System.out.println("Monthly emotion summaries asserted for user: " + GlobalVariable.userId);
+                                } catch (JessException ex) {
+                                    System.err.println("Error asserting monthly emotion summaries: " + ex.getMessage());
+                                    ex.printStackTrace();
+                                }
+                                try {
+                                    // Assert rses-level fact
+                                	// Assert RSES level fact
+                                	// RSES level fact
+                                	Fact rsesLevelFact = new Fact("rses-level", engine);
+                                	rsesLevelFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                	rsesLevelFact.setSlotValue("level", new Value("low", RU.STRING));
+                                	engine.assertFact(rsesLevelFact);
+
+                                	// Trigger status fact
+                                	Fact triggerStatusFact = new Fact("trigger-status", engine);
+                                	triggerStatusFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
+                                	// Use RU.SYMBOL instead of RU.BOOLEAN
+                                	triggerStatusFact.setSlotValue("has-trigger", new Value("true", RU.SYMBOL));
+                                	engine.assertFact(triggerStatusFact);
+                                    // Run the Jess engine after asserting new facts
+                                    
+                                } catch (JessException ex) {
+                                    System.err.println("Error asserting rses-level or trigger-status facts: " + ex.getMessage());
+                                    ex.printStackTrace();
+                                }
+//                          
                                
 //                                Fact sleepQualityFact = new Fact("sleep-quality", engine);
 //                                sleepQualityFact.setSlotValue("user_id", new Value(GlobalVariable.userId, RU.INTEGER));
