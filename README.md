@@ -1,56 +1,67 @@
 # MoodMate: 
-A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Mental Health Risks. The system features:
+A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Mental Health Risks.
 
-* User-friendly Java GUI
-* Powerful inference engine powered by Jess rule-based system
-* MySQL database with JDBC connectivity for persistent data storage and retrieval
-
-## Table of Contents
-- [MoodMate:](#moodmate)
-  - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Project Structure](#project-structure)
-  - [Installation](#installation)
-  - [Database Setup](#database-setup)
 
 ## Features
-
+* User-friendly Java GUI
+* Powerful inference engine using Jess rule-based system
+* Persistent data storage with MySQL and JDBC connectivity
 * Real-time emotion tracking and analysis
-* Rule-based inference for mental health risk detection and suggestions
-* Secure data storage and retrieval
-* Interactive graphical user interface
-* Personalized mood tracking and analysis
 * Historical data visualization
-* Customizable user profiles
+* Personalized suggestions for mood regulation
+* Interactive and customizable user profiles
+
+  
+## Table of Contents
+- [Introduction](#introduction)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Database Setup](#database-setup)
+- [Test Cases](#test-cases)
+
+
+## Introduction
+MoodMate is an intelligent system designed to help users track and manage their emotions through:
+- Daily mood analysis
+- Early detection of potential mental health risks
+- Personalized suggestions to enhance mental well-being
+
 
 ## Project Structure
-    ├── src/                     # Source code
-    │   ├── module.java          # Packages usage
-    │   ├── gui/                 # GUI components
-    │   ├── logic/               # Jess rules and templates
-    │   ├── database/            # Database connection and queries
-    │   └── utilities/           # Helper functions and utilities
-    ├── assets/                  # Configuration files and templates
-    └── README.md                # Project documentation
-
+```plaintext
+├── src/                     
+│   ├── module.java          # Entry point for package usage
+│   ├── gui/                 # GUI components
+│   ├── logic/               # Jess rules and templates
+│   ├── database/            # Database connection and queries
+│   └── utilities/           # Helper functions and utilities
+├── assets/                  # Configuration files and templates
+└── README.md                # Project documentation
+```
 
 ## Installation
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/qiulij/MoodMate.git
+   ```
+   ```bash
    cd MoodMate
+   ```
 2. **Set Up Required Libraries:** \
    Download the following .jar files and add them to your project's classpath:
     * jess.jar
     * jsr94.jar
     * [gson-2.8.8.jar](https://search.maven.org/artifact/com.google.code.gson/gson/2.8.8/jar)
     * [mysql-connector-j-9.1.0.jar](https://dev.mysql.com/downloads/connector/j/?os=26)
+    You can also find these in our repository.
 3. **Set up MySQL:** \
    Install MySQL Server. Set up the database using the provided SQL scripts (see Database Setup).  
 
 
 ## Database Setup
-1. Run the SQL Scripts in MySQL
+1. Create Tables  \
+   Run the provided SQL scripts in MySQL to set up the necessary tables:
     ```bash
     -- Authentication table
     CREATE TABLE IF NOT EXISTS Authentication (
@@ -87,9 +98,24 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     PRIMARY KEY (user_id, record_date)
     );
     ```
-Notice: Whenever you add the new data, please make sure the previous data are removed, since we are adding the data with the same date. Also, the user_id can be different depending on the account you created in the sign-up. You can find the correct user_id in the table "Authentication".
+## Test Case
+### Testing Real-Time Suggestions
+1. Input emotional and physical data directly through the GUI.
+2. Receive personalized recommendations based on the Jess inference engine.
 
-2. Add data to daily_record for testing bipolar
+### Testing Long-Term Suggestions
+1. Insert mock data into the Daily_Record table for long-term analysis:
+2. Use SQL scripts provided in the repository for scenarios like bipolar, depression, anxiety, and eating disorders.
+3. Ensure previously added data with the same dates is removed to avoid conflicts. \
+Verify that the correct user_id matches the one in the Authentication table. 
+
+### Notice \
+When testing: \
+Remove old data before adding new data for the same date. \
+Use the user_id from the Authentication table to avoid errors. \
+
+
+### Example SQL for Bipolar Test
   ```bash
   INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature) VALUES
   (30, '2024-11-14 12:00:00', 15.00, 45.00, 20.00, 10.00, 10.00, 40.00, 35.00, 30.00, 'cloudy', 'cold'),
