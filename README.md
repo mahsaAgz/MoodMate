@@ -86,7 +86,7 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
     weather_temperature VARCHAR(50),
     PRIMARY KEY (user_id, record_date)
     );
-    
+    ```
 2. Add data to daily_record for testing bipolar
   ```bash
   INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature) VALUES
@@ -116,7 +116,7 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
   (30, '2024-12-07 12:00:00', 84.00, 0.00, 0.00, 16.00, 0.00, 60.00, 55.00, 50.00, 'sunny', 'mild'),
   (30, '2024-12-08 12:00:00', 86.00, 4.00, 10.00, 0.00, 0.00, 65.00, 60.00, 55.00, 'sunny', 'warm'),
   (30, '2024-12-09 12:00:00', 80.00, 0.00, 0.00, 10.00, 10.00, 60.00, 55.00, 50.00, 'sunny', 'warm');
-
+```
 3. Add data to daily_record for testing depression and SAD
 ```bash
 INSERT INTO daily_record (user_id, record_date, happy_score, sad_score, angry_score, confused_score, scared_score, sleep_score, physical_activity_score, food_score, weather_condition, weather_temperature)
@@ -147,3 +147,4 @@ VALUES
 (30, '2024-12-07 12:00:00', 12.00, 63.00, 11.00, 8.00, 6.00, 85.00, 78.00, 82.00, 'sunny', 'mild'),
 (30, '2024-12-08 12:00:00', 11.00, 64.00, 13.00, 7.00, 5.00, 88.00, 82.00, 85.00, 'sunny', 'warm'),
 (30, '2024-12-09 12:00:00', 10.00, 65.00, 12.00, 8.00, 5.00, 85.00, 78.00, 82.00, 'sunny', 'warm');
+```
