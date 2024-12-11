@@ -20,6 +20,8 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
 - [Database Setup](#database-setup)
 - [Test Cases](#test-cases)
 
+## Background
+
 
 ## Introduction
 MoodMate is an intelligent system designed to help users track and manage their emotions through:
