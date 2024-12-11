@@ -19,6 +19,7 @@ public class UserProfilePage extends BasePage {
     private JFormattedTextField ageField;
     private JRadioButton maleButton;
     private JRadioButton femaleButton;
+    
     private JRadioButton preferNotToSayButton;
     private JSlider eiSlider, snSlider, tfSlider, jpSlider;
     

@@ -29,6 +29,7 @@ public class SignInPage extends BasePage {
         JLabel backgroundLabel = new JLabel(new ImageIcon("assets/images/background.png"));
         backgroundLabel.setBounds(0, 0, contentArea.getWidth(), contentArea.getHeight());
         contentArea.add(backgroundLabel);
+        
         backgroundLabel.setLayout(null);
 
         // Title Label

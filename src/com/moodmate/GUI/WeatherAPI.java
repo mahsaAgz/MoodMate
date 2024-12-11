@@ -22,6 +22,7 @@ public class WeatherAPI {
 		this.engine = engine;		
 	}
         String city = "Daejeon";  // Example city
+        
         String apiKey = "d15bc8c7724a3d65233de5301a550fba";  // Replace with your OpenWeatherMap API key
     private static final String CITY = "Daejeon";
     private static final String API_KEY = "d15bc8c7724a3d65233de5301a550fba";

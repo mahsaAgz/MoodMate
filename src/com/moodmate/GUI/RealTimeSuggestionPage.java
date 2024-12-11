@@ -18,7 +18,9 @@ public class RealTimeSuggestionPage extends BaseHomePage {
     private static final int FIELD_HEIGHT = 30; // Height for the input fields
     private static final int PIC_SIZE = 100; // Height for the input fields   
     private static final int MARGIN = 20; // Vertical margin between components
+    
     private static final int userId = GlobalVariable.userId;
+
 
     
     int contentWidth = contentArea.getWidth();

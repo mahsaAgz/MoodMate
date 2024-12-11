@@ -171,6 +171,8 @@ public class MbtiTestPage extends BasePage {
                     dispose();
                 }
 
+
+
             } catch (JessException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(
@@ -243,6 +245,7 @@ public class MbtiTestPage extends BasePage {
     }
 
     public static void main(String[] args) {
+        
         new MbtiTestPage(0,"test",0,0);
     }
 }

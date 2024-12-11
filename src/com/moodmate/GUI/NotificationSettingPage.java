@@ -19,6 +19,7 @@ public class NotificationSettingPage extends BasePage {
     private static final int FIELD_HEIGHT = 30; // Height for the input fields
     private static final int MARGIN = 20; // Vertical margin between components
     int contentWidth = contentArea.getWidth();
+    
     private String username;
     private int age;
     private String gender;

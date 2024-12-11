@@ -30,6 +30,7 @@ public class FoodPage extends BaseHomePage {
     private static final int userId = GlobalVariable.userId;
     private Map<String, JSlider> nutrientSliders = new HashMap<>();
     int foodScore;
+    
     int pAScore;
     int sleepScore;
     int happy = 0;
