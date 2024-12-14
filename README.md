@@ -108,7 +108,7 @@ MoodMate is an intelligent system designed to help users track and manage their 
 2. Receive personalized recommendations based on the Jess inference engine.
 
 ### Testing Long-Term Suggestions
-1. Insert mock data into the `Daily_Record` table for long-term analysis:
+1. Insert mock data into the `Daily_Record` table in MySQL datavase for long-term analysis:
 2. Use SQL scripts provided in the repository for scenarios like bipolar, depression, anxiety, and eating disorders.
 3. Ensure previously added data with the same dates is removed to avoid conflicts. 
 4. Verify that the correct `user_id` matches the one in the `Authentication` table. 
