@@ -14,9 +14,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
-
-import com.moodmate.database.DatabaseConnection;
-
 import jess.Fact;
 import jess.JessException;
 import jess.Rete;
@@ -24,6 +21,9 @@ import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.Locale;
+
+import com.moodmate.database.DatabaseConnection;
+
 
 
 public class HomePage extends BaseHomePage {
