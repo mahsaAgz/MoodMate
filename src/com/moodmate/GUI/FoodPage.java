@@ -22,12 +22,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class FoodPage extends BaseHomePage {
-
-    private static final int PADDING_X = 30; // Horizontal padding for fields
-    private static final int FIELD_HEIGHT = 30; // Height for the input fields
+    
     private static final int PIC_SIZE = 100; // Height for the input fields   
     private static final int MARGIN = 20; // Vertical margin between components
     private static final int userId = GlobalVariable.userId;
+    private static final int PADDING_X = 30; // Horizontal padding for fields
+    private static final int FIELD_HEIGHT = 30; // Height for the input fields
+
     private Map<String, JSlider> nutrientSliders = new HashMap<>();
     int foodScore;
     
