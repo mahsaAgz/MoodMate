@@ -19,17 +19,18 @@ import java.time.format.DateTimeFormatter;
 
 public class EFTPage extends BaseHomePage {
 
-    private static final int PADDING_X = 40; // Horizontal padding for fields
-    private static final int FIELD_HEIGHT = 30; // Height for input fields
-    private static final int MARGIN = 5; // Vertical margin between components
-    private static final int BOX_HEIGHT = 250; // Height for each emotion box
-    private static final int CORNER_RADIUS = 25; // Rounded corner radius
 
     private Hashtable<String, String[]> emotionAdj;
     private final Hashtable<String, JSlider> emotionSliders = new Hashtable<>();
     private static final int userId = GlobalVariable.userId; // You might want to pass this from previous pages
     private static int day;
     private static int hour;
+    private static final int PADDING_X = 40; // Horizontal padding for fields
+    private static final int FIELD_HEIGHT = 30; // Height for input fields
+    private static final int MARGIN = 5; // Vertical margin between components
+    private static final int BOX_HEIGHT = 250; // Height for each emotion box
+    private static final int CORNER_RADIUS = 25; // Rounded corner radius
+
     
     public EFTPage() {
         super();
