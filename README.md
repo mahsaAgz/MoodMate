@@ -1,6 +1,19 @@
-# MoodMate: 
-A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Mental Health Risks.
+#  MoodMate: A Knowledge-Based Emotion Tracker for Self-Regulation and Early Mental Health Detection  
 
+### Introduction  
+MoodMate is an innovative **knowledge-based system** designed to enhance **self-awareness** and detect early signs of mental health risks. In today’s fast-paced world, mental health monitoring has become increasingly essential, with millions facing challenges like stress, anxiety, and mood disorders. Traditional methods often fall short of providing **personalized and timely insights**. MoodMate bridges this gap by integrating **rule-based reasoning** and user-centric design, offering tailored suggestions to help users monitor their emotional states and take proactive measures.  
+
+### Background  
+According to the **World Health Organization**, over 970 million people globally suffer from mental health disorders, with depression and anxiety being the most common. The **delay in diagnosis and intervention** often exacerbates these conditions. Self-awareness, defined as the ability to recognize emotions and behavioural patterns, plays a critical role in mental well-being. Tools like **mood trackers** empower individuals to detect triggers, regulate emotions, and seek timely support.  
+
+### Key Features  
+- **Personalized Mood Tracking**: Users report emotions through an intuitive Java-based GUI integrated with a **MySQL database**.  
+- **Knowledge-Based Suggestions**: The system uses the **JESS rule engine** to analyze inputs such as mood, sleep, physical activity, and eating habits to provide real-time feedback.  
+- **Pattern Recognition**: MoodMate identifies **long-term emotional patterns** (e.g., anxiety, depression, SAD) and provides therapeutic suggestions based on user characteristics like MBTI and hobbies.  
+- **Comprehensive Monitoring**: Integrates primary and secondary mental health factors like weather, self-esteem, and diet for holistic analysis.  
+
+### Why Knowledge-Based Systems?  
+Unlike traditional tracking apps, MoodMate combines **domain knowledge** from psychological research and expert insights with real-time user inputs. This hybrid approach ensures personalized interventions, improved self-regulation, and early detection of mental health risks.
 
 ## Features
 * User-friendly Java GUI
@@ -11,24 +24,6 @@ A Knowledge-Based Emotion Tracker for Self-Regulation and Early Detection of Men
 * Personalized suggestions for mood regulation
 * Interactive and customizable user profiles
 
-  
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Database Setup](#database-setup)
-- [Test Cases](#test-cases)
-
-
-
-## Introduction
-MoodMate is an intelligent system designed to help users track and manage their emotions through:
-- Daily mood analysis
-- Early detection of potential mental health risks
-- Personalized suggestions to enhance mental well-being
-
-### Background
 
 
 
