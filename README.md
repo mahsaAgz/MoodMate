@@ -1,6 +1,35 @@
-
-
 # **MoodMate: A Knowledge-Based Emotion Tracker**
+Here's the updated **Table of Contents** reflecting "Long-Term Insights" as a subsection under **Features**:
+
+---
+
+## **Table of Contents**
+
+1. [**MoodMate: A Knowledge-Based Emotion Tracker**](#moodmate-a-knowledge-based-emotion-tracker)  
+2. [**Introduction**](#introduction)  
+3. [**Background**](#background)  
+   - [Emotion-Focused Therapy (EFT)](#emotion-focused-therapy-eft)  
+   - [Key Factors Monitored](#key-factors-monitored)  
+4. [**Features**](#features)  
+   - [Daily Emotional Reports](#daily-emotional-reports)  
+   - [Secondary Factor Analysis](#secondary-factor-analysis)  
+   - [Real-Time Suggestions](#real-time-suggestions)  
+   - [Long-Term Insights](#long-term-insights)  
+     - [Pattern Detection](#pattern-detection)  
+     - [Potential Mental Health Conditions Detected](#potential-mental-health-conditions-detected)  
+5. [**Why Knowledge-Based Systems?**](#why-knowledge-based-systems)  
+6. [**Project Structure**](#project-structure)  
+7. [**Installation**](#installation)  
+8. [**Database Setup**](#database-setup)  
+9. [**Test Cases**](#test-cases)  
+   - [Testing Real-Time Suggestions](#testing-real-time-suggestions)  
+   - [Testing Long-Term Suggestions](#testing-long-term-suggestions)  
+   - [Notice](#notice)  
+10. [**SQL Examples for Testing**](#sql-examples-for-testing)  
+    - [Example SQL for Bipolar Test](#example-sql-for-bipolar-test)  
+    - [Example SQL for Depression and SAD](#example-sql-for-depression-and-sad)  
+    - [Example SQL for Anxiety and Sleep Disorder](#example-sql-for-anxiety-and-sleep-disorder)  
+    - [Example SQL for Eating Disorder](#example-sql-for-eating-disorder)  
 
 ## **Introduction**
 
