@@ -1,8 +1,5 @@
 # **MoodMate: A Knowledge-Based Emotion Tracker**
 
-## **Table of Contents**
-
-
 ## **Introduction**
 
 **MoodMate** is a knowledge-based mental health application that helps users monitor their emotional states and related factors to improve self-awareness and detect early signs of mental health concerns. The application combines insights from **Emotion-Focused Therapy (EFT)**, expert interviews, and a thorough review of relevant research to provide a systematic approach to mental health monitoring.
