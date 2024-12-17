@@ -1,41 +1,34 @@
 # **MoodMate: A Knowledge-Based Emotion Tracker**
-Here's the updated **Table of Contents** reflecting "Long-Term Insights" as a subsection under **Features**:
-
----
 
 ## **Table of Contents**
 
-1. [**MoodMate: A Knowledge-Based Emotion Tracker**](#moodmate-a-knowledge-based-emotion-tracker)  
-2. [**Introduction**](#introduction)  
-3. [**Background**](#background)  
-   - [Emotion-Focused Therapy (EFT)](#emotion-focused-therapy-eft)  
-   - [Key Factors Monitored](#key-factors-monitored)  
-4. [**Features**](#features)  
-   - [Daily Emotional Reports](#daily-emotional-reports)  
-   - [Secondary Factor Analysis](#secondary-factor-analysis)  
-   - [Real-Time Suggestions](#real-time-suggestions)  
-   - [Long-Term Insights](#long-term-insights)  
-     - [Pattern Detection](#pattern-detection)  
-     - [Potential Mental Health Conditions Detected](#potential-mental-health-conditions-detected)  
-5. [**Why Knowledge-Based Systems?**](#why-knowledge-based-systems)  
-6. [**Project Structure**](#project-structure)  
-7. [**Installation**](#installation)  
-8. [**Database Setup**](#database-setup)  
-9. [**Test Cases**](#test-cases)  
-   - [Testing Real-Time Suggestions](#testing-real-time-suggestions)  
-   - [Testing Long-Term Suggestions](#testing-long-term-suggestions)  
-   - [Notice](#notice)  
-10. [**SQL Examples for Testing**](#sql-examples-for-testing)  
-    - [Example SQL for Bipolar Test](#example-sql-for-bipolar-test)  
-    - [Example SQL for Depression and SAD](#example-sql-for-depression-and-sad)  
-    - [Example SQL for Anxiety and Sleep Disorder](#example-sql-for-anxiety-and-sleep-disorder)  
-    - [Example SQL for Eating Disorder](#example-sql-for-eating-disorder)  
 
 ## **Introduction**
 
 **MoodMate** is a knowledge-based mental health application that helps users monitor their emotional states and related factors to improve self-awareness and detect early signs of mental health concerns. The application combines insights from **Emotion-Focused Therapy (EFT)**, expert interviews, and a thorough review of relevant research to provide a systematic approach to mental health monitoring.
 
 Users can log their emotional patterns, track influencing factors such as sleep, diet, and physical activity, and receive tailored feedback to manage their mental well-being.
+
+
+## **Table of Contents**
+1. [**Background**](#background)  
+   - [Emotion-Focused Therapy (EFT)](#emotion-focused-therapy-eft)  
+   - [Key Factors Monitored](#key-factors-monitored)  
+2. [**Features**](#features)  
+   - [Daily Emotional Reports](#daily-emotional-reports)  
+   - [Secondary Factor Analysis](#secondary-factor-analysis)  
+   - [Real-Time Suggestions](#real-time-suggestions)  
+   - [Long-Term Insights](#long-term-insights)   
+3. [**Project Structure**](#project-structure)  
+4. [**Installation**](#installation)  
+5. [**Database Setup**](#database-setup)  
+6. [**Test Cases**](#test-cases)  
+   - [Testing Real-Time Suggestions](#testing-real-time-suggestions)  
+   - [Testing Long-Term Suggestions](#testing-long-term-suggestions)  
+   - [Example SQL for Bipolar Test](#example-sql-for-bipolar-test)  
+   - [Example SQL for Depression and SAD](#example-sql-for-depression-and-sad)  
+   - [Example SQL for Anxiety and Sleep Disorder](#example-sql-for-anxiety-and-sleep-disorder)  
+   - [Example SQL for Eating Disorder](#example-sql-for-eating-disorder)  
 
 
 ## **Background**
@@ -101,8 +94,6 @@ Based on long-term emotional trends, the app can provide early indications of po
 - **Eating Disorders** (e.g., appetite changes, restrictive eating)  
 
 By recognizing these trends, the app encourages users to seek timely professional support if necessary.  
-### Why Knowledge-Based Systems?  
-Unlike traditional tracking apps, MoodMate combines **domain knowledge** from psychological research and expert insights with real-time user inputs. This hybrid approach ensures personalized interventions, improved self-regulation, and early detection of mental health risks.
 
 ## Features
 * User-friendly Java GUI
