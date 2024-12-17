@@ -15,14 +15,15 @@ import java.util.IllegalFormatConversionException;
 
 public class MbtiTestPage extends BasePage {
 
-    private static final int PADDING_X = 60; // Horizontal padding for fields
-    private static final int FIELD_HEIGHT = 30; // Height for the input fields
-    private static final int MARGIN = 20; // Vertical margin between components
     private JSlider[] mbtiSliders = new JSlider[8];
     private int userId;
     private String username;
     private int age;
     private int gender;
+
+    private static final int PADDING_X = 60; // Horizontal padding for fields
+    private static final int FIELD_HEIGHT = 30; // Height for the input fields
+    private static final int MARGIN = 20; // Vertical margin between components
 
     
     int contentWidth= contentArea.getWidth();
