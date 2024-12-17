@@ -17,7 +17,9 @@ public class HobbiesPage extends BasePage {
     private final int age;
     private final String gender;
     private final String mbtiResult;
-
+    private final int age;
+    private final String gender;
+    private final String mbtiResult;
     // Array of hobby image filenames
     private static final String[] HOBBY_IMAGES = {
         "art.png", "collection.png", "cooking.png", "diy.png", 
