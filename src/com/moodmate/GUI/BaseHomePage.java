@@ -1,5 +1,5 @@
 package com.moodmate.GUI;
-
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -7,9 +7,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.*;
-
 public class BaseHomePage extends BasePage {
 
     private boolean isMenuBarOpen = false; // Track the state of the menu bar
