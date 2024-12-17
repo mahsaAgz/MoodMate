@@ -17,25 +17,17 @@ EFT is a therapeutic model focused on understanding and addressing emotions to i
 - Identify emotional patterns over time.  
 - Understand key triggers that influence their mental well-being.
 
-### **Key Factors Monitored**  
 
-1. **Self-Esteem**  
-   Self-esteem affects how individuals perceive themselves, especially during emotional fluctuations. Lower self-esteem can intensify negative thoughts and emotions, while higher self-esteem supports resilience.  
+### **Key Factors Monitored**
 
-2. **Sleep Quality**  
-   Sleep is essential for emotional regulation.  
-   - **Optimal Sleep:** 7–9 hours per night with regular sleep schedules.  
-   - Poor sleep patterns, such as short sleep duration or irregular timing, are linked to mood instability.
+| **Factor**           | **Description**                                                                 | **Recommendations/Insights**                                  |
+|-----------------------|-------------------------------------------------------------------------------|--------------------------------------------------------------|
+| **Self-Esteem**       | Self-esteem influences how individuals perceive themselves and process emotions. Lower self-esteem can amplify negative thoughts. | Higher self-esteem supports resilience and emotional balance. |
+| **Sleep Quality**     | Sleep is essential for emotional regulation. Poor sleep can lead to mood instability and fatigue. | Optimal sleep: **7–9 hours per night**, regular sleep schedules. |
+| **Physical Activity** | Regular physical activity improves mood, reduces stress, and boosts overall emotional well-being. | 150–300 minutes of **moderate activity** or 75–150 minutes of **vigorous activity** per week. |
+| **Diet and Nutrition**| Balanced nutrition (e.g., the Mediterranean diet) supports emotional well-being. Poor eating habits can impact mood and energy. | Maintain a balanced diet. Avoid excessive sugary or processed foods. |
+| **Weather Conditions**| Weather affects mood through sunlight exposure, temperature, and conditions. Lack of sunlight can trigger Seasonal Affective Disorder (SAD). | Increase exposure to sunlight. Use light therapy during prolonged gloomy weather. |
 
-3. **Physical Activity**  
-   Physical activity plays a key role in improving mood and reducing stress.  
-   - Recommendations include 150–300 minutes of moderate activity (e.g., brisk walking) or 75–150 minutes of vigorous exercise weekly.
-
-4. **Diet and Nutrition**  
-   Balanced nutrition, such as the **Mediterranean diet**, supports emotional well-being. In contrast, irregular eating habits or nutrient imbalances can affect mood and energy levels.
-
-5. **Weather Conditions**  
-   Weather influences emotional states. Exposure to sunlight can improve mood, while prolonged gloomy or extreme weather conditions can contribute to emotional distress, including **Seasonal Affective Disorder (SAD)**.
 
 
 ## **Features**
@@ -57,9 +49,9 @@ EFT is a therapeutic model focused on understanding and addressing emotions to i
 - Examples include advice to improve sleep hygiene, increase physical activity, or adjust meal routines.
 
 
-## **Long-Term Insights**
+### **Long-Term Insights**
 
-### **Pattern Detection**  
+#### **Pattern Detection**  
 The app identifies significant emotional patterns by analyzing user data over consecutive days. These include:  
 - **Manic Patterns:** Elevated happiness with low negative emotions.  
 - **Depressive Patterns:** Low happiness with increased sadness and anger.  
@@ -69,7 +61,7 @@ The app identifies significant emotional patterns by analyzing user data over co
 - **Mood Switches:** Sudden changes in emotional states across days.  
 - **Pattern Persistence:** Detection of patterns that persist for multiple days.
 
-### **Potential Mental Health Conditions Detected**  
+#### **Potential Mental Health Conditions Detected**  
 Based on long-term emotional trends, the app can provide early indications of potential conditions, such as:  
 - **Depression** (early signs to severe symptoms)  
 - **Anxiety**  
