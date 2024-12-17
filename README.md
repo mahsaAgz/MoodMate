@@ -1,12 +1,40 @@
-#  MoodMate: A Knowledge-Based Emotion Tracker for Self-Regulation and Early Mental Health Detection  
+# MoodMate: A Knowledge-Based Emotion Tracker for Self-Regulation and Early Mental Health Detection  
 
-### Introduction  
+## Introduction  
 MoodMate is an innovative **knowledge-based system** designed to enhance **self-awareness** and detect early signs of mental health risks. In today’s fast-paced world, mental health monitoring has become increasingly essential, with millions facing challenges like stress, anxiety, and mood disorders. Traditional methods often fall short of providing **personalized and timely insights**. MoodMate bridges this gap by integrating **rule-based reasoning** and user-centric design, offering tailored suggestions to help users monitor their emotional states and take proactive measures.  
 
 ### Background  
-According to the **World Health Organization**, over 970 million people globally suffer from mental health disorders, with depression and anxiety being the most common. The **delay in diagnosis and intervention** often exacerbates these conditions. Self-awareness, defined as the ability to recognize emotions and behavioural patterns, plays a critical role in mental well-being. Tools like **mood trackers** empower individuals to detect triggers, regulate emotions, and seek timely support.  
+According to the **World Health Organization**, over 970 million people globally suffer from mental health disorders, with depression and anxiety being the most common. The **delay in diagnosis and intervention** often exacerbates these conditions. Self-awareness, the ability to recognize emotions and behavioural patterns, plays a critical role in mental well-being. Tools like **mood trackers** empower individuals to detect triggers, regulate emotions, and seek timely support.
 
-### Key Features  
+
+#### Emotion-Focused Therapy (EFT)  
+MoodMate incorporates principles from **Emotion-Focused Therapy (EFT)**, a therapeutic approach designed to help individuals **understand, process, and regulate their emotions**. EFT emphasizes recognizing emotional patterns, identifying triggers, and fostering healthier coping mechanisms. By encouraging users to track their emotional states regularly, MoodMate helps individuals gain **self-awareness** and take **proactive steps** to manage their mental well-being effectively.
+
+
+### Key Factors  
+
+#### 1. **Self-Esteem**  
+Self-esteem impacts how individuals perceive and respond to emotional challenges. Low self-esteem can amplify negative emotions and hinder coping mechanisms.  
+- MoodMate evaluates self-esteem using the **Rosenberg Self-Esteem Scale (RSES)** and provides suggestions to build confidence and enhance self-image.  
+
+#### 2. **Sleep**  
+Sleep plays a crucial role in emotional regulation. Poor sleep quality, irregular timing, or insufficient duration can significantly affect mood.  
+- The system assesses **sleep quality, duration, and timing**, offering tailored recommendations to align sleep patterns with optimal mental well-being.  
+
+#### 3. **Physical Activity**  
+Physical activity is a proven mood booster that reduces stress and anxiety while improving cognitive function.  
+- MoodMate evaluates the **duration** and **intensity** of physical activity and encourages users to maintain consistent exercise habits, starting with small, manageable goals.  
+
+#### 4. **Diet and Food Habits**  
+Nutrition is closely linked to mood through the **gut-brain axis**. Balanced diets can improve mental health, while processed foods and emotional eating can exacerbate symptoms.  
+- Users log meal frequency, appetite changes, and macronutrient intake. The system detects irregularities and suggests dietary improvements.  
+
+#### 5. **Weather**  
+Weather conditions, such as reduced sunlight, extreme heat, or gloomy days, can influence mood and energy levels, particularly for individuals prone to Seasonal Affective Disorder (SAD).  
+- MoodMate integrates **real-time weather data** to provide personalized suggestions, such as increasing light exposure or adapting activity plans.  
+
+
+## Key Features  
 - **Personalized Mood Tracking**: Users report emotions through an intuitive Java-based GUI integrated with a **MySQL database**.  
 - **Knowledge-Based Suggestions**: The system uses the **JESS rule engine** to analyze inputs such as mood, sleep, physical activity, and eating habits to provide real-time feedback.  
 - **Pattern Recognition**: MoodMate identifies **long-term emotional patterns** (e.g., anxiety, depression, SAD) and provides therapeutic suggestions based on user characteristics like MBTI and hobbies.  
