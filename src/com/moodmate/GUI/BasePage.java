@@ -22,14 +22,14 @@ public abstract class BasePage extends JFrame {
     protected static final int MENU_BAR_WIDTH = 200;
     // Navigation stack to keep track of visited pages
     private static final Stack<BasePage> navigationStack = new Stack<>();
-
-    protected JPanel statusBar;
-    protected JPanel navigationBar;
-    protected JPanel contentArea;
-    protected JPanel topPanel;
+	protected JPanel topPanel;
     protected JPanel menuBar;
     protected JLayeredPane layeredPane;
     protected JPanel containerPanel;
+    protected JPanel statusBar;
+    protected JPanel navigationBar;
+    protected JPanel contentArea;
+ 
 
     public Color customGreen = new Color(69, 199, 138);
     public Color customYellow = new Color(255, 221, 128);
