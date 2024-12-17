@@ -232,15 +232,16 @@ public class MbtiTestPage extends BasePage {
         labels.put(5, labelStronglyAgree);
 
         // Apply the label table
-        mbtiSlider.setLabelTable(labels);  
         mbtiSlider.setPaintLabels(true);
+        mbtiSlider.setLabelTable(labels);  
+
+        currentY += FIELD_HEIGHT + MARGIN*2;
+
 
         // Add the slider to the content panel
         contentPanel.add(mbtiSlider);
 
 
-
-        currentY += FIELD_HEIGHT + MARGIN*2;
 
         return currentY;
     }
