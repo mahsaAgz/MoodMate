@@ -1,4 +1,7 @@
 # **MoodMate: A Knowledge-Based Emotion Tracker**
+assets/images/moodmate.png
+[![Watch the Video](assets/images/moodmate.png)](https://youtu.be/iavCDZHl71o?si=GwmisxYxxxu--rK4)
+
 
 ## **Introduction**
 
